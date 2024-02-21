@@ -2,6 +2,7 @@ package com.turing.service.impl;
 
 import com.turing.mapper.EmployeeMapper;
 import com.turing.pojo.Employee;
+import com.turing.pojo.PageBean;
 import com.turing.service.EmployeeService;
 import com.turing.util.SqlSessionFactoryUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -58,5 +59,41 @@ public class EmployeeServiceImpl implements EmployeeService {
         // 释放资源
         sqlSession.close();
 
+    }
+
+    /**
+     * 分页查询
+     * @param currentPage 当前页码
+     * @param pageSize 每页展示条数
+     * @return
+     */
+    @Override
+    public PageBean<Employee> selectByPage(int currentPage, int pageSize) {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+
+        // 计算开始索引
+        int begin = (currentPage - 1) * pageSize;
+        // 计算查询条目数
+        int size = pageSize;
+
+        // 查询当前页数据
+        List<Employee> rows = employeeMapper.selectByPage(begin, size);
+
+        // 查询总记录数
+        int totalCount = employeeMapper.selectTotalCount();
+
+        // 封装PageBean 对象
+        PageBean<Employee> pageBean = new PageBean<>();
+        pageBean.setRows(rows);
+        pageBean.setTotalCount(totalCount);
+
+        // 释放资源
+        sqlSession.close();
+
+        return pageBean;
     }
 }

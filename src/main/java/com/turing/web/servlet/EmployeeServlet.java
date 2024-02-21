@@ -2,6 +2,7 @@ package com.turing.web.servlet;
 
 import com.alibaba.fastjson.JSON;
 import com.turing.pojo.Employee;
+import com.turing.pojo.PageBean;
 import com.turing.service.impl.EmployeeServiceImpl;
 
 import javax.servlet.ServletException;
@@ -36,6 +37,13 @@ public class EmployeeServlet extends BaseServlet{
         resp.getWriter().write(jsonString);
     }
 
+    /**
+     * 添加员工
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     public void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 从JSON中获取employee数据
         BufferedReader br = req.getReader();
@@ -51,4 +59,32 @@ public class EmployeeServlet extends BaseServlet{
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write("success");
     }
+
+    /**
+     * 分页查询
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void selectByPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 调用service 的查询所有方法 返回 employees 集合
+//        List<Employee> employees = employeeService.selectAll();
+        String _currentPage = req.getParameter("currentPage");
+        String _pageSize = req.getParameter("pageSize");
+
+        int currentPage = Integer.parseInt(_currentPage);
+        int pageSize = Integer.parseInt(_pageSize);
+
+        // 调用service 查询pageBean
+        PageBean<Employee> pageBean = employeeService.selectByPage(currentPage, pageSize);
+
+        // 转换为JSON 对象
+        String jsonString = JSON.toJSONString(pageBean);
+
+        // 响应JSON 对象
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+    }
+
 }

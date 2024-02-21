@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.turing.mapper.EmployeeMapper">
 
-    <resultMap id="EmployeeResultMap" type="employee">
+    <resultMap id="employeeResultMap" type="employee">
         <result property="staffId" column="staff_id" />
         <result property="employeeName" column="employee_name" />
         <result property="employmentStatus" column="employment_status" />

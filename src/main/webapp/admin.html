@@ -166,17 +166,17 @@
                     align="center"
                     label="操作">
 
-              <!--  <el-row>
+                <el-row>
                     <el-button type="primary">修改</el-button>
                     <el-button type="danger">删除</el-button>
-                </el-row>-->
+                </el-row>
 
             </el-table-column>
 
         </el-table>
     </template>
 
-   <!-- &lt;!&ndash;分页工具条&ndash;&gt;
+    <!--分页工具条-->
     <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -187,7 +187,6 @@
             :total="totalCount">
     </el-pagination>
 
--->
 </div>
 
 
@@ -220,18 +219,20 @@
                 console.log(this.multipleSelection)
             },*/
             // 查询方法
-           /* onSubmit() {
-                console.log(this.employee);
-                // this.selectAll();
-            },*/
+            /* onSubmit() {
+                 console.log(this.employee);
+                 // this.selectAll();
+             },*/
             //查询分页
             selectAll() {
                 axios({
-                    method: "get",
-                    url: "http://localhost:8080/hr-management-system/employee/selectAll"
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/employee/selectByPage?currentPage=" + this.currentPage + "&pageSize=" + this.pageSize,
+                    data: this.employee
                 }).then(resp => {
                         // 设置表格数据
-                        this.tableData = resp.data;
+                        this.tableData = resp.data.rows; //{rows:[],totoalCount}
+                        this.totalCount = resp.data.totalCount;
                     }
                 )
             },
@@ -271,7 +272,7 @@
                 //console.log(`每页 ${val} 条`);
 
                 // 重新设置展示页数
-                // this.pageSize = val;
+                this.pageSize = val;
 
                 // 重新查询 分页 数据
                 this.selectAll();
@@ -282,7 +283,7 @@
                 // val : currentPage
 
                 // 重新设置当前页码
-                // this.currentPage = val;
+                this.currentPage = val;
 
                 // 重新查询 分页 数据
                 this.selectAll();
@@ -314,9 +315,9 @@
                     age: "",
                     employmentStatus: "",
                     salary: "",
-                    basicSalary:"",
-                    attendanceCount:"",
-                    performance:""
+                    basicSalary: "",
+                    attendanceCount: "",
+                    performance: ""
                 },
                 // 复选框选中数据集合
                 multipleSelection: [],
@@ -327,36 +328,36 @@
                     age: "18",
                     employmentStatus: "1",
                     salary: "3000",
-                    basicSalary:"2000",
-                    attendanceCount:"10",
-                    performance:"0"
+                    basicSalary: "2000",
+                    attendanceCount: "10",
+                    performance: "0"
                 }, {
                     staffId: '1',
                     employeeName: "张三",
                     age: "18",
                     employmentStatus: "1",
                     salary: "3000",
-                    basicSalary:"2000",
-                    attendanceCount:"10",
-                    performance:"0"
+                    basicSalary: "2000",
+                    attendanceCount: "10",
+                    performance: "0"
                 }, {
                     staffId: '1',
                     employeeName: "张三",
                     age: "18",
                     employmentStatus: "1",
                     salary: "3000",
-                    basicSalary:"2000",
-                    attendanceCount:"10",
-                    performance:"0"
+                    basicSalary: "2000",
+                    attendanceCount: "10",
+                    performance: "0"
                 }, {
                     staffId: '1',
                     employeeName: '张三',
                     age: "18",
                     employmentStatus: "1",
                     salary: "3000",
-                    basicSalary:"2000",
-                    attendanceCount:"10",
-                    performance:"0"
+                    basicSalary: "2000",
+                    attendanceCount: "10",
+                    performance: "0"
                 }]
             }
         }
