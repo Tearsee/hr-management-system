@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .el-table .warning-row {
+            background: oldlace;
+        }
+
+        .el-table .success-row {
+            background: #f0f9eb;
+        }
+    </style>
+
+</head>
+<body>
+<div id="app">
+
+    <!--搜索表单
+    <el-form :inline="true" :model="employee" class="demo-form-inline">
+
+        <el-form-item label="雇佣状态">
+            <el-select v-model="employee.employmentStatus" placeholder="雇佣状态">
+                <el-option label="启用" value="1"></el-option>
+                <el-option label="禁用" value="0"></el-option>
+            </el-select>
+        </el-form-item>
+
+        <el-form-item label="工号">
+            <el-input v-model="employee.staffId" placeholder="工号"></el-input>
+        </el-form-item>
+
+        <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+        </el-form-item>
+    </el-form>
+
+    按钮
+-->
+    <el-row>
+
+        <!--<el-button type="danger" plain @click="deleteByIds">批量删除</el-button>-->
+        <el-button type="primary" plain @click="dialogVisible = true">新增</el-button>
+
+    </el-row>
+
+    <!--添加数据对话框表单-->
+    <el-dialog
+            title="添加员工"
+            :visible.sync="dialogVisible"
+            width="30%"
+    >
+
+        <el-form ref="form" :model="employee" label-width="80px">
+            <el-form-item label="工号">
+                <el-input v-model="employee.staffId"></el-input>
+            </el-form-item>
+
+            <el-form-item label="员工名称">
+                <el-input v-model="employee.employeeName"></el-input>
+            </el-form-item>
+
+            <el-form-item label="年龄">
+                <el-input v-model="employee.age"></el-input>
+            </el-form-item>
+
+            <el-form-item label="工资">
+                <el-input v-model="employee.salary"></el-input>
+            </el-form-item>
+
+            <el-form-item label="底薪">
+                <el-input v-model="employee.basicSalary"></el-input>
+            </el-form-item>
+
+            <el-form-item label="出勤次数">
+                <el-input v-model="employee.attendanceCount"></el-input>
+            </el-form-item>
+
+            <el-form-item label="业绩">
+                <el-input v-model="employee.performance"></el-input>
+            </el-form-item>
+
+            <el-form-item label="雇佣状态">
+                <el-switch v-model="employee.employmentStatus"
+                           active-value="1"
+                           inactive-value="0"
+                ></el-switch>
+            </el-form-item>
+
+
+            <el-form-item>
+                <el-button type="primary" @click="addEmployee">提交</el-button>
+                <el-button @click="dialogVisible = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+
+    </el-dialog>
+
+    <!--表格-->
+    <template>
+        <el-table
+                :data="tableData"
+                style="width: 100%"
+                :row-class-name="tableRowClassName"
+                @selection-change="handleSelectionChange"
+        >
+            <el-table-column
+                    type="selection"
+                    width="55">
+            </el-table-column>
+            <el-table-column
+                    type="index"
+                    width="50">
+            </el-table-column>
+
+            <el-table-column
+                    prop="staffId"
+                    label="工号"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="employeeName"
+                    label="员工名称"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="age"
+                    align="center"
+                    label="年龄">
+            </el-table-column>
+
+            <el-table-column
+                    prop="salary"
+                    align="center"
+                    label="工资">
+            </el-table-column>
+
+            <el-table-column
+                    prop="basicSalary"
+                    align="center"
+                    label="底薪">
+            </el-table-column>
+
+            <el-table-column
+                    prop="attendanceCount"
+                    align="center"
+                    label="出勤次数">
+            </el-table-column>
+
+            <el-table-column
+                    prop="performance"
+                    align="center"
+                    label="业绩">
+            </el-table-column>
+
+            <el-table-column
+                    prop="statusStr"
+                    align="center"
+                    label="当前状态">
+            </el-table-column>
+
+            <el-table-column
+                    align="center"
+                    label="操作">
+
+              <!--  <el-row>
+                    <el-button type="primary">修改</el-button>
+                    <el-button type="danger">删除</el-button>
+                </el-row>-->
+
+            </el-table-column>
+
+        </el-table>
+    </template>
+
+   <!-- &lt;!&ndash;分页工具条&ndash;&gt;
+    <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 10, 15, 20]"
+            :page-size="5"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount">
+    </el-pagination>
+
+-->
+</div>
+
+
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+<script src="js/axios-0.18.0.js"></script>
+
+<script>
+
+    new Vue({
+        el: "#app",
+        mounted() {
+            this.selectAll();
+        },
+        methods: {
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex === 1) {
+                    return 'warning-row';
+                } else if (rowIndex === 3) {
+                    return 'success-row';
+                }
+                return '';
+            },
+            // 复选框选中后执行的方法
+            /*handleSelectionChange(val) {
+                this.multipleSelection = val;
+
+                console.log(this.multipleSelection)
+            },*/
+            // 查询方法
+           /* onSubmit() {
+                console.log(this.employee);
+                // this.selectAll();
+            },*/
+            //查询分页
+            selectAll() {
+                axios({
+                    method: "get",
+                    url: "http://localhost:8080/hr-management-system/employee/selectAll"
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData = resp.data;
+                    }
+                )
+            },
+            // 添加数据
+            addEmployee() {
+
+                var _this = this;
+                //console.log(this.employee);
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/employee/add",
+                    data: _this.employee
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+
+                        //关闭窗口
+                        _this.dialogVisible = false;
+
+                        //重新加载页面
+                        _this.selectAll();
+
+                        //成功提示框
+                        _this.$message({
+                            message: '恭喜你，添加成功',
+                            type: 'success'
+                        });
+
+                    }
+
+                })
+            },
+
+            //分页
+            handleSizeChange(val) {
+                //console.log(`每页 ${val} 条`);
+
+                // 重新设置展示页数
+                // this.pageSize = val;
+
+                // 重新查询 分页 数据
+                this.selectAll();
+
+            },
+            handleCurrentChange(val) {
+                //console.log(`当前页: ${val}`); //   当前页 : 8
+                // val : currentPage
+
+                // 重新设置当前页码
+                // this.currentPage = val;
+
+                // 重新查询 分页 数据
+                this.selectAll();
+            },
+
+        },
+        data() {
+            return {
+                // 总条数
+                totalCount: 100,
+
+                // 每页显示的条数
+                pageSize: 5,
+
+                // 选中的id int[]数组
+                selectedIds: [],
+
+                // 当前页码
+                currentPage: 1,
+
+                // 添加数据对话框是否展示的标记
+                dialogVisible: false,
+
+                // 品牌模型数据
+                employee: {
+                    id: '',
+                    staffId: '',
+                    employeeName: '',
+                    age: "",
+                    employmentStatus: "",
+                    salary: "",
+                    basicSalary:"",
+                    attendanceCount:"",
+                    performance:""
+                },
+                // 复选框选中数据集合
+                multipleSelection: [],
+                // 表格数据
+                tableData: [{
+                    staffId: '1',
+                    employeeName: "张三",
+                    age: "18",
+                    employmentStatus: "1",
+                    salary: "3000",
+                    basicSalary:"2000",
+                    attendanceCount:"10",
+                    performance:"0"
+                }, {
+                    staffId: '1',
+                    employeeName: "张三",
+                    age: "18",
+                    employmentStatus: "1",
+                    salary: "3000",
+                    basicSalary:"2000",
+                    attendanceCount:"10",
+                    performance:"0"
+                }, {
+                    staffId: '1',
+                    employeeName: "张三",
+                    age: "18",
+                    employmentStatus: "1",
+                    salary: "3000",
+                    basicSalary:"2000",
+                    attendanceCount:"10",
+                    performance:"0"
+                }, {
+                    staffId: '1',
+                    employeeName: '张三',
+                    age: "18",
+                    employmentStatus: "1",
+                    salary: "3000",
+                    basicSalary:"2000",
+                    attendanceCount:"10",
+                    performance:"0"
+                }]
+            }
+        }
+    })
+
+</script>
+
+
+</body>
+</html>

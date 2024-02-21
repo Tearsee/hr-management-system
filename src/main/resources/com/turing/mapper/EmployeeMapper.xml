@@ -3,7 +3,8 @@
 <mapper namespace="com.turing.mapper.EmployeeMapper">
 
     <resultMap id="EmployeeResultMap" type="employee">
-        <result property="employeeName" column="employment_name" />
+        <result property="staffId" column="staff_id" />
+        <result property="employeeName" column="employee_name" />
         <result property="employmentStatus" column="employment_status" />
         <result property="basicSalary" column="basic_salary" />
         <result property="attendanceCount" column="attendance_count" />

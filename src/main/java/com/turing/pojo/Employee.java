@@ -1,9 +1,11 @@
 package com.turing.pojo;
 
 public class Employee {
-    // 编号
+    // id 主键
     private Integer id;
-    // 雇员名字
+    // 工号
+    private Integer staffId;
+    // 员工名称
     private String employeeName;
     // 年龄
     private Integer age;
@@ -90,5 +92,11 @@ public class Employee {
         this.employmentStatus = status;
     }
 
+    public Integer getStaffId() {
+        return staffId;
+    }
 
+    public void setStaffId(Integer staffId) {
+        this.staffId = staffId;
+    }
 }

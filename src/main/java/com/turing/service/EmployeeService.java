@@ -10,4 +10,10 @@ public interface EmployeeService {
      * @return
      */
     List<Employee> selectAll();
+
+    /**
+     * 添加员工
+     * @param emp
+     */
+    void add(Employee emp);
 }

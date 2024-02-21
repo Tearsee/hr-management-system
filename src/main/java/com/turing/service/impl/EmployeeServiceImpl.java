@@ -11,9 +11,11 @@ import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {
     // 创建sqlSession 工厂
-    private static SqlSessionFactory factory =  SqlSessionFactoryUtils.getSqlSessionFactory();
+    private static SqlSessionFactory factory = SqlSessionFactoryUtils.getSqlSessionFactory();
+
     /**
      * 查询所有
+     *
      * @return
      */
     @Override
@@ -32,5 +34,29 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         // 返回查询结果
         return employees;
+    }
+
+    /**
+     * 添加员工
+     *
+     * @param emp
+     */
+    @Override
+    public void add(Employee emp) {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+
+        // 执行方法
+        employeeMapper.add(emp);
+
+        // 提交事务
+        sqlSession.commit();
+
+        // 释放资源
+        sqlSession.close();
+
     }
 }

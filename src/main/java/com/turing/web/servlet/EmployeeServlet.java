@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -33,5 +34,21 @@ public class EmployeeServlet extends BaseServlet{
         // 响应JSON 对象
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
+    }
+
+    public void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 从JSON中获取employee数据
+        BufferedReader br = req.getReader();
+        String params = br.readLine();
+
+        // 转为employee 对象
+        Employee employee = JSON.parseObject(params, Employee.class);
+
+        // 调用service 添加员工
+        employeeService.add(employee);
+
+        // 响应成功标识
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write("success");
     }
 }
