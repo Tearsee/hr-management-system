@@ -3,12 +3,23 @@
 <mapper namespace="com.turing.mapper.EmployeeMapper">
 
     <resultMap id="employeeResultMap" type="employee">
-        <result property="staffId" column="staff_id" />
-        <result property="employeeName" column="employee_name" />
-        <result property="employmentStatus" column="employment_status" />
-        <result property="basicSalary" column="basic_salary" />
-        <result property="attendanceCount" column="attendance_count" />
+        <result property="staffId" column="staff_id"/>
+        <result property="employeeName" column="employee_name"/>
+        <result property="employmentStatus" column="employment_status"/>
+        <result property="basicSalary" column="basic_salary"/>
+        <result property="attendanceCount" column="attendance_count"/>
     </resultMap>
+
+    <!--批量删除-->
+    <delete id="deleteByIds">
+        -- from tb_employee where id in (?,?,?)
+        delete
+        from tb_employee
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
 
 
 </mapper>

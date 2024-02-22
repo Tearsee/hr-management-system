@@ -1,10 +1,7 @@
 package com.turing.mapper;
 
 import com.turing.pojo.Employee;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -33,7 +30,7 @@ public interface EmployeeMapper {
      */
     @Select("select * from tb_employee limit #{begin},#{size}")
     @ResultMap("employeeResultMap")
-    List<Employee> selectByPage(@Param("begin") int begin,@Param("size") int size);
+    List<Employee> selectByPage(@Param("begin") int begin, @Param("size") int size);
 
     /**
      * 查询总条数
@@ -41,4 +38,10 @@ public interface EmployeeMapper {
      */
     @Select("select count(*) from tb_employee")
     int selectTotalCount();
+
+    /**
+     * 批量删除
+     * @param ids
+     */
+    void deleteByIds(@Param("ids") int[] ids);
 }

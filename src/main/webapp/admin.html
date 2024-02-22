@@ -40,7 +40,7 @@
 -->
     <el-row>
 
-        <!--<el-button type="danger" plain @click="deleteByIds">批量删除</el-button>-->
+        <el-button type="danger" plain @click="deleteByIds">批量删除</el-button>
         <el-button type="primary" plain @click="dialogVisible = true">新增</el-button>
 
     </el-row>
@@ -213,11 +213,11 @@
                 return '';
             },
             // 复选框选中后执行的方法
-            /*handleSelectionChange(val) {
+            handleSelectionChange(val) {
                 this.multipleSelection = val;
 
                 console.log(this.multipleSelection)
-            },*/
+            },
             // 查询方法
             /* onSubmit() {
                  console.log(this.employee);
@@ -227,7 +227,7 @@
             selectAll() {
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/hr-management-system/employee/selectByPage?currentPage=" + this.currentPage + "&pageSize=" + this.pageSize,
+                    url: "http://localhost:8080/hr-management-system/admin/selectByPage?currentPage=" + this.currentPage + "&pageSize=" + this.pageSize,
                     data: this.employee
                 }).then(resp => {
                         // 设置表格数据
@@ -244,7 +244,7 @@
                 //提交表单数据,发送异步请求
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/hr-management-system/employee/add",
+                    url: "http://localhost:8080/hr-management-system/admin/add",
                     data: _this.employee
                 }).then(function (resp) {
                     //判断响应标识
@@ -266,7 +266,46 @@
 
                 })
             },
+            // 批量删除
+            deleteByIds() {
+                // 弹出确认框
+                this.$confirm('此操作将删除该员工, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    // 删除成功逻辑
+                    for (let i = 0; i < this.multipleSelection.length; i++) {
+                        let selectionElement = this.multipleSelection[i];
+                        this.selectedIds[i] = selectionElement.id;
+                    }
 
+                    // 发送异步请求
+                    axios({
+                        method: "post",
+                        url: "http://localhost:8080/hr-management-system/admin/deleteByIds",
+                        data: this.selectedIds
+                    }).then(resp => {
+
+                        if (resp.data == "success") {
+                            // 重新加载页面
+                            this.selectAll()
+
+                            //成功提示框
+                            this.$message({
+                                message: '恭喜你，删除成功',
+                                type: 'success'
+                            });
+                        }
+                    })
+                }).catch(() => {
+                    // 取消删除逻辑
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                })
+            },
             //分页
             handleSizeChange(val) {
                 //console.log(`每页 ${val} 条`);
