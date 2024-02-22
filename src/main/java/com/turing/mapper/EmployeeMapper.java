@@ -54,10 +54,12 @@ public interface EmployeeMapper {
        List<Employee> selectByPageAndCondition(@Param("begin") int begin, @Param("size") int size,@Param("employee") Employee employee);
 
     /**
-     * 根据条件查询总记录数
+     * 修改员工信息
      * @param employee
      * @return
      */
     int selectTotalCountByCondition(Employee employee);
 
+    @Update("update tb_employee set staff_id=#{staffId},employee_name=#{employeeName},age=#{age},employment_status=#{employmentStatus},salary=#{salary},basic_salary=#{basicSalary},attendance_count=#{attendanceCount},performance=#{performance} where id=#{id}")
+    void updateById(Employee employee);
 }

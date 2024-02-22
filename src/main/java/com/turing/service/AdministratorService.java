@@ -41,4 +41,9 @@ public interface AdministratorService {
      */
     PageBean<Employee> selectByPageAndCondition(int currentPage, int pageSize,Employee employee);
 
+    /**
+     * 修改员工信息
+     * @param employee
+     */
+    void updateById(Employee employee);
 }

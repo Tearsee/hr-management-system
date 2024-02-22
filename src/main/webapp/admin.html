@@ -100,6 +100,77 @@
 
     </el-dialog>
 
+    <!--修改数据对话框表单-->
+    <el-dialog
+            title="编辑员工信息"
+            :visible.sync="dialogVisible1"
+            width="30%"
+    >
+        <el-form ref="form" :model="employee" label-width="80px">
+            <el-form-item label="工号">
+                <el-input v-model="employee.staffId"
+                >
+
+                </el-input>
+            </el-form-item>
+
+            <el-form-item label="员工名称">
+                <el-input v-model="employee.employeeName "
+                >
+
+                </el-input>
+            </el-form-item>
+
+            <el-form-item label="年龄">
+                <el-input v-model="employee.age"
+                >
+
+                </el-input>
+            </el-form-item>
+
+            <el-form-item label="工资">
+                <el-input v-model="employee.salary"
+                >
+
+                </el-input>
+            </el-form-item>
+
+            <el-form-item label="底薪">
+                <el-input v-model="employee.basicSalary"
+                >
+
+                </el-input>
+            </el-form-item>
+
+            <el-form-item label="出勤次数">
+                <el-input v-model="employee.attendanceCount"
+                >
+
+                </el-input>
+            </el-form-item>
+
+            <el-form-item label="业绩">
+                <el-input v-model="employee.performance"
+                >
+
+                </el-input>
+            </el-form-item>
+
+            <el-form-item label=" 雇佣状态 ">
+                <el-switch v-model="employee.employmentStatus"
+                           active-value="1"
+                           inactive-value="0"
+                ></el-switch>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="updateById">提交</el-button>
+                <el-button @click="dialogVisible1 = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+
+    </el-dialog>
+
     <!--表格-->
     <template>
         <el-table
@@ -112,10 +183,10 @@
                     type="selection"
                     width="55">
             </el-table-column>
-            <el-table-column
+            <el-table-column3
                     type="index"
                     width="50">
-            </el-table-column>
+            </el-table-column3>
 
             <el-table-column
                     prop="staffId"
@@ -169,11 +240,14 @@
                     align="center"
                     label="操作">
 
-                <el-row>
+                <!--<el-row>
                     <el-button type="primary">修改</el-button>
-                    <el-button type="danger">删除</el-button>
-                </el-row>
+                </el-row>-->
 
+                <template slot-scope="scope">
+                    <el-button @click="dialogVisible1=true;getupdate(scope.row)" type="primary" round>编辑</el-button>
+                    <!--                    <el-button @click="deleteById(scope.row.id)" type="danger" round>删除</el-button>-->
+                </template>
             </el-table-column>
 
         </el-table>
@@ -222,16 +296,28 @@
                 console.log(this.multipleSelection)
             },
             // 查询方法
-             onSubmit() {
-                 // console.log(this.employee);
-                 this.selectAll();
-             },
+            onSubmit() {
+                // console.log(this.employee);
+                this.selectAll();
+            },
             // 根据条件分页查询
             selectAll() {
                 axios({
                     method: "post",
                     url: "http://localhost:8080/hr-management-system/admin/selectByPageAndCondition?currentPage=" + this.currentPage + "&pageSize=" + this.pageSize,
                     data: this.employee
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData = resp.data.rows; //{rows:[],totoalCount}
+                        this.totalCount = resp.data.totalCount;
+                    }
+                )
+            },
+            // 分页查询
+            selectAll2() {
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/admin/selectByPage?currentPage=" + this.currentPage + "&pageSize=" + this.pageSize,
                 }).then(resp => {
                         // 设置表格数据
                         this.tableData = resp.data.rows; //{rows:[],totoalCount}
@@ -257,7 +343,7 @@
                         _this.dialogVisible = false;
 
                         //重新加载页面
-                        _this.selectAll();
+                        _this.selectAll2();
 
                         //成功提示框
                         _this.$message({
@@ -268,6 +354,42 @@
                     }
 
                 })
+            },
+            updateById() {
+                var _this = this;
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/admin/updateById",
+                    data: _this.employee
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+                        //关闭窗口
+                        _this.dialogVisible1 = false;
+
+                        //重新加载页面
+                        _this.selectAll2();
+
+                        //成功提示框
+                        _this.$message({
+                            message: '恭喜你，编辑成功',
+                            type: 'success'
+                        });
+                    }
+                })
+            },
+            // 修改数据
+            getupdate(row) {
+                this.employee.id = row.id;
+                this.employee.staffId = row.staffId;
+                this.employee.employeeName = row.employeeName;
+                this.employee.age = row.age;
+                this.employee.employmentStatus = row.employmentStatus;
+                this.employee.salary = row.salary;
+                this.employee.basicSalary = row.basicSalary;
+                this.employee.attendanceCount = row.attendanceCount;
+                this.employee.performance = row.performance;
             },
             // 批量删除
             deleteByIds() {
@@ -308,7 +430,8 @@
                         message: '已取消删除'
                     });
                 })
-            },
+            }
+            ,
             //分页
             handleSizeChange(val) {
                 //console.log(`每页 ${val} 条`);
@@ -319,9 +442,10 @@
                 // 重新查询 分页 数据
                 this.selectAll();
 
-            },
+            }
+            ,
             handleCurrentChange(val) {
-                //console.log(`当前页: ${val}`); //   当前页 : 8
+                console.log(`当前页: ${val}`); //   当前页 : 8
                 // val : currentPage
 
                 // 重新设置当前页码
@@ -329,7 +453,8 @@
 
                 // 重新查询 分页 数据
                 this.selectAll();
-            },
+            }
+            ,
 
         },
         data() {
@@ -348,6 +473,9 @@
 
                 // 添加数据对话框是否展示的标记
                 dialogVisible: false,
+
+                // 修改数据对话框是否展示的标记
+                dialogVisible1: false,
 
                 // 品牌模型数据
                 employee: {
