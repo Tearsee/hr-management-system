@@ -119,4 +119,50 @@ public class AdministratorServiceImpl implements AdministratorService {
         sqlSession.close();
 
     }
+
+    /**
+     * 分页条件查询
+     * @param currentPage
+     * @param pageSize
+     * @param employee
+     * @return
+     */
+    @Override
+    public PageBean<Employee> selectByPageAndCondition(int currentPage, int pageSize, Employee employee) {
+
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+
+        // 计算开始索引
+        int begin = (currentPage - 1) * pageSize;
+        // 计算查询条目数
+        int size = pageSize;
+
+        // 处理employee条件 ，设置模糊表达式
+        String employeeName = employee.getEmployeeName();
+        if(employeeName != null && employeeName.length() > 0){
+            employee.setEmployeeName("%" + employeeName + "%");
+        }
+
+        // 查询当前页数据
+        List<Employee> rows = employeeMapper.selectByPageAndCondition(begin, size,employee);
+
+        // 查询总记录数
+        int totalCount = employeeMapper.selectTotalCountByCondition(employee);
+
+        // 封装PageBean 对象
+        PageBean<Employee> pageBean = new PageBean<>();
+        pageBean.setRows(rows);
+        pageBean.setTotalCount(totalCount);
+
+        // 释放资源
+        sqlSession.close();
+
+        return pageBean;
+    }
+
+
 }

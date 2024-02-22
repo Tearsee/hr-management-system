@@ -113,4 +113,38 @@ public class AdministratorServlet extends BaseServlet {
         resp.getWriter().write("success");
     }
 
+    /**
+     * 根据条件分页查询
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void selectByPageAndCondition(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 调用service 的查询所有方法 返回 employees 集合
+//        List<Employee> employees = employeeService.selectAll();
+        String _currentPage = req.getParameter("currentPage");
+        String _pageSize = req.getParameter("pageSize");
+
+        int currentPage = Integer.parseInt(_currentPage);
+        int pageSize = Integer.parseInt(_pageSize);
+
+        // 获取employee
+        BufferedReader br = req.getReader();
+        String params = br.readLine();
+
+        Employee employee = JSON.parseObject(params, Employee.class);
+
+        // 调用service 查询pageBean
+        PageBean<Employee> pageBean = adminService.selectByPageAndCondition(currentPage, pageSize,employee);
+
+        // 转换为JSON 对象
+        String jsonString = JSON.toJSONString(pageBean);
+
+        // 响应JSON 对象
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+    }
+
 }

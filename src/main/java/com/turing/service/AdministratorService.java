@@ -31,4 +31,14 @@ public interface AdministratorService {
      * @param ids
      */
     void deleteByIds(int[] ids);
+
+    /**
+     * 分页条件查询
+     * @param currentPage
+     * @param pageSize
+     * @param employee
+     * @return
+     */
+    PageBean<Employee> selectByPageAndCondition(int currentPage, int pageSize,Employee employee);
+
 }

@@ -21,5 +21,43 @@
         </foreach>
     </delete>
 
+    <select id="selectByPageAndCondition" resultMap="employeeResultMap">
+        select *
+        from tb_employee
+        <where>
+            <if test="employee.staffId != null">
+                and staff_id = #{employee.staffId}
+            </if>
+
+            <if test="employee.employeeName != null and employee.employeeName != ''">
+                and employee_name like #{employee.employeeName}
+            </if>
+
+            <if test="employee.employmentStatus != null">
+                and employment_status = #{employee.employmentStatus}
+            </if>
+
+        </where>
+        limit #{begin},#{size}
+    </select>
+
+    <select id="selectTotalCountByCondition" resultType="int">
+        select count(*)
+        from tb_employee
+        <where>
+            <if test="staffId != null">
+                and staff_id = #{staffId}
+            </if>
+
+            <if test="employeeName != null and employeeName != ''">
+                and employee_name like #{employeeName}
+            </if>
+
+            <if test="employmentStatus != null">
+                and employment_status = #{employmentStatus}
+            </if>
+
+        </where>
+    </select>
 
 </mapper>

@@ -44,4 +44,20 @@ public interface EmployeeMapper {
      * @param ids
      */
     void deleteByIds(@Param("ids") int[] ids);
+
+    /**
+     * 分页条件查询
+     * @param begin
+     * @param size
+     * @return
+     */
+       List<Employee> selectByPageAndCondition(@Param("begin") int begin, @Param("size") int size,@Param("employee") Employee employee);
+
+    /**
+     * 根据条件查询总记录数
+     * @param employee
+     * @return
+     */
+    int selectTotalCountByCondition(Employee employee);
+
 }
