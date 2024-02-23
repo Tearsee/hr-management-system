@@ -17,10 +17,38 @@
 <body>
 <div id="app">
 
+    <!--管理员页面导航栏-->
+    <el-menu
+            :default-active="activeIndex2"
+            class="el-menu-demo"
+            mode="horizontal"
+            @select="handleSelect"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b">
+        <el-menu-item index="0">人力资源管理系统</el-menu-item>
+        <el-menu-item index="1">首页</el-menu-item>
+        <el-submenu index="2">
+            <template slot="title">考勤管理</template>
+            <el-menu-item index="2-1">请假审批</el-menu-item>
+            <el-menu-item index="2-2">考勤表现</el-menu-item>
+            <el-menu-item index="2-3">选项3</el-menu-item>
+            <!--<el-submenu index="2-4">
+                <template slot="title">培训活动管理</template>
+                <el-menu-item index="2-4-1">选项1</el-menu-item>
+                <el-menu-item index="2-4-2">选项2</el-menu-item>
+                <el-menu-item index="2-4-3">选项3</el-menu-item>
+            </el-submenu>-->
+        </el-submenu>
+<!--        <el-menu-item index="3" disabled>管理公告</el-menu-item>-->
+        <el-menu-item index="3">管理公告</el-menu-item>
+        <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">培训活动管理</a></el-menu-item>
+    </el-menu>
+
     <!--搜索表单-->
     <el-form :inline="true" :model="employee" class="demo-form-inline">
 
-        <el-form-item label="员工雇佣状态">
+        <el-form-item label="员工在职状态">
             <el-select v-model="employee.employmentStatus" placeholder="雇佣状态">
                 <el-option label="在职" value="1"></el-option>
                 <el-option label="离职" value="0"></el-option>
@@ -39,6 +67,7 @@
             <el-button type="primary" @click="onSubmit">查询</el-button>
         </el-form-item>
     </el-form>
+
 
     <!--按钮-->
     <el-row>
@@ -207,33 +236,33 @@
             </el-table-column>
 
             <el-table-column
-                    prop="salary"
+                    prop="email"
                     align="center"
-                    label="工资">
+                    label="邮箱">
             </el-table-column>
 
             <el-table-column
-                    prop="basicSalary"
+                    prop="phone"
                     align="center"
-                    label="底薪">
+                    label="联系电话">
             </el-table-column>
 
             <el-table-column
-                    prop="attendanceCount"
+                    prop="deptId"
                     align="center"
-                    label="出勤次数">
+                    label="所属部门ID">
             </el-table-column>
 
             <el-table-column
-                    prop="performance"
+                    prop="posId"
                     align="center"
-                    label="业绩">
+                    label="职位ID">
             </el-table-column>
 
             <el-table-column
                     prop="employmentStatusStr"
                     align="center"
-                    label="员工雇佣状态">
+                    label="在职状态">
             </el-table-column>
 
             <el-table-column
@@ -278,7 +307,7 @@
     new Vue({
         el: "#app",
         mounted() {
-            this.selectAll();
+            this.selectAll2();
         },
         methods: {
             tableRowClassName({row, rowIndex}) {
@@ -433,7 +462,7 @@
             }
             ,
             // 删除单条数据(软删除)
-            softDeleteById(id){
+            softDeleteById(id) {
                 // 弹出确认框
                 this.$confirm('此操作将软删除该员工, 是否继续?', '提示', {
                     confirmButtonText: '确定',
@@ -518,50 +547,50 @@
                     employeeName: '',
                     age: "",
                     employmentStatus: "",
-                    salary: "",
-                    basicSalary: "",
-                    attendanceCount: "",
-                    performance: ""
+                    email: "",
+                    phone: "",
+                    deptId: "",
+                    posId: ""
                 },
                 // 复选框选中数据集合
                 multipleSelection: [],
                 // 表格数据
                 tableData: [{
-                    staffId: '1',
-                    employeeName: "张三",
-                    age: "18",
-                    employmentStatus: "1",
-                    salary: "3000",
-                    basicSalary: "2000",
-                    attendanceCount: "10",
-                    performance: "0"
-                }, {
-                    staffId: '1',
-                    employeeName: "张三",
-                    age: "18",
-                    employmentStatus: "1",
-                    salary: "3000",
-                    basicSalary: "2000",
-                    attendanceCount: "10",
-                    performance: "0"
-                }, {
-                    staffId: '1',
-                    employeeName: "张三",
-                    age: "18",
-                    employmentStatus: "1",
-                    salary: "3000",
-                    basicSalary: "2000",
-                    attendanceCount: "10",
-                    performance: "0"
-                }, {
-                    staffId: '1',
+                    staffId: 'aaa111',
                     employeeName: '张三',
                     age: "18",
                     employmentStatus: "1",
-                    salary: "3000",
-                    basicSalary: "2000",
-                    attendanceCount: "10",
-                    performance: "0"
+                    email: "1437369274@qq.com",
+                    phone: "13530696351",
+                    deptId: "6",
+                    posId: "23",
+                }, {
+                    staffId: 'aaa111',
+                    employeeName: '张三',
+                    age: "18",
+                    employmentStatus: "1",
+                    email: "1437369274@qq.com",
+                    phone: "13530696351",
+                    deptId: "6",
+                    posId: "23",
+                }, {
+                    staffId: 'aaa111',
+                    employeeName: '张三',
+                    age: "18",
+                    employmentStatus: "1",
+                    email: "1437369274@qq.com",
+                    phone: "13530696351",
+                    deptId: "6",
+                    posId: "23",
+                }, {
+                    staffId: 'aaa111',
+                    employeeName: '张三',
+                    age: "18",
+                    employmentStatus: "1",
+                    email: "1437369274@qq.com",
+                    phone: "13530696351",
+                    deptId: "6",
+                    posId: "23",
                 }]
             }
         }

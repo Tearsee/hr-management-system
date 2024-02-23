@@ -6,10 +6,9 @@
         <result property="staffId" column="staff_id"/>
         <result property="employeeName" column="employee_name"/>
         <result property="employmentStatus" column="employment_status"/>
-        <result property="basicSalary" column="basic_salary"/>
-        <result property="attendanceCount" column="attendance_count"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="posId" column="pos_id"/>
     </resultMap>
-
     <!--批量删除-->
     <delete id="deleteByIds">
         -- from tb_employee where id in (?,?,?)
@@ -21,6 +20,7 @@
         </foreach>
     </delete>
 
+    <!--分页条件查询-->
     <select id="selectByPageAndCondition" resultMap="employeeResultMap">
         select *
         from tb_employee
@@ -41,6 +41,7 @@
         limit #{begin},#{size}
     </select>
 
+    <!--根据条件查询总记录数-->
     <select id="selectTotalCountByCondition" resultType="int">
         select count(*)
         from tb_employee

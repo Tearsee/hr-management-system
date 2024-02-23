@@ -19,7 +19,7 @@ public interface EmployeeMapper {
      * 添加员工
      * @param employee
      */
-    @Insert("insert into tb_employee values (null,#{staffId},#{employeeName},#{age},#{employmentStatus},#{salary},#{basicSalary},#{attendanceCount},#{performance})")
+    @Insert("insert into tb_employee values (null,#{staffId},#{employeeName},#{age},#{email},#{phone},#{deptId},#{posId},#{employmentStatus})")
     void add(Employee employee);
 
     /**
@@ -54,12 +54,17 @@ public interface EmployeeMapper {
        List<Employee> selectByPageAndCondition(@Param("begin") int begin, @Param("size") int size,@Param("employee") Employee employee);
 
     /**
-     * 修改员工信息
+     * 根据条件查询总条数
      * @param employee
      * @return
      */
     int selectTotalCountByCondition(Employee employee);
 
+    /**
+     * 修改员工信息
+     * @param employee
+     * @return
+     */
     @Update("update tb_employee set staff_id=#{staffId},employee_name=#{employeeName},age=#{age},employment_status=#{employmentStatus},salary=#{salary},basic_salary=#{basicSalary},attendance_count=#{attendanceCount},performance=#{performance} where id=#{id}")
     void updateById(Employee employee);
 

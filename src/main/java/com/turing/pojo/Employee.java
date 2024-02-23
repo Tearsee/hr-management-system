@@ -4,23 +4,64 @@ public class Employee {
     // id 主键
     private Integer id;
     // 工号
-    private Integer staffId;
+    private String staffId;
     // 员工名称
     private String employeeName;
     // 年龄
     private Integer age;
-    // 雇佣状态 : 0:离职 1:在职
+    // 邮箱
+    private String email;
+    // 手机号
+    private String phone;
+    // 部门编号
+    private Integer deptId;
+    // 职位ID
+    private Integer posId;
+    // 在职状态 : 0:离职 1:在职
     private Integer employmentStatus;
-    // 工资
-    private Integer salary;
-    // 底薪
-    private Integer basicSalary;
-    // 出勤次数
-    private Integer attendanceCount;
-    // 业绩
-    private Integer performance;
 
-    public Integer getSalary() {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public int getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Integer deptId) {
+        this.deptId = deptId;
+    }
+
+    public int getPosId() {
+        return posId;
+    }
+
+    public void setPosId(Integer posId) {
+        this.posId = posId;
+    }
+
+    /*// 工资
+        private Integer salary;
+        // 底薪
+        private Integer basicSalary;
+        // 出勤次数
+        private Integer attendanceCount;
+        // 业绩
+        private Integer performance;
+    */
+    /*public Integer getSalary() {
         return salary;
     }
 
@@ -51,7 +92,7 @@ public class Employee {
     public void setPerformance(Integer performance) {
         this.performance = performance;
     }
-
+*/
     public Integer getId() {
         return id;
     }
@@ -92,11 +133,11 @@ public class Employee {
         this.employmentStatus = status;
     }
 
-    public Integer getStaffId() {
+    public String getStaffId() {
         return staffId;
     }
 
-    public void setStaffId(Integer staffId) {
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 }
