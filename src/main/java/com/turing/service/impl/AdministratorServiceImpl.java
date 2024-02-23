@@ -185,4 +185,26 @@ public class AdministratorServiceImpl implements AdministratorService {
         // 释放资源
         sqlSession.close();
     }
+
+    /**
+     * 软删除
+     * @param id
+     */
+    @Override
+    public void softDeleteById(int id) {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+
+        // 执行方法
+        employeeMapper.softDeleteById(id);
+
+        // 提交事务
+        sqlSession.commit();
+
+        // 释放资源
+        sqlSession.close();
+    }
 }

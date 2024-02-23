@@ -62,4 +62,11 @@ public interface EmployeeMapper {
 
     @Update("update tb_employee set staff_id=#{staffId},employee_name=#{employeeName},age=#{age},employment_status=#{employmentStatus},salary=#{salary},basic_salary=#{basicSalary},attendance_count=#{attendanceCount},performance=#{performance} where id=#{id}")
     void updateById(Employee employee);
+
+    /**
+     * 软删除
+     * @param id
+     */
+    @Update("update tb_employee set employment_status=0 where id=#{id}")
+    void softDeleteById(int id);
 }

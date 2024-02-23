@@ -46,4 +46,10 @@ public interface AdministratorService {
      * @param employee
      */
     void updateById(Employee employee);
+
+    /**
+     * 软删除
+     * @param id
+     */
+    void softDeleteById(int id);
 }

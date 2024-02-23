@@ -170,4 +170,24 @@ public class AdministratorServlet extends BaseServlet {
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write("success");
     }
+
+    /**
+     * 软删除
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void softDeleteById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String _id = req.getParameter("id");
+        int id = Integer.parseInt(_id);
+
+        // 调用service 添加员工
+        adminService.softDeleteById(id);
+
+        // 响应成功标识
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write("success");
+    }
 }
