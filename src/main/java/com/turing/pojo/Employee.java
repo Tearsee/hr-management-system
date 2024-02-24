@@ -13,7 +13,7 @@ public class Employee {
     private String email;
     // 手机号
     private String phone;
-    // 部门编号
+    // 部门ID
     private Integer deptId;
     // 职位ID
     private Integer posId;

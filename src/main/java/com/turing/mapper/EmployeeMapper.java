@@ -19,7 +19,7 @@ public interface EmployeeMapper {
      * 添加员工
      * @param employee
      */
-    @Insert("insert into tb_employee values (null,#{staffId},#{employeeName},#{age},#{email},#{phone},#{deptId},#{posId},#{employmentStatus})")
+    @Insert("insert into tb_employee values (null,#{employeeName},#{age},#{email},#{phone},#{deptId},#{posId},#{employmentStatus},#{staffId})")
     void add(Employee employee);
 
     /**
