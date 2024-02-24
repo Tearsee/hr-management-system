@@ -137,60 +137,41 @@
     >
         <el-form ref="form" :model="employee" label-width="80px">
             <el-form-item label="工号">
-                <el-input v-model="employee.staffId"
-                >
-
-                </el-input>
+                <el-input v-model="employee.staffId"></el-input>
             </el-form-item>
 
             <el-form-item label="员工名称">
-                <el-input v-model="employee.employeeName "
-                >
-
-                </el-input>
+                <el-input v-model="employee.employeeName"></el-input>
             </el-form-item>
 
             <el-form-item label="年龄">
-                <el-input v-model="employee.age"
-                >
-
-                </el-input>
+                <el-input v-model="employee.age"></el-input>
             </el-form-item>
 
-            <el-form-item label="工资">
-                <el-input v-model="employee.salary"
-                >
-
-                </el-input>
+            <el-form-item label="邮箱">
+                <el-input v-model="employee.email"></el-input>
             </el-form-item>
 
-            <el-form-item label="底薪">
-                <el-input v-model="employee.basicSalary"
-                >
-
-                </el-input>
+            <el-form-item label="手机号">
+                <el-input v-model="employee.phone"></el-input>
             </el-form-item>
 
-            <el-form-item label="出勤次数">
-                <el-input v-model="employee.attendanceCount"
-                >
-
-                </el-input>
+            <el-form-item label="部门编号">
+                <el-input v-model="employee.deptId"></el-input>
             </el-form-item>
 
-            <el-form-item label="业绩">
-                <el-input v-model="employee.performance"
-                >
-
-                </el-input>
+            <el-form-item label="职位ID">
+                <el-input v-model="employee.posId"></el-input>
             </el-form-item>
 
-            <el-form-item label=" 雇佣状态 ">
+            <el-form-item label="在职状态">
                 <el-switch v-model="employee.employmentStatus"
                            active-value="1"
                            inactive-value="0"
                 ></el-switch>
             </el-form-item>
+
+
 
             <el-form-item>
                 <el-button type="primary" @click="updateById">提交</el-button>
@@ -415,10 +396,10 @@
                 this.employee.employeeName = row.employeeName;
                 this.employee.age = row.age;
                 this.employee.employmentStatus = row.employmentStatus;
-                this.employee.salary = row.salary;
-                this.employee.basicSalary = row.basicSalary;
-                this.employee.attendanceCount = row.attendanceCount;
-                this.employee.performance = row.performance;
+                this.employee.email = row.email;
+                this.employee.phone = row.phone;
+                this.employee.deptId = row.deptId;
+                this.employee.posId = row.posId;
             },
             // 批量删除
             deleteByIds() {

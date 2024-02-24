@@ -65,7 +65,7 @@ public interface EmployeeMapper {
      * @param employee
      * @return
      */
-    @Update("update tb_employee set staff_id=#{staffId},employee_name=#{employeeName},age=#{age},employment_status=#{employmentStatus},salary=#{salary},basic_salary=#{basicSalary},attendance_count=#{attendanceCount},performance=#{performance} where id=#{id}")
+    @Update("update tb_employee set staff_id=#{staffId},employee_name=#{employeeName},age=#{age},employment_status=#{employmentStatus},email=#{email},phone=#{phone},dept_id=#{deptId},pos_id=#{posId} where id=#{id}")
     void updateById(Employee employee);
 
     /**
