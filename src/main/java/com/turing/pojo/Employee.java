@@ -20,85 +20,21 @@ public class Employee {
     // 在职状态 : 0:离职 1:在职
     private Integer employmentStatus;
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public int getDeptId() {
-        return deptId;
-    }
-
-    public void setDeptId(Integer deptId) {
-        this.deptId = deptId;
-    }
-
-    public int getPosId() {
-        return posId;
-    }
-
-    public void setPosId(Integer posId) {
-        this.posId = posId;
-    }
-
-    /*// 工资
-        private Integer salary;
-        // 底薪
-        private Integer basicSalary;
-        // 出勤次数
-        private Integer attendanceCount;
-        // 业绩
-        private Integer performance;
-    */
-    /*public Integer getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Integer salary) {
-        this.salary = salary;
-    }
-
-    public Integer getBasicSalary() {
-        return basicSalary;
-    }
-
-    public void setBasicSalary(Integer basicSalary) {
-        this.basicSalary = basicSalary;
-    }
-
-    public Integer getAttendanceCount() {
-        return attendanceCount;
-    }
-
-    public void setAttendanceCount(Integer attendanceCount) {
-        this.attendanceCount = attendanceCount;
-    }
-
-    public Integer getPerformance() {
-        return performance;
-    }
-
-    public void setPerformance(Integer performance) {
-        this.performance = performance;
-    }
-*/
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
     }
 
     public String getEmployeeName() {
@@ -117,8 +53,44 @@ public class Employee {
         this.age = age;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Integer getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Integer deptId) {
+        this.deptId = deptId;
+    }
+
+    public Integer getPosId() {
+        return posId;
+    }
+
+    public void setPosId(Integer posId) {
+        this.posId = posId;
+    }
+
     public Integer getEmploymentStatus() {
         return employmentStatus;
+    }
+
+    public void setEmploymentStatus(Integer employmentStatus) {
+        this.employmentStatus = employmentStatus;
     }
 
     // 雇佣状态逻辑视图
@@ -129,15 +101,4 @@ public class Employee {
         return employmentStatus == 0 ? "离职":"在职";
     }
 
-    public void setEmploymentStatus(Integer status) {
-        this.employmentStatus = status;
-    }
-
-    public String getStaffId() {
-        return staffId;
-    }
-
-    public void setStaffId(String staffId) {
-        this.staffId = staffId;
-    }
 }

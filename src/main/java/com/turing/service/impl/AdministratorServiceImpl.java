@@ -142,6 +142,11 @@ public class AdministratorServiceImpl implements AdministratorService {
         int size = pageSize;
 
         // 处理employee条件 ，设置模糊表达式
+        String staffId = employee.getStaffId();
+        if(staffId != null && staffId.length() > 0){
+            employee.setStaffId("%" + staffId + "%");
+        }
+
         String employeeName = employee.getEmployeeName();
         if(employeeName != null && employeeName.length() > 0){
             employee.setEmployeeName("%" + employeeName + "%");
