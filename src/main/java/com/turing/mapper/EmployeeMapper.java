@@ -7,6 +7,7 @@ import java.util.List;
 
 
 public interface EmployeeMapper {
+    // 管理员操作
     /**
      * 查询所有
      * @return
@@ -74,4 +75,15 @@ public interface EmployeeMapper {
      */
     @Update("update tb_employee set employment_status=0 where id=#{id}")
     void softDeleteById(int id);
+
+    // 员工操作
+
+    /**
+     * 查看个人信息
+     * @param id
+     * @return
+     */
+    @Select("select * from tb_employee where id=#{id}")
+    @ResultMap("employeeResultMap")
+    Employee selectOneById(int id);
 }

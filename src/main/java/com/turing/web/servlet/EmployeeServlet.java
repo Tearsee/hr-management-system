@@ -3,6 +3,7 @@ package com.turing.web.servlet;
 import com.alibaba.fastjson.JSON;
 import com.turing.pojo.Employee;
 import com.turing.pojo.PageBean;
+import com.turing.service.impl.AdministratorServiceImpl;
 import com.turing.service.impl.EmployeeServiceImpl;
 
 import javax.servlet.ServletException;
@@ -15,5 +16,32 @@ import java.util.List;
 
 @WebServlet("/employee/*")
 public class EmployeeServlet extends BaseServlet{
+
+    private static EmployeeServiceImpl employeeService = new EmployeeServiceImpl();// 创建service 对象
+
+
+    /**
+     * 查询员工个人信息
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void selectOneById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 从req中获取参数id
+        String _id = req.getParameter("id");
+        int id = Integer.parseInt(_id);
+
+        // 调用service 的查询所有方法 返回 employees 集合
+        Employee employee = employeeService.selectOneById(id);
+
+        // 转换为JSON 对象
+        String jsonString = JSON.toJSONString(employee);
+
+        // 响应JSON 对象
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+    }
 
 }
