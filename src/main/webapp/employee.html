@@ -195,9 +195,11 @@
 
                     <el-card class="box-card">
                         <span>个人资料信息</span>
-                        <span style="float: right">编辑个人资料信息</span>
+                        <span  style="float: right">
+                            <el-link icon="el-icon-edit" @click="dialogVisible1=true;getupdate(employee.id)">编辑资料信息</el-link>
+                        </span>
                         <el-divider></el-divider>
-                        <span property="">工号</span>
+                        <span>工号</span>
                         <span style="float: right">{{employee.staffId}}</span>
                         <el-divider></el-divider>
                         <span>年龄</span>
@@ -267,6 +269,58 @@
         </el-container>
     </el-container>
 
+    <!--修改数据对话框表单-->
+    <el-dialog
+            title="编辑员工信息"
+            :visible.sync="dialogVisible1"
+            width="30%"
+    >
+        <el-form ref="form" :model="employee" label-width="80px">
+            <el-form-item label="工号">
+                <el-input v-model="employee.staffId"></el-input>
+            </el-form-item>
+
+            <el-form-item label="员工名称">
+                <el-input v-model="employee.employeeName"></el-input>
+            </el-form-item>
+
+            <el-form-item label="年龄">
+                <el-input v-model="employee.age"></el-input>
+            </el-form-item>
+
+            <el-form-item label="邮箱">
+                <el-input v-model="employee.email"></el-input>
+            </el-form-item>
+
+            <el-form-item label="手机号">
+                <el-input v-model="employee.phone"></el-input>
+            </el-form-item>
+
+            <el-form-item label="部门编号">
+                <el-input v-model="employee.deptId"></el-input>
+            </el-form-item>
+
+            <el-form-item label="职位ID">
+                <el-input v-model="employee.posId"></el-input>
+            </el-form-item>
+
+            <el-form-item label="在职状态">
+                <el-switch v-model="employee.employmentStatus"
+                           active-value="1"
+                           inactive-value="0"
+                ></el-switch>
+            </el-form-item>
+
+
+
+            <el-form-item>
+                <el-button type="primary" @click="updateById">提交</el-button>
+                <el-button @click="dialogVisible1 = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+
+    </el-dialog>
+
 </div>
 
 
@@ -326,6 +380,8 @@
                     deptId: "",
                     posId: ""
                 },
+                // 修改数据对话框是否展示的标记
+                dialogVisible1: false,
             }
         },
         methods: {
@@ -389,7 +445,43 @@
                         this.employee.posId = resp.data.posId;
                     }
                 )
-            }
+            },
+            updateById() {
+                var _this = this;
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/employee/updateById",
+                    data: _this.employee
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+                        //关闭窗口
+                        _this.dialogVisible1 = false;
+
+                        //重新加载页面
+                        _this.selectOneById();
+
+                        //成功提示框
+                        _this.$message({
+                            message: '恭喜你，编辑成功',
+                            type: 'success'
+                        });
+                    }
+                })
+            },
+            // 修改数据
+            getupdate(id) {
+                // this.employee.id = row.id;
+                this.employee.staffId = row.staffId;
+                this.employee.employeeName = row.employeeName;
+                this.employee.age = row.age;
+                this.employee.employmentStatus = row.employmentStatus;
+                this.employee.email = row.email;
+                this.employee.phone = row.phone;
+                this.employee.deptId = row.deptId;
+                this.employee.posId = row.posId;
+            },
         }
     })
 

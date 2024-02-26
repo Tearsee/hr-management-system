@@ -16,4 +16,11 @@ public interface EmployeeService {
     @Select("select * from tb_employee where id=#{id}")
     Employee selectOneById(int id);
 
+
+    /**
+     * 修改员工信息
+     * @param employee
+     */
+    void updateById(Employee employee);
+
 }

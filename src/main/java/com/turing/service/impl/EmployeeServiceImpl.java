@@ -35,4 +35,27 @@ public class EmployeeServiceImpl implements EmployeeService{
         // 返回查询结果
         return employee;
     }
+
+
+    /**
+     * 修改员工信息( 不包括 名字)
+     * @param employee
+     */
+    @Override
+    public void updateById(Employee employee) {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+
+        // 执行方法
+        employeeMapper.updateById(employee);
+
+        // 提交事务
+        sqlSession.commit();
+
+        // 释放资源
+        sqlSession.close();
+    }
 }

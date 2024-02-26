@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/employee/*")
-public class EmployeeServlet extends BaseServlet{
+public class EmployeeServlet extends BaseServlet {
 
     private static EmployeeServiceImpl employeeService = new EmployeeServiceImpl();// 创建service 对象
 
@@ -44,4 +44,27 @@ public class EmployeeServlet extends BaseServlet{
         resp.getWriter().write(jsonString);
     }
 
+    /**
+     * 修改员工信息
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void updateById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 从JSON中获取employee数据
+        BufferedReader br = req.getReader();
+        String params = br.readLine();
+
+        // 转为employee 对象
+        Employee employee = JSON.parseObject(params, Employee.class);
+
+        // 调用service 添加员工
+        employeeService.updateById(employee);
+
+        // 响应成功标识
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write("success");
+    }
 }
