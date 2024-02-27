@@ -63,4 +63,27 @@ public class TrainServlet extends BaseServlet {
         resp.getWriter().write("success");
     }
 
+    /**
+     * 批量删除
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void deleteByIds(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 1. 接收ids数组
+        BufferedReader br = req.getReader();
+        String params = br.readLine();//[1,6,9]
+
+        // 获取到了ids数组
+        int[] ids = JSON.parseObject(params, int[].class);
+
+        // 2. 调用service 批量删除
+        trainService.deleteByIds(ids);
+
+        // 3. 响应成功标识
+        resp.getWriter().write("success");
+    }
+
 }

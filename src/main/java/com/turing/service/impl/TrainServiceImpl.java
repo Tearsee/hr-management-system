@@ -62,4 +62,26 @@ public class TrainServiceImpl implements TrainService {
         // 释放资源
         sqlSession.close();
     }
+
+    /**
+     * 批量删除
+     * @param ids
+     */
+    @Override
+    public void deleteByIds(int[] ids) {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        TrainMapper trainMapper = sqlSession.getMapper(TrainMapper.class);
+
+        // 执行方法
+        trainMapper.deleteByIds(ids);
+
+        // 提交事务
+        sqlSession.commit();
+
+        // 释放资源
+        sqlSession.close();
+    }
 }
