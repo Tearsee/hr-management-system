@@ -295,13 +295,13 @@
 
                         <!--分页工具条-->
                         <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="currentPage"
+                                @size-change="handleSizeChange_train"
+                                @current-change="handleCurrentChange_train"
+                                :current-page="currentPage_train"
                                 :page-sizes="[5, 10, 15, 20]"
                                 :page-size="5"
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :total="totalCount">
+                                :total="totalCount_train">
                         </el-pagination>
 
                     </div>
@@ -727,7 +727,7 @@
                         _this.dialogVisible3 = false;
 
                         //重新加载页面
-                        _this.selectAll_train();
+                        _this.selectByPage();
 
                         //成功提示框
                         _this.$message({
@@ -776,7 +776,7 @@
                         _this.dialogVisible2 = false;
 
                         //重新加载页面
-                        _this.selectAll_train();
+                        _this.selectByPage();
 
                         //成功提示框
                         _this.$message({
@@ -818,7 +818,7 @@
 
                         if (resp.data == "success") {
                             // 重新加载页面
-                            this.selectAll_train();
+                            this.selectByPage();
 
                             //成功提示框
                             this.$message({
@@ -890,29 +890,59 @@
             selectByPage() {
                 axios({
                     method: "get",
-                    url: "http://localhost:8080/hr-management-system/train/selectByPage?currentPage=" + this.currentPage + "&pageSize=" + this.pageSize,
+                    url: "http://localhost:8080/hr-management-system/train/selectByPage?currentPage_train=" + this.currentPage_train + "&pageSize_train=" + this.pageSize_train,
                 }).then(resp => {
                         // 设置表格数据
                         this.tableData_train = resp.data.rows; //{rows:[],totoalCount}
-                        this.totalCount = resp.data.totalCount;
+                        this.totalCount_train = resp.data.totalCount;
                     }
                 )
             },
+            //分页
+            handleSizeChange_train(val) {
+                //console.log(`每页 ${val} 条`);
+
+                // 重新设置展示页数
+                this.pageSize_train = val;
+
+                // 重新查询 分页 数据
+                this.selectByPage();
+
+            },
+            handleCurrentChange_train(val) {
+                console.log(`当前页: ${val}`); //   当前页 : 8
+                // val : currentPage
+
+                // 重新设置当前页码
+                this.currentPage_train = val;
+
+                // 重新查询 分页 数据
+                this.selectByPage();
+            }
 
         },
         data() {
             return {
-                // 总条数
+                // 员工总条数
                 totalCount: 100,
+
+                // 培训总条数
+                totalCount_train:100,
 
                 // 每页显示的条数
                 pageSize: 5,
 
+                // 每页显示的条数
+                pageSize_train: 5,
+
                 // 选中的id int[]数组
                 selectedIds: [],
 
-                // 当前页码
+                // 员工 当前页码
                 currentPage: 1,
+
+                // 培训 当前页码
+                currentPage_train:1,
 
                 //当前页面
                 currentPage_: 'employeeManage',

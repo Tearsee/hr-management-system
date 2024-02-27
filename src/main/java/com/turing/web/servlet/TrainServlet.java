@@ -121,8 +121,8 @@ public class TrainServlet extends BaseServlet {
      */
     public void selectByPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 调用service 的查询所有方法 返回 employees 集合
-        String _currentPage = req.getParameter("currentPage");
-        String _pageSize = req.getParameter("pageSize");
+        String _currentPage = req.getParameter("currentPage_train");
+        String _pageSize = req.getParameter("pageSize_train");
 
         int currentPage = Integer.parseInt(_currentPage);
         int pageSize = Integer.parseInt(_pageSize);
