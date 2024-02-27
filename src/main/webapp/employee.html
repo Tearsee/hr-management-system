@@ -431,7 +431,7 @@
             selectOneById() {
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/hr-management-system/employee/selectOneById?id=1"
+                    url: "http://localhost:8080/hr-management-system/employee/selectOneById?id=1"// 暂时写死
                 }).then(resp => {
                         // 设置数据
                         this.employee.id = resp.data.id;
