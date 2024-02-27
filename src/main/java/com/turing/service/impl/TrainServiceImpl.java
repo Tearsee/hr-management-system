@@ -40,4 +40,26 @@ public class TrainServiceImpl implements TrainService {
         return trains;
 
     }
+
+    /**
+     * 添加培训计划
+     * @param train
+     */
+    @Override
+    public void add(Train train) {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        TrainMapper trainMapper = sqlSession.getMapper(TrainMapper.class);
+
+        // 执行方法
+        trainMapper.add(train);
+
+        // 提交事务
+        sqlSession.commit();
+
+        // 释放资源
+        sqlSession.close();
+    }
 }

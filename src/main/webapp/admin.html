@@ -231,7 +231,7 @@
                         <el-row>
 
                             <el-button type="danger" plain @click="deleteByIds">批量删除</el-button>
-                            <el-button type="primary" plain @click="dialogVisible = true">新增</el-button>
+                            <el-button type="primary" plain @click="dialogVisible3 = true">新增</el-button>
 
                         </el-row>
 
@@ -314,8 +314,9 @@
         </el-container>
     </el-container>
 
+    <!--员工-->
 
-    <!--添加数据对话框表单-->
+    <!--添加员工数据对话框表单-->
     <el-dialog
             title="添加员工"
             :visible.sync="dialogVisible"
@@ -418,7 +419,39 @@
 
     </el-dialog>
 
+    <!--培训-->
 
+    <!--添加数据对话框表单-->
+    <el-dialog
+            title="添加培训计划"
+            :visible.sync="dialogVisible3"
+            width="30%"
+    >
+
+        <el-form ref="form" :model="train" label-width="80px">
+            <el-form-item label="员工编号">
+                <el-input v-model="train.eid"></el-input>
+            </el-form-item>
+
+            <el-form-item label="培训日期">
+                <el-input v-model="train.trainDate"></el-input>
+            </el-form-item>
+
+            <el-form-item label="培训内容">
+                <el-input v-model="train.trainContent"></el-input>
+            </el-form-item>
+
+            <el-form-item label="备注">
+                <el-input v-model="train.remark"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="addTrain">提交</el-button>
+                <el-button @click="dialogVisible3 = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+
+    </el-dialog>
 </div>
 
 <script src="js/vue.js"></script>
@@ -643,8 +676,39 @@
                 this.selectAll();
             }
             ,
+
             // 培训增删改查
-            selectAllTrain() {
+
+            // 添加数据
+            addTrain() {
+                var _this = this;
+                //console.log(this.employee);
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/train/add",
+                    data: _this.train
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+
+                        //关闭窗口
+                        _this.dialogVisible3 = false;
+
+                        //重新加载页面
+                        _this.selectAll_train();
+
+                        //成功提示框
+                        _this.$message({
+                            message: '恭喜你，添加成功',
+                            type: 'success'
+                        });
+
+                    }
+
+                })
+            },
+           /* selectAllTrain() {
                 axios({
                     method: "post",
                     url: "http://localhost:8080/hr-management-system/admin/selectByPageAndCondition?currentPage=" + this.currentPage + "&pageSize=" + this.pageSize,
@@ -655,7 +719,7 @@
                         this.totalCount = resp.data.totalCount;
                     }
                 )
-            },
+            },*/
             handleOpen(key, keyPath) {
                 console.log(key, keyPath);
             },
@@ -667,7 +731,6 @@
                 this.currentPage_ = index;
             },
 
-            // 培训
             // 修改数据
             getupdate_train(row) {
                 this.train.id = row.id;
@@ -723,7 +786,8 @@
                         // this.totalCount = resp.data.totalCount;
                     }
                 )
-            }
+            },
+
         },
         data() {
             return {
@@ -805,7 +869,7 @@
                 train: {
                     id: '',
                     eid: '',
-                    trainDate: '',
+                    trainDate: new Date(),
                     trainContent: '',
                     remark: ''
                 },
@@ -835,8 +899,11 @@
                     trainContent: 'xxxxxxx',
                     remark: ''
                 }],
-                // 修改数据对话框是否展示的标记
-                dialogVisible2: false
+                // 修改培训数据对话框是否展示的标记
+                dialogVisible2: false,
+
+                // 添加培训计划对话框是否展示的标记
+                dialogVisible3:false,
 
             }
         }
