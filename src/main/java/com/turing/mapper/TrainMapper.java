@@ -54,4 +54,19 @@ public interface TrainMapper {
     @Select("select count(*) from emptrain")
     int selectTotalCount();
 
+    /**
+     * 分页条件查询
+     * @param begin
+     * @param size
+     * @return
+     */
+    List<Train> selectByPageAndCondition(@Param("begin") int begin, @Param("size") int size,@Param("train") Train train);
+
+    /**
+     * 根据条件查询总条数
+     * @param train
+     * @return
+     */
+    int selectTotalCountByCondition(Train train);
+
 }

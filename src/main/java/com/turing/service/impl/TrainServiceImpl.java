@@ -145,5 +145,43 @@ public class TrainServiceImpl implements TrainService {
         return pageBean;
     }
 
+    /**
+     * 分页条件查询
+     * @param currentPage
+     * @param pageSize
+     * @param train
+     * @return
+     */
+    @Override
+    public PageBean<Train> selectByPageAndCondition(int currentPage, int pageSize, Train train) {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        TrainMapper trainMapper = sqlSession.getMapper(TrainMapper.class);
+
+        // 计算开始索引
+        int begin = (currentPage - 1) * pageSize;
+        // 计算查询条目数
+        int size = pageSize;
+
+        // 查询当前页数据
+        List<Train> rows = trainMapper.selectByPageAndCondition(begin, size,train);
+
+        // 查询总记录数
+        int totalCount = trainMapper.selectTotalCountByCondition(train);
+
+        // 封装PageBean 对象
+        PageBean<Train> pageBean = new PageBean<>();
+        pageBean.setRows(rows);
+        pageBean.setTotalCount(totalCount);
+
+        // 释放资源
+        sqlSession.close();
+
+        return pageBean;
+        
+    }
+
 
 }

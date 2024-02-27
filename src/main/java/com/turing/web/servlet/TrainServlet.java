@@ -137,4 +137,38 @@ public class TrainServlet extends BaseServlet {
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
     }
+
+    /**
+     * 根据条件分页查询
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void selectByPageAndCondition(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 调用service 的查询所有方法 返回 employees 集合
+//        List<Employee> employees = employeeService.selectAll();
+        String _currentPage = req.getParameter("currentPage_train");
+        String _pageSize = req.getParameter("pageSize_train");
+
+        int currentPage = Integer.parseInt(_currentPage);
+        int pageSize = Integer.parseInt(_pageSize);
+
+        // 获取 train
+        BufferedReader br = req.getReader();
+        String params = br.readLine();
+
+        Train train = JSON.parseObject(params, Train.class);
+
+        // 调用service 查询pageBean
+        PageBean<Train> pageBean = trainService.selectByPageAndCondition(currentPage, pageSize,train);
+
+        // 转换为JSON 对象
+        String jsonString = JSON.toJSONString(pageBean);
+
+        // 响应JSON 对象
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+    }
 }

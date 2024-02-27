@@ -4,7 +4,7 @@
 
     <!--批量删除-->
     <delete id="deleteByIds">
-        -- from tb_employee where id in (?,?,?)
+        -- from tb_train where id in (?,?,?)
         delete
         from emptrain
         where id in
@@ -13,4 +13,28 @@
         </foreach>
     </delete>
 
+    <!--分页条件查询-->
+    <select id="selectByPageAndCondition" resultType="com.turing.pojo.Train">
+
+        select *
+        from emptrain
+        <where>
+            <if test="train.eid != null">
+                and eid = #{train.eid}
+            </if>
+        </where>
+        limit #{begin},#{size}
+
+    </select>
+
+    <!--根据条件查询总记录数-->
+    <select id="selectTotalCountByCondition" resultType="int">
+        select count(*)
+        from emptrain
+        <where>
+            <if test="eid != null">
+                and eid = #{eid}
+            </if>
+        </where>
+    </select>
 </mapper>

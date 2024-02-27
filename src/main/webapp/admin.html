@@ -49,7 +49,7 @@
                         <el-submenu index="transactionManage">
                             <template slot="title"><i class="el-icon-menu"></i>事务管理</template>
 
-                            <el-menu-item index="trainManage"  @click="selectByPage">培训管理</el-menu-item>
+                            <el-menu-item index="trainManage"  @click="selectByPageAndCondition_train">培训管理</el-menu-item>
                             <el-menu-item index="attendanceManage">考勤管理</el-menu-item>
 
                         </el-submenu>
@@ -206,25 +206,14 @@
                     </div>
                     <div v-show="currentPage_ === 'trainManage'">
                         <!--搜索表单-->
-                        <el-form :inline="true" :model="employee" class="demo-form-inline">
+                        <el-form :inline="true" :model="train" class="demo-form-inline">
 
-                            <el-form-item label="员工在职状态">
-                                <el-select v-model="employee.employmentStatus" placeholder="在职状态" value="">
-                                    <el-option label="在职" value="1"></el-option>
-                                    <el-option label="离职" value="0"></el-option>
-                                </el-select>
-                            </el-form-item>
-
-                            <el-form-item label="工号">
-                                <el-input v-model="employee.staffId" placeholder="工号"></el-input>
-                            </el-form-item>
-
-                            <el-form-item label="员工名称">
-                                <el-input v-model="employee.employeeName" placeholder="员工名称"></el-input>
+                            <el-form-item label="员工编号(id)">
+                                <el-input v-model="train.eid" placeholder="员工编号(id)"></el-input>
                             </el-form-item>
 
                             <el-form-item>
-                                <el-button type="primary" @click="onSubmit">查询</el-button>
+                                <el-button type="primary" @click="onSubmit_train">查询</el-button>
                             </el-form-item>
                         </el-form>
                         <!--按钮-->
@@ -918,7 +907,25 @@
 
                 // 重新查询 分页 数据
                 this.selectByPage();
-            }
+            },
+            // 查询方法
+            onSubmit_train() {
+                // console.log(this.employee);
+                this.selectByPageAndCondition_train();
+            },
+            // 根据条件分页查询
+            selectByPageAndCondition_train() {
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/train/selectByPageAndCondition?currentPage_train=" + this.currentPage_train + "&pageSize_train=" + this.pageSize_train,
+                    data: this.train
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData_train = resp.data.rows; //{rows:[],totoalCount}
+                        this.totalCount_train = resp.data.totalCount;
+                    }
+                )
+            },
 
         },
         data() {

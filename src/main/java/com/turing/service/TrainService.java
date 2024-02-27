@@ -44,4 +44,13 @@ public interface TrainService {
      * @return
      */
     PageBean<Train> selectByPage(int currentPage, int pageSize);
+
+    /**
+     * 分页条件查询
+     * @param currentPage
+     * @param pageSize
+     * @param train
+     * @return
+     */
+    PageBean<Train> selectByPageAndCondition(int currentPage, int pageSize,Train train);
 }
