@@ -2,10 +2,7 @@ package com.turing.mapper;
 
 import com.turing.pojo.Employee;
 import com.turing.pojo.Train;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -31,4 +28,12 @@ public interface TrainMapper {
      * @param ids
      */
     void deleteByIds(@Param("ids") int[] ids);
+
+    /**
+     * 修改培训信息
+     * @param train
+     * @return
+     */
+    @Update("update emptrain set eid=#{eid},trainDate=#{trainDate},trainContent=#{trainContent},remark=#{remark} where id=#{id}")
+    void updateById(Train train);
 }

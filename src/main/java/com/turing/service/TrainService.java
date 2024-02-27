@@ -4,6 +4,7 @@ import com.turing.pojo.Employee;
 import com.turing.pojo.Train;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -26,4 +27,11 @@ public interface TrainService {
      * @param ids
      */
     void deleteByIds(@Param("ids") int[] ids);
+
+    /**
+     * 修改培训信息
+     * @param train
+     * @return
+     */
+    void updateById(Train train);
 }

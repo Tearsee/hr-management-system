@@ -452,6 +452,37 @@
         </el-form>
 
     </el-dialog>
+
+    <!--修改数据对话框表单-->
+    <el-dialog
+            title="编辑员工信息"
+            :visible.sync="dialogVisible2"
+            width="30%"
+    >
+        <el-form ref="form" :model="train" label-width="80px">
+            <el-form-item label="员工编号">
+                <el-input v-model="train.eid"></el-input>
+            </el-form-item>
+
+            <el-form-item label="培训日期">
+                <el-input v-model="train.trainDate"></el-input>
+            </el-form-item>
+
+            <el-form-item label="培训内容">
+                <el-input v-model="train.trainContent"></el-input>
+            </el-form-item>
+
+            <el-form-item label="备注">
+                <el-input v-model="train.remark"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="updateById_train">提交</el-button>
+                <el-button @click="dialogVisible2 = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+
+    </el-dialog>
 </div>
 
 <script src="js/vue.js"></script>
@@ -730,7 +761,31 @@
             handleSelect(index) {
                 this.currentPage_ = index;
             },
+            // 修改数据
+            updateById_train() {
+                var _this = this;
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/train/updateById",
+                    data: _this.train
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+                        //关闭窗口
+                        _this.dialogVisible2 = false;
 
+                        //重新加载页面
+                        _this.selectAll_train();
+
+                        //成功提示框
+                        _this.$message({
+                            message: '恭喜你，编辑成功',
+                            type: 'success'
+                        });
+                    }
+                })
+            },
             // 修改数据
             getupdate_train(row) {
                 this.train.id = row.id;

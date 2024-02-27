@@ -86,4 +86,29 @@ public class TrainServlet extends BaseServlet {
         resp.getWriter().write("success");
     }
 
+    /**
+     * 修改培训信息
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void updateById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 从JSON中获取employee数据
+        BufferedReader br = req.getReader();
+        String params = br.readLine();
+
+        // 转为employee 对象
+        Train train = JSON.parseObject(params, Train.class);
+
+        // 调用service 添加员工
+        trainService.updateById(train);
+
+        // 响应成功标识
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write("success");
+    }
+
+
 }
