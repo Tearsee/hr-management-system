@@ -72,7 +72,6 @@ public class AdministratorServlet extends BaseServlet {
      */
     public void selectByPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 调用service 的查询所有方法 返回 employees 集合
-//        List<Employee> employees = employeeService.selectAll();
         String _currentPage = req.getParameter("currentPage");
         String _pageSize = req.getParameter("pageSize");
 

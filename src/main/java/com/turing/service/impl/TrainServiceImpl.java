@@ -3,6 +3,7 @@ package com.turing.service.impl;
 import com.turing.mapper.EmployeeMapper;
 import com.turing.mapper.TrainMapper;
 import com.turing.pojo.Employee;
+import com.turing.pojo.PageBean;
 import com.turing.pojo.Train;
 import com.turing.service.EmployeeService;
 import com.turing.service.TrainService;
@@ -107,4 +108,42 @@ public class TrainServiceImpl implements TrainService {
         // 释放资源
         sqlSession.close();
     }
+
+    /**
+     * 分页查询
+     * @param currentPage 当前页码
+     * @param pageSize 每页展示条数
+     * @return
+     */
+    @Override
+    public PageBean<Train> selectByPage(int currentPage, int pageSize) {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        TrainMapper trainMapper = sqlSession.getMapper(TrainMapper.class);
+
+        // 计算开始索引
+        int begin = (currentPage - 1) * pageSize;
+        // 计算查询条目数
+        int size = pageSize;
+
+        // 查询当前页数据
+        List<Train> rows = trainMapper.selectByPage(begin, size);
+
+        // 查询总记录数
+        int totalCount = trainMapper.selectTotalCount();
+
+        // 封装PageBean 对象
+        PageBean<Train> pageBean = new PageBean<>();
+        pageBean.setRows(rows);
+        pageBean.setTotalCount(totalCount);
+
+        // 释放资源
+        sqlSession.close();
+
+        return pageBean;
+    }
+
+
 }

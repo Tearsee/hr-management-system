@@ -1,9 +1,11 @@
 package com.turing.service;
 
 import com.turing.pojo.Employee;
+import com.turing.pojo.PageBean;
 import com.turing.pojo.Train;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
@@ -34,4 +36,12 @@ public interface TrainService {
      * @return
      */
     void updateById(Train train);
+
+    /**
+     * 分页查询
+     * @param currentPage 当前页码
+     * @param pageSize 每页展示条数
+     * @return
+     */
+    PageBean<Train> selectByPage(int currentPage, int pageSize);
 }

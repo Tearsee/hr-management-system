@@ -36,4 +36,22 @@ public interface TrainMapper {
      */
     @Update("update emptrain set eid=#{eid},trainDate=#{trainDate},trainContent=#{trainContent},remark=#{remark} where id=#{id}")
     void updateById(Train train);
+
+
+    /**
+     * 分页查询
+     * @param begin
+     * @param size
+     * @return
+     */
+    @Select("select * from emptrain limit #{begin},#{size}")
+    List<Train> selectByPage(@Param("begin") int begin, @Param("size") int size);
+
+    /**
+     * 查询总条数
+     * @return
+     */
+    @Select("select count(*) from emptrain")
+    int selectTotalCount();
+
 }

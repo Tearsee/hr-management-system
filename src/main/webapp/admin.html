@@ -49,7 +49,7 @@
                         <el-submenu index="transactionManage">
                             <template slot="title"><i class="el-icon-menu"></i>事务管理</template>
 
-                            <el-menu-item index="trainManage"  @click="selectAll_train">培训管理</el-menu-item>
+                            <el-menu-item index="trainManage"  @click="selectByPage">培训管理</el-menu-item>
                             <el-menu-item index="attendanceManage">考勤管理</el-menu-item>
 
                         </el-submenu>
@@ -874,7 +874,7 @@
                 })
             },
             // 培训查询
-            // 分页查询
+            // 常规查询所有
             selectAll_train() {
                 axios({
                     method: "get",
@@ -883,6 +883,18 @@
                         // 设置表格数据
                         this.tableData_train = resp.data; //{rows:[],totoalCount}
                         // this.totalCount = resp.data.totalCount;
+                    }
+                )
+            },
+            // 分页查询
+            selectByPage() {
+                axios({
+                    method: "get",
+                    url: "http://localhost:8080/hr-management-system/train/selectByPage?currentPage=" + this.currentPage + "&pageSize=" + this.pageSize,
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData_train = resp.data.rows; //{rows:[],totoalCount}
+                        this.totalCount = resp.data.totalCount;
                     }
                 )
             },
@@ -968,7 +980,7 @@
                 train: {
                     id: '',
                     eid: '',
-                    trainDate: new Date(),
+                    trainDate: '',
                     trainContent: '',
                     remark: ''
                 },
