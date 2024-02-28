@@ -273,7 +273,7 @@
                                         <el-button @click="dialogVisible2=true;getupdate_train(scope.row)" type="primary"
                                                    round>编辑
                                         </el-button>
-                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>软删除
+<!--                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>软删除-->
                                         </el-button>
                                     </template>
 
@@ -696,8 +696,7 @@
                 this.selectAll();
             }
             ,
-
-            // 培训增删改查
+             // 培训增删改查
 
             // 添加数据
             addTrain() {
@@ -728,18 +727,6 @@
 
                 })
             },
-           /* selectAllTrain() {
-                axios({
-                    method: "post",
-                    url: "http://localhost:8080/hr-management-system/admin/selectByPageAndCondition?currentPage=" + this.currentPage + "&pageSize=" + this.pageSize,
-                    data: this.train
-                }).then(resp => {
-                        // 设置表格数据
-                        this.tableData = resp.data.rows; //{rows:[],totoalCount}
-                        this.totalCount = resp.data.totalCount;
-                    }
-                )
-            },*/
             handleOpen(key, keyPath) {
                 console.log(key, keyPath);
             },
@@ -827,41 +814,6 @@
                 })
             }
             ,
-
-            // 删除单条数据(软删除)
-            softDeleteById(id) {
-                // 弹出确认框
-                this.$confirm('此操作将软删除该员工, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    // 删除成功逻辑
-                    // 发送异步请求
-                    axios({
-                        method: "get",
-                        url: "http://localhost:8080/hr-management-system/admin/softDeleteById?id=" + id,
-                    }).then(resp => {
-
-                        if (resp.data == "success") {
-                            // 重新加载页面
-                            this.selectAll()
-
-                            //成功提示框
-                            this.$message({
-                                message: '恭喜你，软删除成功',
-                                type: 'success'
-                            });
-                        }
-                    })
-                }).catch(() => {
-                    // 取消删除逻辑
-                    this.$message({
-                        type: 'info',
-                        message: '已取消软删除'
-                    });
-                })
-            },
             // 培训查询
             // 常规查询所有
             selectAll_train() {

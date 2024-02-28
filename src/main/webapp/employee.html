@@ -141,36 +141,13 @@
 
         <el-container>
             <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-                <el-menu :default-openeds="['1', '3']">
-                    <el-submenu index="1">
-                        <template slot="title"><i class="el-icon-message"></i>导航一</template>
-                        <el-menu-item-group>
-                            <template slot="title">分组一</template>
-                            <el-menu-item index="1-1">选项1</el-menu-item>
-                            <el-menu-item index="1-2">选项2</el-menu-item>
-                        </el-menu-item-group>
-                        <el-menu-item-group title="分组2">
-                            <el-menu-item index="1-3">选项3</el-menu-item>
-                        </el-menu-item-group>
-                        <el-submenu index="1-4">
-                            <template slot="title">选项4</template>
-                            <el-menu-item index="1-4-1">选项4-1</el-menu-item>
-                        </el-submenu>
-                    </el-submenu>
+                <el-menu :default-openeds="['1', '3']"  @select="handleSelect">
+                    <el-menu-item index="home">首页</el-menu-item>
                     <el-submenu index="2">
-                        <template slot="title"><i class="el-icon-menu"></i>导航二</template>
-                        <el-menu-item-group>
-                            <template slot="title">分组一</template>
-                            <el-menu-item index="2-1">选项1</el-menu-item>
-                            <el-menu-item index="2-2">选项2</el-menu-item>
-                        </el-menu-item-group>
-                        <el-menu-item-group title="分组2">
-                            <el-menu-item index="2-3">选项3</el-menu-item>
-                        </el-menu-item-group>
-                        <el-submenu index="2-4">
-                            <template slot="title">选项4</template>
-                            <el-menu-item index="2-4-1">选项4-1</el-menu-item>
-                        </el-submenu>
+                        <template slot="title"><i class="el-icon-message"></i>培训</template>
+                        <el-menu-item index="announcement" @click="selectByPage_announcement">培训公告</el-menu-item>
+                        <el-menu-item index="1-2">参与培训</el-menu-item>
+                        <el-menu-item index="1-3">个人培训计划与成绩</el-menu-item>
                     </el-submenu>
                     <el-submenu index="3">
                         <template slot="title"><i class="el-icon-setting"></i>导航三</template>
@@ -191,77 +168,108 @@
             </el-aside>
 
             <el-container>
-                <el-main>
 
-                    <el-card class="box-card">
-                        <span>个人资料信息</span>
-                        <span  style="float: right">
-                            <el-link icon="el-icon-edit" @click="dialogVisible1=true;getupdate(employee.id)">编辑资料信息</el-link>
+                <div  v-show="currentPage_ === 'home'">
+                    <el-main>
+
+                        <el-card class="box-card">
+                            <span>个人资料信息</span>
+                            <span style="float: right">
+                            <el-link icon="el-icon-edit"
+                                     @click="dialogVisible1=true;getupdate(employee.id)">编辑资料信息</el-link>
                         </span>
-                        <el-divider></el-divider>
-                        <span>工号</span>
-                        <span style="float: right">{{employee.staffId}}</span>
-                        <el-divider></el-divider>
-                        <span>年龄</span>
-                        <span style="float: right">{{employee.age}}</span>
-                        <el-divider></el-divider>
-                        <span>邮箱</span>
-                        <span style="float: right">{{employee.email}}</span>
-                        <el-divider></el-divider>
-                        <span>手机号</span>
-                        <span style="float: right">{{employee.phone}}</span>
-                        <el-divider></el-divider>
-                        <span>部门ID</span>
-                        <span style="float: right">{{employee.deptId}}</span>
-                        <el-divider></el-divider>
-                        <span>职位ID</span>
-                        <span style="float: right">{{employee.posId}}</span>
-                        <el-divider></el-divider>
-                        <span>在职状态</span>
-                        <span style="float: right">{{employee.employmentStatus}}</span>
-                    </el-card>
-                </el-main>
+                            <el-divider></el-divider>
+                            <span>工号</span>
+                            <span style="float: right">{{employee.staffId}}</span>
+                            <el-divider></el-divider>
+                            <span>年龄</span>
+                            <span style="float: right">{{employee.age}}</span>
+                            <el-divider></el-divider>
+                            <span>邮箱</span>
+                            <span style="float: right">{{employee.email}}</span>
+                            <el-divider></el-divider>
+                            <span>手机号</span>
+                            <span style="float: right">{{employee.phone}}</span>
+                            <el-divider></el-divider>
+                            <span>部门ID</span>
+                            <span style="float: right">{{employee.deptId}}</span>
+                            <el-divider></el-divider>
+                            <span>职位ID</span>
+                            <span style="float: right">{{employee.posId}}</span>
+                            <el-divider></el-divider>
+                            <span>在职状态</span>
+                            <span style="float: right">{{employee.employmentStatus}}</span>
+                        </el-card>
+                    </el-main>
 
-                <el-divider></el-divider>
+                    <el-divider></el-divider>
 
-                <el-footer height="500px">
-                    <el-card class="box-card">
-                        <!-- <div slot="header" class="clearfix">
-                             <span>卡片名称</span>
-                             <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
-                         </div>
-                         <div v-for="o in 4" :key="o" class="text item">
-                             {{'列表内容 ' + o }}
-                         </div>
-                         -->
-                        <!--更新版-->
-                        <div slot="header">
+                    <el-footer height="500px">
+                        <el-card class="box-card">
+                            <!-- <div slot="header" class="clearfix">
+                                 <span>卡片名称</span>
+                                 <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                             </div>
+                             <div v-for="o in 4" :key="o" class="text item">
+                                 {{'列表内容 ' + o }}
+                             </div>
+                             -->
+                            <!--更新版-->
+                            <div slot="header">
 
-                            <el-form :model="form">
-                                <el-form-item label="路径" prop="url">
-                                    <el-upload
-                                            class="avatar-uploader"
-                                            action=""
-                                            :http-request="field101BeforeUpload"
-                                            :show-file-list="false"
-                                    >
-                                        <img v-if="imageUrl" :src="imageUrl" class="avatar"/>
-                                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                                    </el-upload>
-                                </el-form-item>
-                            </el-form>
+                                <el-form :model="form">
+                                    <el-form-item label="路径" prop="url">
+                                        <el-upload
+                                                class="avatar-uploader"
+                                                action=""
+                                                :http-request="field101BeforeUpload"
+                                                :show-file-list="false"
+                                        >
+                                            <img v-if="imageUrl" :src="imageUrl" class="avatar"/>
+                                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                        </el-upload>
+                                    </el-form-item>
+                                </el-form>
 
 
-                        </div>
-                        <div class="clearfix">
-                            <h7>
-                                <span>全名</span>
-                            </h7>
-                            <el-button style="float: right; padding: 3px 0" type="text">编辑名称</el-button>
-                        </div>
+                            </div>
+                            <div class="clearfix">
+                                <h7>
+                                    <span>全名</span>
+                                </h7>
+                                <el-button style="float: right; padding: 3px 0" type="text">编辑名称</el-button>
+                            </div>
 
-                    </el-card>
-                </el-footer>
+                        </el-card>
+                    </el-footer>
+
+                </div>
+                <div  v-show="currentPage_ === 'announcement'">
+                    <!--表格-->
+                    <template>
+                        <el-table
+                                :data="tableData_announcement"
+                                style="width: 100%"
+                                :row-class-name="tableRowClassName"
+                        >
+                            <el-table-column
+                                    prop="id"
+                                    label="序号"
+                                    width="300px"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                    prop="detail"
+                                    label="培训内容"
+                                    width="900px"
+                            >
+                            </el-table-column>
+
+                        </el-table>
+                    </template>
+
+                </div>
 
             </el-container>
 
@@ -312,7 +320,6 @@
             </el-form-item>
 
 
-
             <el-form-item>
                 <el-button type="primary" @click="updateById">提交</el-button>
                 <el-button @click="dialogVisible1 = false">取消</el-button>
@@ -344,6 +351,14 @@
                 address: '上海市普陀区金沙江路 1518 弄'
             };
             return {
+                // 当前页面
+                currentPage_ : 'home',
+                // 当前页码
+                currentPage_announcement:'1',
+                // 页面展示数
+                pageSize_announcement:'5',
+                // 总条数
+                totalCount_announcement:'100',
                 size: '',
                 tableData: Array(20).fill(item),
                 currentDate: new Date(),
@@ -382,6 +397,20 @@
                 },
                 // 修改数据对话框是否展示的标记
                 dialogVisible1: false,
+                tableData_announcement:[{
+                    id:'1',
+                    detail:"2024-2-21日井冈山培训"
+                },{
+                    id:'2',
+                    detail:"2024-2-21日井冈山培训"
+                },{
+                    id:'3',
+                    detail:"2024-2-21日井冈山培训"
+                },{
+                    id:'4',
+                    detail:"2024-2-21日井冈山培训"
+                }]
+
             }
         },
         methods: {
@@ -482,6 +511,22 @@
                 this.employee.deptId = row.deptId;
                 this.employee.posId = row.posId;
             },
+            // 点击侧边导航栏-->右侧动态变化
+            handleSelect(index) {
+                this.currentPage_ = index;
+            },
+            // 分页查询公告
+            selectByPage_announcement(){
+                axios({
+                    method: "get",
+                    url: "http://localhost:8080/hr-management-system/announcement/selectByPage?currentPage_announcement=" + this.currentPage_announcement + "&pageSize_announcement=" + this.pageSize_announcement,
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData_announcement = resp.data.rows; //{rows:[],totoalCount}
+                        this.totalCount_announcement = resp.data.totalCount_announcement;
+                    }
+                )
+            }
         }
     })
 
