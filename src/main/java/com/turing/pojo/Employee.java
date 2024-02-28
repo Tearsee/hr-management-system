@@ -93,7 +93,7 @@ public class Employee {
         this.employmentStatus = employmentStatus;
     }
 
-    // 雇佣状态逻辑视图
+    // 在职状态逻辑视图
     public String getEmploymentStatusStr(){
         if(employmentStatus == null){
             return "未知";

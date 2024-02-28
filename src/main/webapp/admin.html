@@ -49,10 +49,19 @@
                         <el-submenu index="transactionManage">
                             <template slot="title"><i class="el-icon-menu"></i>事务管理</template>
 
-                            <el-menu-item index="trainManage" @click="selectByPageAndCondition_train">培训管理
-                            </el-menu-item>
-                            <el-menu-item index="trainAnnouncement" @click="selectByPage_announcement_admin">培训公告管理
-                            </el-menu-item>
+                            <el-menu-item-group>
+                                <template slot="title">培训</template>
+                                <el-menu-item index="trainManage" @click="selectByPageAndCondition_train">培训管理
+                                </el-menu-item>
+                                <el-menu-item index="trainAnnouncement" @click="selectByPage_announcement_admin">培训公告管理
+                                </el-menu-item>
+                            </el-menu-item-group>
+
+                            <el-menu-item-group>
+                                <template slot="title">请假</template>
+                                <el-menu-item index="vacateManage" @click="selectByPageAndCondition_vacate">请假管理
+                                </el-menu-item>
+                            </el-menu-item-group>
                             <el-menu-item index="attendanceManage">考勤管理</el-menu-item>
 
                         </el-submenu>
@@ -339,6 +348,94 @@
                                 layout="total, sizes, prev, pager, next, jumper"
                                 :total="totalCount_announcement_admin">
                         </el-pagination>
+                    </div>
+                    <div v-show="currentPage_ === 'vacateManage'">
+
+                        <!--搜索表单-->
+                        <el-form :inline="true" :model="vacate" class="demo-form-inline">
+
+                            <el-form-item label="员工编号(id)">
+                                <el-input v-model="vacate.eid" placeholder="员工编号(id)"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="审批状态">
+                                <el-input v-model="vacate.status" placeholder="审批状态"></el-input>
+                            </el-form-item>
+
+                            <el-form-item>
+                                <el-button type="primary" @click="onSubmit_vacate">查询</el-button>
+                            </el-form-item>
+                        </el-form>
+                        <!--表格-->
+                        <template>
+                            <el-table
+                                    :data="tableData_vacate"
+                                    style="width: 100%"
+                                    :row-class-name="tableRowClassName"
+                            >
+                                <el-table-column
+                                        prop="id"
+                                        label="序号"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="eid"
+                                        label="员工编号(id)"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="startDate"
+                                        label="开始时间"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="endDate"
+                                        label="结束时间"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="typeStr"
+                                        label="请假类型"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="remark"
+                                        label="备注"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="statusStr"
+                                        label="审批状态"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                            </el-table>
+                        </template>
+
+                        <!--分页工具条-->
+                        <el-pagination
+                                @size-change="handleSizeChange_vacate"
+                                @current-change="handleCurrentChange_vacate"
+                                :current-page="currentPage_vacate"
+                                :page-sizes="[5, 10, 15, 20]"
+                                :page-size="5"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="totalCount_vacate">
+                        </el-pagination>
+
                     </div>
                 </el-main>
 
@@ -1012,7 +1109,47 @@
                     }
 
                 })
-            }
+            },
+            // 分页条件查询
+            selectByPageAndCondition_vacate(){
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/vacate/selectByPageAndCondition?currentPage_vacate=" + this.currentPage_vacate + "&pageSize_vacate=" + this.pageSize_vacate,
+                    data: this.vacate
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData_vacate = resp.data.rows; //{rows:[],totoalCount}
+                        // 设置总条数
+                        this.totalCount_vacate = resp.data.totalCount;
+                    }
+                )
+            },
+            // 查询方法
+            onSubmit_vacate() {
+                // console.log(this.employee);
+                this.selectByPageAndCondition_vacate();
+            },
+            //分页
+            handleSizeChange_vacate(val) {
+                //console.log(`每页 ${val} 条`);
+
+                // 重新设置展示页数
+                this.pageSize_vacate = val;
+
+                // 重新查询 分页 数据
+                this.selectByPageAndCondition_vacate();
+
+            },
+            handleCurrentChange_vacate(val) {
+                console.log(`当前页: ${val}`); //   当前页 : 8
+                // val : currentPage
+
+                // 重新设置当前页码
+                this.currentPage_vacate = val;
+
+                // 重新查询 分页 数据
+                this.selectByPageAndCondition_vacate();
+            },
         },
         data() {
             return {
@@ -1167,7 +1304,57 @@
                 trainannounce:{
                     id:'',
                     detail:''
+                },
+                // 模型数据
+                vacate:{
+                    id:'',
+                    eid:'',
+                    start_date :'',
+                    end_date:'',
+                    typeStr:'',
+                    remark:'',
+                    statusStr:''
                 }
+                ,
+                tableData_vacate:[{
+                    id:'1',
+                    eid:'5',
+                    start_date :'2024:02:19',
+                    end_date:'2024:02:20',
+                    type:'1',
+                    remark:'',
+                    statusStr:''
+                },{
+                    id:'2',
+                    eid:'5',
+                    start_date :'2024:02:19',
+                    end_date:'2024:02:20',
+                    type:'1',
+                    remark:'',
+                    statusStr:''
+                },{
+                    id:'3',
+                    eid:'5',
+                    start_date :'2024:02:19',
+                    end_date:'2024:02:20',
+                    type:'1',
+                    remark:'',
+                    statusStr:''
+                },{
+                    id:'4',
+                    eid:'5',
+                    start_date :'2024:02:19',
+                    end_date:'2024:02:20',
+                    type:'1',
+                    remark:'',
+                    statusStr:''
+                }],
+                // 当前页码
+                currentPage_vacate:'1',
+                // 页面展示数
+                pageSize_vacate:'5',
+                // 总条数
+                totalCount_vacate:'100',
             }
         }
     })
