@@ -49,7 +49,10 @@
                         <el-submenu index="transactionManage">
                             <template slot="title"><i class="el-icon-menu"></i>事务管理</template>
 
-                            <el-menu-item index="trainManage"  @click="selectByPageAndCondition_train">培训管理</el-menu-item>
+                            <el-menu-item index="trainManage" @click="selectByPageAndCondition_train">培训管理
+                            </el-menu-item>
+                            <el-menu-item index="trainAnnouncement" @click="selectByPage_announcement_admin">培训公告管理
+                            </el-menu-item>
                             <el-menu-item index="attendanceManage">考勤管理</el-menu-item>
 
                         </el-submenu>
@@ -270,10 +273,11 @@
                                         label="操作">
 
                                     <template slot-scope="scope">
-                                        <el-button @click="dialogVisible2=true;getupdate_train(scope.row)" type="primary"
+                                        <el-button @click="dialogVisible2=true;getupdate_train(scope.row)"
+                                                   type="primary"
                                                    round>编辑
                                         </el-button>
-<!--                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>软删除-->
+                                        <!--                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>软删除-->
                                         </el-button>
                                     </template>
 
@@ -293,6 +297,48 @@
                                 :total="totalCount_train">
                         </el-pagination>
 
+                    </div>
+                    <div v-show="currentPage_ === 'trainAnnouncement'">
+
+                        <!--按钮-->
+                        <el-row>
+                            <el-button type="primary" plain @click="dialogVisible4 = true">发布公告</el-button>
+                        </el-row>
+
+                        <!--表格-->
+                        <template>
+                            <el-table
+                                    :data="tableData_announcement_admin"
+                                    style="width: 100%"
+                                    :row-class-name="tableRowClassName"
+                            >
+                                <el-table-column
+                                        prop="id"
+                                        label="序号"
+                                        width="300px"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="detail"
+                                        label="培训内容"
+                                        width="900px"
+                                >
+                                </el-table-column>
+
+                            </el-table>
+                        </template>
+
+                        <!--分页工具条-->
+                        <el-pagination
+                                @size-change="handleSizeChange_announcement_admin"
+                                @current-change="handleCurrentChange_announcement_admin"
+                                :current-page="currentPage_announcement_admin"
+                                :page-sizes="[5, 10, 15, 20]"
+                                :page-size="5"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="totalCount_announcement_admin">
+                        </el-pagination>
                     </div>
                 </el-main>
 
@@ -468,6 +514,32 @@
             <el-form-item>
                 <el-button type="primary" @click="updateById_train">提交</el-button>
                 <el-button @click="dialogVisible2 = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+
+    </el-dialog>
+
+    <!--培训公告-->
+    <!--添加数据对话框表单-->
+    <el-dialog
+            title="发布公告"
+            :visible.sync="dialogVisible4"
+            width="30%"
+    >
+
+        <el-form ref="form" :model="trainannounce" label-width="80px">
+            <el-form-item label="详细内容">
+                <el-input
+                        type="textarea"
+                        :rows="4"
+                        placeholder="请输入内容"
+                        v-model="trainannounce.detail">
+                </el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="addTrainAnnouncement">提交</el-button>
+                <el-button @click="dialogVisible4 = false">取消</el-button>
             </el-form-item>
         </el-form>
 
@@ -696,7 +768,7 @@
                 this.selectAll();
             }
             ,
-             // 培训增删改查
+            // 培训增删改查
 
             // 添加数据
             addTrain() {
@@ -878,7 +950,69 @@
                     }
                 )
             },
+            // 分页查询公告
+            selectByPage_announcement_admin() {
+                axios({
+                    method: "get",
+                    url: "http://localhost:8080/hr-management-system/announcement/selectByPage?currentPage_announcement=" + this.currentPage_announcement_admin + "&pageSize_announcement=" + this.pageSize_announcement_admin,
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData_announcement_admin = resp.data.rows; //{rows:[],totoalCount}
+                        this.totalCount_announcement_admin = resp.data.totalCount;
+                    }
+                )
+            },
+            //分页
+            handleSizeChange_announcement_admin(val) {
+                //console.log(`每页 ${val} 条`);
 
+                // 重新设置展示页数
+                this.pageSize_announcement_admin = val;
+
+                // 重新查询 分页 数据
+                this.selectByPage_announcement_admin();
+
+            }
+            ,
+            handleCurrentChange_announcement_admin(val) {
+                console.log(`当前页: ${val}`); //   当前页 : 8
+                // val : currentPage
+
+                // 重新设置当前页码
+                this.currentPage_announcement_admin = val;
+
+                // 重新查询 分页 数据
+                this.selectByPage_announcement_admin();
+            },
+            // 添加培训公告
+            addTrainAnnouncement(){
+                var _this = this;
+                //console.log(this.employee);
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/announcement/add",
+                    data: _this.trainannounce
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+
+                        //关闭窗口
+                        _this.dialogVisible4 = false;
+
+                        //重新加载页面
+                        _this.selectByPage_announcement_admin();
+
+                        //成功提示框
+                        _this.$message({
+                            message: '恭喜你，添加成功',
+                            type: 'success'
+                        });
+
+                    }
+
+                })
+            }
         },
         data() {
             return {
@@ -886,7 +1020,7 @@
                 totalCount: 100,
 
                 // 培训总条数
-                totalCount_train:100,
+                totalCount_train: 100,
 
                 // 每页显示的条数
                 pageSize: 5,
@@ -901,7 +1035,7 @@
                 currentPage: 1,
 
                 // 培训 当前页码
-                currentPage_train:1,
+                currentPage_train: 1,
 
                 //当前页面
                 currentPage_: 'employeeManage',
@@ -974,25 +1108,25 @@
                     remark: ''
                 },
                 // 表格数据
-                tableData_train:[{
+                tableData_train: [{
                     id: '1',
                     eid: '6',
                     trainDate: '2024-2-21',
                     trainContent: 'xxxxxxx',
                     remark: ''
-                },{
+                }, {
                     id: '1',
                     eid: '6',
                     trainDate: '2024-2-21',
                     trainContent: 'xxxxxxx',
                     remark: ''
-                },{
+                }, {
                     id: '1',
                     eid: '6',
                     trainDate: '2024-2-21',
                     trainContent: 'xxxxxxx',
                     remark: ''
-                },{
+                }, {
                     id: '1',
                     eid: '6',
                     trainDate: '2024-2-21',
@@ -1003,8 +1137,37 @@
                 dialogVisible2: false,
 
                 // 添加培训计划对话框是否展示的标记
-                dialogVisible3:false,
+                dialogVisible3: false,
 
+                // 培训公告表格
+                tableData_announcement_admin:[{
+                    id:'1',
+                    detail:"2024-2-21日井冈山培训"
+                },{
+                    id:'2',
+                    detail:"2024-2-21日井冈山培训"
+                },{
+                    id:'3',
+                    detail:"2024-2-21日井冈山培训"
+                },{
+                    id:'4',
+                    detail:"2024-2-21日井冈山培训"
+                }],
+                // 当前页码
+                currentPage_announcement_admin:'1',
+                // 页面展示数
+                pageSize_announcement_admin:'5',
+                // 总条数
+                totalCount_announcement_admin:'100',
+                // 培训公告添加表单
+                dialogVisible4:false,
+                // 文本域
+                textarea: '',
+                // 培训公告
+                trainannounce:{
+                    id:'',
+                    detail:''
+                }
             }
         }
     })

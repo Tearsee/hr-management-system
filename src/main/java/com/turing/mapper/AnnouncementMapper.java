@@ -2,6 +2,7 @@ package com.turing.mapper;
 
 import com.turing.pojo.Announcement;
 import com.turing.pojo.Employee;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
@@ -24,4 +25,11 @@ public interface AnnouncementMapper {
      */
     @Select("select count(*) from trainannounce")
     int selectTotalCount();
+
+    /**
+     * 添加培训公告
+     * @param announcement
+     */
+    @Insert("insert into trainannounce values (null,#{detail})")
+    void add(Announcement announcement);
 }

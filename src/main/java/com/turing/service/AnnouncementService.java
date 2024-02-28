@@ -3,6 +3,7 @@ package com.turing.service;
 import com.turing.pojo.Announcement;
 import com.turing.pojo.PageBean;
 import com.turing.pojo.Train;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -15,5 +16,12 @@ public interface AnnouncementService {
      * @return
      */
     PageBean<Announcement> selectByPage(int currentPage, int pageSize);
+
+    /**
+     * 添加培训公告
+     * @param announcement
+     */
+    @Insert("insert into trainannounce values (null,#{detail})")
+    void add(Announcement announcement);
 
 }

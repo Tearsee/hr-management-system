@@ -1,6 +1,7 @@
 package com.turing.service.impl;
 
 import com.turing.mapper.AnnouncementMapper;
+import com.turing.mapper.EmployeeMapper;
 import com.turing.mapper.TrainMapper;
 import com.turing.pojo.Announcement;
 import com.turing.pojo.PageBean;
@@ -50,5 +51,23 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         sqlSession.close();
 
         return pageBean;
+    }
+
+    @Override
+    public void add(Announcement announcement) {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        AnnouncementMapper anMapper = sqlSession.getMapper(AnnouncementMapper.class);
+
+        // 执行方法
+        anMapper.add(announcement);
+
+        // 提交事务
+        sqlSession.commit();
+
+        // 释放资源
+        sqlSession.close();
     }
 }

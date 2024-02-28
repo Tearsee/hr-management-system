@@ -2,6 +2,7 @@ package com.turing.web.servlet;
 
 import com.alibaba.fastjson.JSON;
 import com.turing.pojo.Announcement;
+import com.turing.pojo.Employee;
 import com.turing.pojo.PageBean;
 import com.turing.pojo.Train;
 import com.turing.service.impl.AnnouncementServiceImpl;
@@ -45,4 +46,29 @@ public class AnnouncementServlet extends BaseServlet {
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
     }
+
+    /**
+     * 添加公告
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 从JSON中获取employee数据
+        BufferedReader br = req.getReader();
+        String params = br.readLine();
+
+        // 转为employee 对象
+        Announcement announcement = JSON.parseObject(params, Announcement.class);
+
+        // 调用service 添加员工
+        anServiceImpl.add(announcement);
+
+        // 响应成功标识
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write("success");
+    }
+
 }
