@@ -2,6 +2,7 @@ package com.turing.mapper;
 
 import com.turing.pojo.Vacate;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -21,4 +22,12 @@ public interface VacateMapper {
      * @return
      */
     int selectTotalCountByCondition(Vacate leave);
+
+    /**
+     * 设置审批状态
+     * @param id
+     */
+    @Update("update vacate set status=#{status} where id=#{id}")
+    void updateById(@Param("id") int id,@Param("status") int status);
+
 }

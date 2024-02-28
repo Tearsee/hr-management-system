@@ -81,10 +81,10 @@ public class Vacate {
             return "未知";
         }
 //        return type == 0 ? "病假":"事假";
-        if(status == 0){
+        if(status == 1){
             return "通过";
         }
-        if(status == 1){
+        if(status == 0){
             return "不通过";
         }
 

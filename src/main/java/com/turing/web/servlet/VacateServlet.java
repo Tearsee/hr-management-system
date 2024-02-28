@@ -52,4 +52,27 @@ public class VacateServlet extends BaseServlet {
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
     }
+
+    /**
+     * 设置审批状态
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void updateById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String _id = req.getParameter("id");
+        int id = Integer.parseInt(_id);
+
+        String _status = req.getParameter("status");
+        int status = Integer.parseInt(_status);
+
+        // 调用service 添加员工
+        vacateService.updateById(id,status);
+
+        // 响应成功标识
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write("success");
+    }
 }

@@ -50,4 +50,27 @@ public class VacateServiceImpl implements VacateService {
 
         return pageBean;
     }
+
+    /**
+     * 设置审批状态
+     * @param id
+     * @param status
+     */
+    @Override
+    public void updateById(int id, int status) {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        VacateMapper vacateMapper = sqlSession.getMapper(VacateMapper.class);
+
+        // 执行方法
+        vacateMapper.updateById(id,status);
+
+        // 提交事务
+        sqlSession.commit();
+
+        // 释放资源
+        sqlSession.close();
+    }
 }

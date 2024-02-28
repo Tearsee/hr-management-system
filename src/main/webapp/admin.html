@@ -187,11 +187,6 @@
                                 <el-table-column
                                         align="center"
                                         label="操作">
-
-                                    <!--<el-row>
-                                        <el-button type="primary">修改</el-button>
-                                    </el-row>-->
-
                                     <template slot-scope="scope">
                                         <el-button @click="dialogVisible1=true;getupdate(scope.row)" type="primary"
                                                    round>编辑
@@ -376,7 +371,7 @@
                                 <el-table-column
                                         prop="id"
                                         label="序号"
-                                        align="center"
+                                        width="50px"
                                 >
                                 </el-table-column>
 
@@ -420,6 +415,15 @@
                                         label="审批状态"
                                         align="center"
                                 >
+                                </el-table-column>
+                                <el-table-column
+                                        align="center"
+                                        label="操作">
+                                    <template slot-scope="scope">
+                                        <el-button @click="dialogVisible5=true;getupdate(scope.row)" type="primary"
+                                                   round>审阅
+                                        </el-button>
+                                    </template>
                                 </el-table-column>
 
                             </el-table>
@@ -637,6 +641,33 @@
             <el-form-item>
                 <el-button type="primary" @click="addTrainAnnouncement">提交</el-button>
                 <el-button @click="dialogVisible4 = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+
+    </el-dialog>
+
+    <!--批阅表单-->
+    <el-dialog
+            title="审阅请假"
+            :visible.sync="dialogVisible5"
+            width="30%"
+    >
+        <el-form ref="form" :model="vacate" label-width="80px">
+            <el-form-item>
+                <el-switch
+                        v-model="vacate.status"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                        active-value="1"
+                        inactive-value="0"
+                        active-text="通过"
+                        inactive-text="不通过">
+                </el-switch>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="updateById_vacate">提交</el-button>
+                <el-button @click="dialogVisible5 = false">取消</el-button>
             </el-form-item>
         </el-form>
 
@@ -1082,7 +1113,7 @@
                 this.selectByPage_announcement_admin();
             },
             // 添加培训公告
-            addTrainAnnouncement(){
+            addTrainAnnouncement() {
                 var _this = this;
                 //console.log(this.employee);
                 //提交表单数据,发送异步请求
@@ -1111,7 +1142,7 @@
                 })
             },
             // 分页条件查询
-            selectByPageAndCondition_vacate(){
+            selectByPageAndCondition_vacate() {
                 axios({
                     method: "post",
                     url: "http://localhost:8080/hr-management-system/vacate/selectByPageAndCondition?currentPage_vacate=" + this.currentPage_vacate + "&pageSize_vacate=" + this.pageSize_vacate,
@@ -1150,6 +1181,30 @@
                 // 重新查询 分页 数据
                 this.selectByPageAndCondition_vacate();
             },
+            updateById_vacate() {
+                var _this = this;
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/vacate/updateById",
+                    data: _this.vacate
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+                        //关闭窗口
+                        _this.dialogVisible5 = false;
+
+                        //重新加载页面
+                        _this.selectByPageAndCondition_vacate();
+
+                        //成功提示框
+                        _this.$message({
+                            message: '恭喜你，编辑成功',
+                            type: 'success'
+                        });
+                    }
+                })
+            }
         },
         data() {
             return {
@@ -1277,84 +1332,89 @@
                 dialogVisible3: false,
 
                 // 培训公告表格
-                tableData_announcement_admin:[{
-                    id:'1',
-                    detail:"2024-2-21日井冈山培训"
-                },{
-                    id:'2',
-                    detail:"2024-2-21日井冈山培训"
-                },{
-                    id:'3',
-                    detail:"2024-2-21日井冈山培训"
-                },{
-                    id:'4',
-                    detail:"2024-2-21日井冈山培训"
+                tableData_announcement_admin: [{
+                    id: '1',
+                    detail: "2024-2-21日井冈山培训"
+                }, {
+                    id: '2',
+                    detail: "2024-2-21日井冈山培训"
+                }, {
+                    id: '3',
+                    detail: "2024-2-21日井冈山培训"
+                }, {
+                    id: '4',
+                    detail: "2024-2-21日井冈山培训"
                 }],
                 // 当前页码
-                currentPage_announcement_admin:'1',
+                currentPage_announcement_admin: '1',
                 // 页面展示数
-                pageSize_announcement_admin:'5',
+                pageSize_announcement_admin: '5',
                 // 总条数
-                totalCount_announcement_admin:'100',
+                totalCount_announcement_admin: '100',
                 // 培训公告添加表单
-                dialogVisible4:false,
+                dialogVisible4: false,
                 // 文本域
                 textarea: '',
                 // 培训公告
-                trainannounce:{
-                    id:'',
-                    detail:''
+                trainannounce: {
+                    id: '',
+                    detail: ''
                 },
                 // 模型数据
-                vacate:{
-                    id:'',
-                    eid:'',
-                    start_date :'',
-                    end_date:'',
-                    typeStr:'',
-                    remark:'',
-                    statusStr:''
+                vacate: {
+                    id: '',
+                    eid: '',
+                    start_date: '',
+                    end_date: '',
+                    typeStr: '',
+                    remark: '',
+                    statusStr: '',
+                    status: '',
                 }
                 ,
-                tableData_vacate:[{
-                    id:'1',
-                    eid:'5',
-                    start_date :'2024:02:19',
-                    end_date:'2024:02:20',
-                    type:'1',
-                    remark:'',
-                    statusStr:''
-                },{
-                    id:'2',
-                    eid:'5',
-                    start_date :'2024:02:19',
-                    end_date:'2024:02:20',
-                    type:'1',
-                    remark:'',
-                    statusStr:''
-                },{
-                    id:'3',
-                    eid:'5',
-                    start_date :'2024:02:19',
-                    end_date:'2024:02:20',
-                    type:'1',
-                    remark:'',
-                    statusStr:''
-                },{
-                    id:'4',
-                    eid:'5',
-                    start_date :'2024:02:19',
-                    end_date:'2024:02:20',
-                    type:'1',
-                    remark:'',
-                    statusStr:''
+                tableData_vacate: [{
+                    id: '1',
+                    eid: '5',
+                    start_date: '2024:02:19',
+                    end_date: '2024:02:20',
+                    type: '1',
+                    remark: '',
+                    statusStr: ''
+                }, {
+                    id: '2',
+                    eid: '5',
+                    start_date: '2024:02:19',
+                    end_date: '2024:02:20',
+                    type: '1',
+                    remark: '',
+                    statusStr: ''
+                }, {
+                    id: '3',
+                    eid: '5',
+                    start_date: '2024:02:19',
+                    end_date: '2024:02:20',
+                    type: '1',
+                    remark: '',
+                    statusStr: ''
+                }, {
+                    id: '4',
+                    eid: '5',
+                    start_date: '2024:02:19',
+                    end_date: '2024:02:20',
+                    type: '1',
+                    remark: '',
+                    statusStr: ''
                 }],
                 // 当前页码
-                currentPage_vacate:'1',
+                currentPage_vacate: '1',
                 // 页面展示数
-                pageSize_vacate:'5',
+                pageSize_vacate: '5',
                 // 总条数
-                totalCount_vacate:'100',
+                totalCount_vacate: '100',
+                // 审批对话框表单
+                dialogVisible5: false,
+                //
+                value: '100'
             }
         }
     })
