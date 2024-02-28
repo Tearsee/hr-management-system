@@ -245,30 +245,42 @@
 
                 </div>
                 <div  v-show="currentPage_ === 'announcement'">
-                    <!--表格-->
-                    <template>
-                        <el-table
-                                :data="tableData_announcement"
-                                style="width: 100%"
-                                :row-class-name="tableRowClassName"
-                        >
-                            <el-table-column
-                                    prop="id"
-                                    label="序号"
-                                    width="300px"
+                    <el-main>
+                        <!--表格-->
+                        <template>
+                            <el-table
+                                    :data="tableData_announcement"
+                                    style="width: 100%"
+                                    :row-class-name="tableRowClassName"
                             >
-                            </el-table-column>
+                                <el-table-column
+                                        prop="id"
+                                        label="序号"
+                                        width="300px"
+                                >
+                                </el-table-column>
 
-                            <el-table-column
-                                    prop="detail"
-                                    label="培训内容"
-                                    width="900px"
-                            >
-                            </el-table-column>
+                                <el-table-column
+                                        prop="detail"
+                                        label="培训内容"
+                                        width="900px"
+                                >
+                                </el-table-column>
 
-                        </el-table>
-                    </template>
+                            </el-table>
+                        </template>
 
+                        <!--分页工具条-->
+                        <el-pagination
+                                @size-change="handleSizeChange_announcement"
+                                @current-change="handleCurrentChange_announcement"
+                                :current-page="currentPage_announcement"
+                                :page-sizes="[5, 10, 15, 20]"
+                                :page-size="5"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="totalCount_announcement">
+                        </el-pagination>
+                    </el-main>
                 </div>
 
             </el-container>
@@ -523,9 +535,31 @@
                 }).then(resp => {
                         // 设置表格数据
                         this.tableData_announcement = resp.data.rows; //{rows:[],totoalCount}
-                        this.totalCount_announcement = resp.data.totalCount_announcement;
+                        this.totalCount_announcement = resp.data.totalCount;
                     }
                 )
+            },
+            //分页
+            handleSizeChange_announcement(val) {
+                //console.log(`每页 ${val} 条`);
+
+                // 重新设置展示页数
+                this.pageSize_announcement = val;
+
+                // 重新查询 分页 数据
+                this.selectByPage_announcement();
+
+            }
+            ,
+            handleCurrentChange_announcement(val) {
+                console.log(`当前页: ${val}`); //   当前页 : 8
+                // val : currentPage
+
+                // 重新设置当前页码
+                this.currentPage_announcement = val;
+
+                // 重新查询 分页 数据
+                this.selectByPage_announcement();
             }
         }
     })
