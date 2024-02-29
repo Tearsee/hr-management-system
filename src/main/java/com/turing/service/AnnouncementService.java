@@ -21,7 +21,6 @@ public interface AnnouncementService {
      * 添加培训公告
      * @param announcement
      */
-    @Insert("insert into trainannounce values (null,#{detail})")
     void add(Announcement announcement);
 
 }

@@ -22,6 +22,5 @@ public interface VacateService {
      * 设置审批状态
      * @param id
      */
-    @Update("update vacate set status=#{status} where id=#{id}")
-    void updateById(@Param("id") int id, @Param("status") int status);
+    void updateById(int id,int status);
 }

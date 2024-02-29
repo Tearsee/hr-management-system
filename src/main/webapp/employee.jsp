@@ -1,3 +1,12 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: DELL
+  Date: 2024/2/29
+  Time: 18:04
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -129,7 +138,7 @@
 
     <el-container style="height: 500px; border: 1px solid #eee">
         <el-header style="text-align: right; font-size: 12px">
-            <span>${user.username}</span>
+
             <el-dropdown>
                 <i class="el-icon-user" style="margin-right: 15px"></i>
                 <el-dropdown-menu slot="dropdown">

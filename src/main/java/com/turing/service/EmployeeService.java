@@ -13,7 +13,6 @@ public interface EmployeeService {
      * @param id
      * @return
      */
-    @Select("select * from tb_employee where id=#{id}")
     Employee selectOneById(int id);
 
 

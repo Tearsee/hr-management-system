@@ -28,7 +28,7 @@ public interface TrainService {
      * 批量删除
      * @param ids
      */
-    void deleteByIds(@Param("ids") int[] ids);
+    void deleteByIds(int[] ids);
 
     /**
      * 修改培训信息
