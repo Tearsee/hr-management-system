@@ -78,7 +78,7 @@
                             </el-menu-item-group>
 
                         </el-submenu>
-                        <el-menu-item index="3-1">注册员工账号</el-menu-item>
+                        <el-menu-item index="register"  @click="dialogVisible7 = true">注册员工账号</el-menu-item>
                     </el-menu>
                 </div>
 
@@ -552,6 +552,35 @@
                                 :total="totalCount_rewardPunish">
                         </el-pagination>
                     </div>
+                    <div v-show="currentPage_ === 'register'">
+
+                        <el-dialog
+                                title="注册"
+                                :visible.sync="dialogVisible7"
+                                width="30%"
+                        >
+
+                            <el-form ref="form" :model="user" label-width="200px">
+                                <el-form-item label="用户名">
+                                    <el-input v-model="user.username"></el-input>
+                                </el-form-item>
+
+                                <el-form-item label="密码">
+                                    <el-input v-model="user.password"></el-input>
+                                </el-form-item>
+
+                                <el-form-item>
+                                    <el-button type="primary" @click="addRegister">提交</el-button>
+                                    <el-button @click="dialogVisible7 = false">取消</el-button>
+                                </el-form-item>
+                            </el-form>
+
+                        </el-dialog>
+
+
+                    </div>
+
+
                 </el-main>
 
 
@@ -1435,6 +1464,35 @@
 
                 })
             },
+            // 添加培训公告
+            addRegister() {
+                var _this = this;
+                //console.log(this.employee);
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/register/add",
+                    data: _this.user
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+
+                        //关闭窗口
+                        _this.dialogVisible7 = false;
+
+                        //重新加载页面
+                        _this.selectByPage_announcement_admin();
+
+                        //成功提示框
+                        _this.$message({
+                            message: '恭喜你，添加成功',
+                            type: 'success'
+                        });
+
+                    }
+
+                })
+            },
         },
         data() {
             return {
@@ -1705,6 +1763,15 @@
                 totalCount_rewardPunish: '100',
                 // 新增奖罚表单展示
                 dialogVisible6:false
+                ,
+                // 新增奖罚表单展示
+                dialogVisible7:false,
+                user:{
+                    id : '',
+                    username : '',
+                    password:'',
+                    enabled:''
+                }
             }
         }
     })

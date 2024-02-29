@@ -76,6 +76,9 @@ public class UserServiceImpl implements UserService {
 
         userMapper.add(user);
 
+        sqlSession.commit();
+
+        sqlSession.close();
 
     }
 }
