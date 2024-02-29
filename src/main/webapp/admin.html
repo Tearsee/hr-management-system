@@ -62,7 +62,10 @@
                                 <el-menu-item index="vacateManage" @click="selectByPageAndCondition_vacate">请假管理
                                 </el-menu-item>
                             </el-menu-item-group>
-                            <el-menu-item index="attendanceManage">考勤管理</el-menu-item>
+                            <el-menu-item-group>
+                                <template slot="title">考勤</template>
+                                <el-menu-item index="emprpManage"  @click="selectByPageAndCondition_rewardPunish">考勤管理</el-menu-item>
+                            </el-menu-item-group>
 
                         </el-submenu>
                         <el-submenu index="3">
@@ -446,6 +449,113 @@
                         </el-pagination>
 
                     </div>
+                    <div v-show="currentPage_ === 'emprpManage'">
+                        <!--搜索表单-->
+                        <el-form :inline="true" :model="rewardPunish" class="demo-form-inline">
+
+                            <el-form-item label="员工编号(id)">
+                                <el-input v-model="rewardPunish.eid" placeholder="员工编号(id)"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="奖罚类型">
+                                <el-input v-model="rewardPunish.rpType" placeholder="奖罚类型"></el-input>
+                            </el-form-item>
+
+                            <el-form-item>
+                                <el-button type="primary" @click="onSubmit_rewardPunish">查询</el-button>
+                            </el-form-item>
+                        </el-form>
+
+                        <!--按钮-->
+                        <el-row>
+                            <el-button type="primary" plain @click="dialogVisible6 = true">新增</el-button>
+                        </el-row>
+
+                        <!--表格-->
+                        <template>
+                            <el-table
+                                    :data="tableData_rewardPunish"
+                                    style="width: 100%"
+                                    :row-class-name="tableRowClassName"
+                            >
+                                <el-table-column
+                                        prop="id"
+                                        label="序号"
+                                        width="50px"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="eid"
+                                        label="员工编号(id)"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="rpDate"
+                                        label="奖罚时间"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="rpTypeStr"
+                                        label="奖罚类型"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="rpReason"
+                                        label="奖罚原因"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="rpPoint"
+                                        label="奖罚分"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="remark"
+                                        label="备注"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        align="center"
+                                        label="操作">
+
+                                    <template slot-scope="scope">
+                                        <el-button @click="dialogVisible5=true;getupdate_rewardPunish(scope.row)"
+                                                   type="primary"
+                                                   round>审阅
+                                        </el-button>
+                                        <!--                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>软删除-->
+                                        </el-button>
+                                    </template>
+
+                                </el-table-column>
+
+                            </el-table>
+                        </template>
+
+                        <!--分页工具条-->
+                        <el-pagination
+                                @size-change="handleSizeChange_rewardPunish"
+                                @current-change="handleCurrentChange_rewardPunish"
+                                :current-page="currentPage_rewardPunish"
+                                :page-sizes="[5, 10, 15, 20]"
+                                :page-size="5"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="totalCount_rewardPunish">
+                        </el-pagination>
+                    </div>
                 </el-main>
 
 
@@ -670,6 +780,54 @@
             <el-form-item>
                 <el-button type="primary" @click="updateById_vacate">提交</el-button>
                 <el-button @click="dialogVisible5 = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+
+    </el-dialog>
+
+    <!--考勤表单-->
+    <!--添加员工数据对话框表单-->
+    <el-dialog
+            title="添加奖罚"
+            :visible.sync="dialogVisible6"
+            width="35%"
+    >
+
+        <el-form ref="form" :model="rewardPunish" label-width="80px">
+            <el-form-item label="员工编号(id)" label-width="100px">
+                <el-input v-model="rewardPunish.eid"></el-input>
+            </el-form-item>
+
+            <el-form-item label="奖罚日期"  label-width="100px">
+                <el-input v-model="rewardPunish.rpDate"></el-input>
+            </el-form-item>
+
+
+            <el-form-item label="奖罚类型"  label-width="100px">
+                <el-switch v-model="rewardPunish.rpType"
+                           active-value="1"
+                           inactive-value="0"
+                           active-text="奖"
+                           inactive-text="罚"
+                ></el-switch>
+            </el-form-item>
+
+
+            <el-form-item label="奖罚原因"  label-width="100px">
+                <el-input v-model="rewardPunish.rpReason"></el-input>
+            </el-form-item>
+
+            <el-form-item label="奖罚分"  label-width="100px">
+                <el-input v-model="rewardPunish.rpPoint"></el-input>
+            </el-form-item>
+
+            <el-form-item label="备注"  label-width="100px">
+                <el-input v-model="rewardPunish.remark"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="addRewardPunish">提交</el-button>
+                <el-button @click="dialogVisible6 = false">取消</el-button>
             </el-form-item>
         </el-form>
 
@@ -1211,6 +1369,76 @@
             getupdate_vacate(row) {
                 this.vacate.id = row.id;
             },
+            // 查询方法
+            onSubmit_rewardPunish() {
+                // console.log(this.employee);
+                this.selectByPageAndCondition_rewardPunish();
+            },
+            //分页
+            handleSizeChange_rewardPunish(val) {
+                //console.log(`每页 ${val} 条`);
+
+                // 重新设置展示页数
+                this.pageSize_rewardPunish = val;
+
+                // 重新查询 分页 数据
+                this.selectByPageAndCondition_rewardPunish();
+
+            },
+            handleCurrentChange_rewardPunish(val) {
+                console.log(`当前页: ${val}`); //   当前页 : 8
+                // val : currentPage
+
+                // 重新设置当前页码
+                this.currentPage_rewardPunish = val;
+
+                // 重新查询 分页 数据
+                this.selectByPageAndCondition_rewardPunish();
+            },
+            // 分页条件查询
+            selectByPageAndCondition_rewardPunish() {
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/rewardPunish/selectByPageAndCondition?currentPage_rewardPunish=" + this.currentPage_rewardPunish + "&pageSize_rewardPunish=" + this.pageSize_rewardPunish,
+                    data: this.rewardPunish
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData_rewardPunish = resp.data.rows; //{rows:[],totoalCount}
+                        // 设置总条数
+                        this.totalCount_rewardPunish = resp.data.totalCount;
+                    }
+                )
+            },
+            // 添加数据
+            addRewardPunish() {
+
+                var _this = this;
+                //console.log(this.employee);
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/rewardPunish/add",
+                    data: _this.rewardPunish
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+
+                        //关闭窗口
+                        _this.dialogVisible6 = false;
+
+                        //重新加载页面
+                        _this.selectByPageAndCondition_rewardPunish();
+
+                        //成功提示框
+                        _this.$message({
+                            message: '恭喜你，添加成功',
+                            type: 'success'
+                        });
+
+                    }
+
+                })
+            },
         },
         data() {
             return {
@@ -1419,7 +1647,68 @@
                 // 审批对话框表单
                 dialogVisible5: false,
                 //
-                value: '100'
+                value: '100',
+                // 表格
+                tableData_rewardPunish: [{
+                    id: '1',
+                    eid: '5',
+                    rpDate: '2024-02-19',
+                    rpType: '1',
+                    rpReason: '',
+                    rpPoint: '',
+                    remark:''
+                },{
+                    id: '1',
+                    eid: '5',
+                    rpDate: '2024-02-19',
+                    rpType: '1',
+                    rpReason: '',
+                    rpPoint: '',
+                    remark:''
+                },{
+                    id: '1',
+                    eid: '5',
+                    rpDate: '2024-02-19',
+                    rpType: '1',
+                    rpReason: '',
+                    rpPoint: '',
+                    remark:''
+                },{
+                    id: '1',
+                    eid: '5',
+                    rpDate: '2024-02-19',
+                    rpType: '1',
+                    rpReason: '',
+                    rpPoint: '',
+                    remark:''
+                },{
+                    id: '1',
+                    eid: '5',
+                    rpDate: '2024-02-19',
+                    rpType: '1',
+                    rpReason: '',
+                    rpPoint: '',
+                    remark:''
+                },]
+                ,
+                // 模型数据
+                rewardPunish:{
+                    id: '',
+                    eid: '',
+                    rpDate: '',
+                    rpType: '',
+                    rpReason: '',
+                    rpPoint: '',
+                    remark:''
+                },
+                // 当前页码
+                currentPage_rewardPunish: '1',
+                // 页面展示数
+                pageSize_rewardPunish: '5',
+                // 总条数
+                totalCount_rewardPunish: '100',
+                // 新增奖罚表单展示
+                dialogVisible6:false
             }
         }
     })

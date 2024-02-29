@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.turing.mapper.RewardPunishMapper">
+    <!--分页条件查询-->
+    <select id="selectByPageAndCondition" resultType="com.turing.pojo.RewardPunish">
+        select * from emprp
+        <where>
+            <if test="rewardPunish.eid != null">
+                and eid = #{rewardPunish.eid}
+            </if>
+
+            <if test="rewardPunish.rpType != null">
+                and rpType = #{rewardPunish.rpType}
+            </if>
+        </where>
+        limit #{begin},#{size}
+
+
+    </select>
+    
+
+    <!--根据条件查询总记录数-->
+    <select id="selectTotalCountByCondition" resultType="int">
+        select count(*) from emprp
+        <where>
+            <if test="eid != null">
+                and eid = #{eid}
+            </if>
+            <if test="rpType != null">
+                and rpType = #{rpType}
+            </if>
+
+        </where>
+    </select>
+</mapper>
