@@ -419,11 +419,16 @@
                                 <el-table-column
                                         align="center"
                                         label="操作">
+
                                     <template slot-scope="scope">
-                                        <el-button @click="dialogVisible5=true;getupdate(scope.row)" type="primary"
+                                        <el-button @click="dialogVisible5=true;getupdate_vacate(scope.row)"
+                                                   type="primary"
                                                    round>审阅
                                         </el-button>
+                                        <!--                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>软删除-->
+                                        </el-button>
                                     </template>
+
                                 </el-table-column>
 
                             </el-table>
@@ -648,21 +653,18 @@
 
     <!--批阅表单-->
     <el-dialog
-            title="审阅请假"
+            title="审批请假"
             :visible.sync="dialogVisible5"
             width="30%"
     >
         <el-form ref="form" :model="vacate" label-width="80px">
             <el-form-item>
-                <el-switch
-                        v-model="vacate.status"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
-                        active-value="1"
-                        inactive-value="0"
-                        active-text="通过"
-                        inactive-text="不通过">
-                </el-switch>
+                <el-switch v-model="vacate.status"
+                           active-value="1"
+                           inactive-value="0"
+                           active-text="通过"
+                           inactive-text="不通过"
+                ></el-switch>
             </el-form-item>
 
             <el-form-item>
@@ -1186,8 +1188,8 @@
                 //提交表单数据,发送异步请求
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/hr-management-system/vacate/updateById",
-                    data: _this.vacate
+                    url: "http://localhost:8080/hr-management-system/vacate/updateById?id="+_this.vacate.id+"&status=" + _this.vacate.status,
+                    // data: _this.vacate
                 }).then(function (resp) {
                     //判断响应标识
                     if (resp.data == "success") {
@@ -1204,7 +1206,11 @@
                         });
                     }
                 })
-            }
+            },
+            // 回显数据到表单上
+            getupdate_vacate(row) {
+                this.vacate.id = row.id;
+            },
         },
         data() {
             return {
@@ -1366,10 +1372,9 @@
                     eid: '',
                     start_date: '',
                     end_date: '',
-                    typeStr: '',
+                    type: '',
                     remark: '',
-                    statusStr: '',
-                    status: '',
+                    status: ''
                 }
                 ,
                 tableData_vacate: [{
@@ -1379,7 +1384,7 @@
                     end_date: '2024:02:20',
                     type: '1',
                     remark: '',
-                    statusStr: ''
+                    status: ''
                 }, {
                     id: '2',
                     eid: '5',
@@ -1387,7 +1392,7 @@
                     end_date: '2024:02:20',
                     type: '1',
                     remark: '',
-                    statusStr: ''
+                    status: ''
                 }, {
                     id: '3',
                     eid: '5',
@@ -1395,7 +1400,7 @@
                     end_date: '2024:02:20',
                     type: '1',
                     remark: '',
-                    statusStr: ''
+                    status: ''
                 }, {
                     id: '4',
                     eid: '5',
@@ -1403,7 +1408,7 @@
                     end_date: '2024:02:20',
                     type: '1',
                     remark: '',
-                    statusStr: ''
+                    status: ''
                 }],
                 // 当前页码
                 currentPage_vacate: '1',
