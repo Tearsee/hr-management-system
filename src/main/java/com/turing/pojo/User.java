@@ -5,6 +5,15 @@ public class User {
     private String username;
     private String password;
     private Integer enabled;
+    private String staffId;
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
 
     public Integer getId() {
         return id;

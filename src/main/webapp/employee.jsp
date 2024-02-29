@@ -2,11 +2,13 @@
   Created by IntelliJ IDEA.
   User: DELL
   Date: 2024/2/29
-  Time: 18:04
+  Time: 22:52
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
+<%-- 获取 session 中传输的对象 user --%>
+<jsp:useBean id="user" class="com.turing.pojo.User" scope="session" />
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,10 +137,21 @@
 </head>
 <body>
 <div id="app">
+    <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible2"
+            width="30%"
+            :before-close="handleClose">
+        <span>点击按钮生成个人资料信息</span>
+        <span slot="footer" class="dialog-footer">
+<%--    <el-button @click="dialogVisible2 = false">取 消</el-button>--%>
+    <el-button type="primary" @click="dialogVisible2 = false;selectOneById">click</el-button>
+  </span>
+    </el-dialog>
 
     <el-container style="height: 500px; border: 1px solid #eee">
         <el-header style="text-align: right; font-size: 12px">
-
+            <span>${user.username}</span>
             <el-dropdown>
                 <i class="el-icon-user" style="margin-right: 15px"></i>
                 <el-dropdown-menu slot="dropdown">
@@ -211,47 +224,6 @@
                             <span style="float: right">{{employee.employmentStatus}}</span>
                         </el-card>
                     </el-main>
-
-                    <el-divider></el-divider>
-
-                    <el-footer height="500px">
-                        <el-card class="box-card">
-                            <!-- <div slot="header" class="clearfix">
-                                 <span>卡片名称</span>
-                                 <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
-                             </div>
-                             <div v-for="o in 4" :key="o" class="text item">
-                                 {{'列表内容 ' + o }}
-                             </div>
-                             -->
-                            <!--更新版-->
-                            <div slot="header">
-
-                                <el-form :model="form">
-                                    <el-form-item label="路径" prop="url">
-                                        <el-upload
-                                                class="avatar-uploader"
-                                                action=""
-                                                :http-request="field101BeforeUpload"
-                                                :show-file-list="false"
-                                        >
-                                            <img v-if="imageUrl" :src="imageUrl" class="avatar"/>
-                                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                                        </el-upload>
-                                    </el-form-item>
-                                </el-form>
-
-
-                            </div>
-                            <div class="clearfix">
-                                <h7>
-                                    <span>全名</span>
-                                </h7>
-                                <el-button style="float: right; padding: 3px 0" type="text">编辑名称</el-button>
-                            </div>
-
-                        </el-card>
-                    </el-footer>
 
                 </div>
                 <div  v-show="currentPage_ === 'announcement'">
@@ -431,7 +403,15 @@
                 },{
                     id:'4',
                     detail:"2024-2-21日井冈山培训"
-                }]
+                }],
+                user:{
+                    id : '',
+                    username : '',
+                    password:'',
+                    enabled:'',
+                    staffId:''
+                },
+                dialogVisible2: true
 
             }
         },
@@ -480,9 +460,11 @@
             },
             // 员工个人查询
             selectOneById() {
+                <%-- 调用对象 user 的 staffId 属性 --%>
+                // const staffId = this.$session.user.staffId;
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/hr-management-system/employee/selectOneById?id=1"// 暂时写死
+                    url: "http://localhost:8080/hr-management-system/employee/selectOneById?staffId=" + ${user.staffId}// 暂时写死
                 }).then(resp => {
                         // 设置数据
                         this.employee.id = resp.data.id;
@@ -571,6 +553,7 @@
                 // 重新查询 分页 数据
                 this.selectByPage_announcement();
             }
+
         }
     })
 

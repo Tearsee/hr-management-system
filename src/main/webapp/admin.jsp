@@ -569,6 +569,10 @@
                                     <el-input v-model="user.password"></el-input>
                                 </el-form-item>
 
+                                <el-form-item label="工号">
+                                    <el-input v-model="user.staffId"></el-input>
+                                </el-form-item>
+
                                 <el-form-item>
                                     <el-button type="primary" @click="addRegister">提交</el-button>
                                     <el-button @click="dialogVisible7 = false">取消</el-button>
@@ -1770,7 +1774,8 @@
                     id : '',
                     username : '',
                     password:'',
-                    enabled:''
+                    enabled:'',
+                    staffId:''
                 }
             }
         }

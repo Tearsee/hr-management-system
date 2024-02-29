@@ -15,11 +15,11 @@ public class EmployeeServiceImpl implements EmployeeService{
     private static SqlSessionFactory factory = SqlSessionFactoryUtils.getSqlSessionFactory();
     /**
      * 查看员工个人信息
-     * @param id
+     * @param staffId
      * @return
      */
     @Override
-    public Employee selectOneById(int id) {
+    public Employee selectOneById(String staffId) {
         // 获取SQLSession
         SqlSession sqlSession = factory.openSession();
 
@@ -27,7 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
 
         // 执行方法
-        Employee employee = employeeMapper.selectOneById(id);
+        Employee employee = employeeMapper.selectOneById(staffId);
 
         // 释放资源
         sqlSession.close();

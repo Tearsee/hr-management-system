@@ -10,10 +10,10 @@ public interface EmployeeService {
 
     /**
      * 查看个人信息
-     * @param id
+     * @param staffId
      * @return
      */
-    Employee selectOneById(int id);
+    Employee selectOneById(String staffId);
 
 
     /**

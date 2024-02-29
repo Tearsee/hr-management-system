@@ -30,7 +30,7 @@ public interface UserMapper {
      * 添加员工账号
      * @param user
      */
-    @Insert("insert into user values (null,#{username},#{password},1)")
+    @Insert("insert into user values (null,#{username},#{password},1,#{staffId})")
     void add(User user);
 
 }

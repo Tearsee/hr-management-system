@@ -30,11 +30,11 @@ public class EmployeeServlet extends BaseServlet {
      */
     public void selectOneById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 从req中获取参数id
-        String _id = req.getParameter("id");
-        int id = Integer.parseInt(_id);
+        String staffId = req.getParameter("staffId");
+//        int staffId = Integer.parseInt(_staffId);
 
         // 调用service 的查询所有方法 返回 employees 集合
-        Employee employee = employeeService.selectOneById(id);
+        Employee employee = employeeService.selectOneById(staffId);
 
         // 转换为JSON 对象
         String jsonString = JSON.toJSONString(employee);

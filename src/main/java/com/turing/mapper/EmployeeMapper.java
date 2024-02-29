@@ -80,10 +80,13 @@ public interface EmployeeMapper {
 
     /**
      * 查看个人信息
-     * @param id
+     * @param staffId
      * @return
      */
-    @Select("select * from tb_employee where id=#{id}")
+    @Select("select * from tb_employee where staff_id=#{staffId}")
     @ResultMap("employeeResultMap")
-    Employee selectOneById(int id);
+    Employee selectOneById(String staffId);
+
+
+
 }
