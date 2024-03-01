@@ -158,7 +158,8 @@
             <el-dropdown>
                 <i class="el-icon-user" style="margin-right: 15px"></i>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item><a href="http://localhost:8080/hr-management-system/login.jsp">退出登录</a></el-dropdown-item>
+                    <el-dropdown-item><a href="http://localhost:8080/hr-management-system/login.jsp">退出登录</a>
+                    </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </el-header>
@@ -180,22 +181,24 @@
 
                     </el-submenu>
                     <el-submenu index="4">
-                        <template slot="title"><i class="el-icon-setting"></i>导航三</template>
+                        <template slot="title"><i class="el-icon-setting"></i>考勤&工资</template>
                         <el-menu-item-group>
-                            <template slot="title">分组一</template>
-                            <el-menu-item index="3-1">选项1</el-menu-item>
-                            <el-menu-item index="3-2">选项2</el-menu-item>
+                            <template slot="title">考勤</template>
+                            <el-menu-item index="emprpManage" @click="selectByPageAndCondition_rewardPunish">
+                                考勤奖罚记录
+                            </el-menu-item>
                         </el-menu-item-group>
-                        <el-menu-item-group title="分组2">
-                            <el-menu-item index="3-3">选项3</el-menu-item>
+
+                        <el-menu-item-group>
+                            <template slot="title">工资</template>
+                            <el-menu-item index="salary" @click="selectSalary">
+                                工资管理
+                            </el-menu-item>
                         </el-menu-item-group>
-                        <el-submenu index="3-4">
-                            <template slot="title">选项4</template>
-                            <el-menu-item index="3-4-1">选项4-1</el-menu-item>
-                        </el-submenu>
                     </el-submenu>
 
-                    <el-menu-item index="inbox" @click="dialogVisible5=true"><i class="el-icon-message"></i>离职申请</el-menu-item>
+                    <el-menu-item index="inbox" @click="dialogVisible5=true"><i class="el-icon-message"></i>离职申请
+                    </el-menu-item>
                 </el-menu>
             </el-aside>
 
@@ -291,7 +294,22 @@
                                         prop="trainDate"
                                         align="center"
                                         label="培训日期">
+
+                                    <template slot-scope="scope">
+
+                                        <div>{{goTime(scope.row.trainDate)}}</div>
+
+                                    </template>
                                 </el-table-column>
+
+                              <%--  <el-table-column align="center" prop="phone" label="活动时间" width="200">
+                                    <template slot-scope="scope">
+                                        <div>开始时间：</div>
+                                        <div>{{goTime(scope.row.start_time)}}</div>
+                                        <div>结束时间：</div>
+                                        <div>{{goTime(scope.row.end_time)}}</div>
+                                    </template>
+                                </el-table-column>--%>
 
                                 <el-table-column
                                         prop="trainContent"
@@ -405,7 +423,7 @@
                             </el-form-item>
 
                             <el-form-item label="请假类型">
-<%--                                <el-input v-model="vacate.type"></el-input>--%>
+                                <%--                                <el-input v-model="vacate.type"></el-input>--%>
 
 
                                 <el-select v-model="vacate.type" placeholder="请选择">
@@ -456,6 +474,169 @@
 
                     </el-dialog>
 
+
+                </div>
+                <div v-show="currentPage_ === 'emprpManage'">
+
+                    <!--搜索表单-->
+                    <el-form :inline="true" :model="rewardPunish" class="demo-form-inline">
+                            <el-form-item label="员工编号">
+                                <el-input
+                                        placeholder="员工编号(id)"
+                                        v-model="rewardPunish.eid"
+                                >
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="奖罚类型">
+                            <el-select v-model="rewardPunish.rpType" placeholder="请选择">
+                                <el-option
+                                        v-for="item in options_rp"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+
+                        <el-form-item label="奖罚日期">
+                            <el-date-picker
+                                    v-model="rewardPunish.rpDate"
+                                    align="right"
+                                    type="date"
+                                    placeholder="选择日期"
+                                    :picker-options="pickerOptions">
+                            </el-date-picker>
+                        </el-form-item>
+
+                        <el-form-item>
+                            <el-button type="primary" @click="onSubmit_rewardPunish">查询</el-button>
+                        </el-form-item>
+                    </el-form>
+
+                    <!--表格-->
+                    <template>
+                        <el-table
+                                :data="tableData_rewardPunish"
+                                style="width: 100%"
+                                :row-class-name="tableRowClassName"
+                        >
+                            <el-table-column
+                                    prop="id"
+                                    label="序号"
+                                    width="50px"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                    prop="rpDate"
+                                    align="center"
+                                    label="奖罚时间">
+
+                                <template slot-scope="scope">
+
+                                    <div>{{goTime(scope.row.rpDate)}}</div>
+
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column
+                                    prop="rpTypeStr"
+                                    label="奖罚类型"
+                                    align="center"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                    prop="rpReason"
+                                    label="奖罚原因"
+                                    align="center"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                    prop="rpPoint"
+                                    label="奖罚分"
+                                    align="center"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                    prop="remark"
+                                    label="备注"
+                                    align="center"
+                            >
+                            </el-table-column>
+
+                        </el-table>
+                    </template>
+
+                    <!--分页工具条-->
+                    <el-pagination
+                            @size-change="handleSizeChange_rewardPunish"
+                            @current-change="handleCurrentChange_rewardPunish"
+                            :current-page="currentPage_rewardPunish"
+                            :page-sizes="[5, 10, 15, 20]"
+                            :page-size="5"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="totalCount_rewardPunish">
+                    </el-pagination>
+
+                </div>
+                <div v-show="currentPage_ === 'salary'">
+                    <!--表格-->
+                    <template>
+                        <el-table
+                                :data="tableData_salary"
+                                style="width: 100%"
+                                :row-class-name="tableRowClassName"
+                        >
+                            <el-table-column
+                                    prop="id"
+                                    label="序号"
+                                    width="200px"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                    prop="eid"
+                                    label="员工编号(id)"
+                                    align="center"
+                                    width="200px"
+
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                    prop="sal"
+                                    label="工资"
+                                    align="center"
+                                    width="200px"
+
+                            >
+                            </el-table-column>
+
+
+                            <el-table-column
+                                    prop="basicSalary"
+                                    label="底薪"
+                                    align="center"
+                                    width="200px"
+
+                            >
+                            </el-table-column>
+
+
+                            <el-table-column
+                                    prop="performance"
+                                    label="业绩"
+                                    align="center"
+                                    width="200px"
+                            >
+                            </el-table-column>
+
+
+                        </el-table>
+                    </template>
 
                 </div>
             </el-container>
@@ -662,11 +843,11 @@
                     status: ''
                 }
                 ,
-                messages:{
-                    eid     :'',
-                    message  : ''
+                messages: {
+                    eid: '',
+                    message: ''
                 },
-                dialogVisible5:false
+                dialogVisible5: false
                 ,
                 options: [{
                     value: '0',
@@ -675,6 +856,98 @@
                     value: '1',
                     label: '事假'
                 }],
+
+                tableData_rewardPunish: [{
+                    id: '1',
+                    eid: '5',
+                    rpDate: '2024-02-19',
+                    rpType: '1',
+                    rpReason: '',
+                    rpPoint: '',
+                    remark: ''
+                }, {
+                    id: '1',
+                    eid: '5',
+                    rpDate: '2024-02-19',
+                    rpType: '1',
+                    rpReason: '',
+                    rpPoint: '',
+                    remark: ''
+                }, {
+                    id: '1',
+                    eid: '5',
+                    rpDate: '2024-02-19',
+                    rpType: '1',
+                    rpReason: '',
+                    rpPoint: '',
+                    remark: ''
+                }, {
+                    id: '1',
+                    eid: '5',
+                    rpDate: '2024-02-19',
+                    rpType: '1',
+                    rpReason: '',
+                    rpPoint: '',
+                    remark: ''
+                }, {
+                    id: '1',
+                    eid: '5',
+                    rpDate: '2024-02-19',
+                    rpType: '1',
+                    rpReason: '',
+                    rpPoint: '',
+                    remark: ''
+                },]
+                ,
+                // 模型数据
+                rewardPunish: {
+                    id: '',
+                    eid: '',
+                    rpDate: '',
+                    rpType: '',
+                    rpReason: '',
+                    rpPoint: '',
+                    remark: ''
+                },
+                // 当前页码
+                currentPage_rewardPunish: '1',
+                // 页面展示数
+                pageSize_rewardPunish: '5',
+                // 总条数
+                totalCount_rewardPunish: '100',
+
+                options_rp: [{
+                    value: '0',
+                    label: '罚'
+                }, {
+                    value: '1',
+                    label: '奖'
+                }],
+
+                dialogVisible6: false
+                ,
+
+                tableData_salary: [{
+                    id: '',
+                    eid: '',
+                    sal: '',
+                    basicSalary: '',
+                    performance: ''
+                },{
+                    id: '',
+                    eid: '',
+                    sal: '',
+                    basicSalary: '',
+                    performance: ''
+                }],
+
+                salary: {
+                    id: '',
+                    eid: '',
+                    sal: '',
+                    basicSalary: '',
+                    performance: ''
+                }
             }
         },
         methods: {
@@ -938,6 +1211,64 @@
                     }
 
                 })
+            },
+
+            // 查询方法
+            onSubmit_rewardPunish() {
+                // console.log(this.employee);
+                this.selectByPageAndCondition_rewardPunish();
+            },
+            //分页
+            handleSizeChange_rewardPunish(val) {
+                //console.log(`每页 ${val} 条`);
+
+                // 重新设置展示页数
+                this.pageSize_rewardPunish = val;
+
+                // 重新查询 分页 数据
+                this.selectByPageAndCondition_rewardPunish();
+
+            },
+            handleCurrentChange_rewardPunish(val) {
+                console.log(`当前页: ${val}`); //   当前页 : 8
+                // val : currentPage
+
+                // 重新设置当前页码
+                this.currentPage_rewardPunish = val;
+
+                // 重新查询 分页 数据
+                this.selectByPageAndCondition_rewardPunish();
+            },
+            // 分页条件查询
+            selectByPageAndCondition_rewardPunish() {
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/rewardPunish/selectByPageAndCondition?currentPage_rewardPunish=" + this.currentPage_rewardPunish + "&pageSize_rewardPunish=" + this.pageSize_rewardPunish,
+                    data: this.rewardPunish
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData_rewardPunish = resp.data.rows; //{rows:[],totoalCount}
+                        // 设置总条数
+                        this.totalCount_rewardPunish = resp.data.totalCount;
+                    }
+                )
+            },
+
+            goTime(val) {
+                var timestamp4 = new Date(val);
+                //利用拼接正则等手段转化为yyyy-MM-dd hh:mm:ss 格式
+                return timestamp4.toLocaleDateString().replace(/\//g, "-") + " " + timestamp4.toTimeString().substr(0, 8);
+            },
+            // 分页查询
+            selectSalary() {
+                axios({
+                    method: "get",
+                    url: "http://localhost:8080/hr-management-system/salary/selectAll"
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData_salary = resp.data; //{rows:[],totoalCount}
+                    }
+                )
             }
         }
     })

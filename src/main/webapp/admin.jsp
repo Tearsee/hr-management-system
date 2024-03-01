@@ -36,7 +36,8 @@
             <el-dropdown>
                 <i class="el-icon-user" style="margin-right: 15px"></i>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item><a href="http://localhost:8080/hr-management-system/login.jsp">退出登录</a></el-dropdown-item>
+                    <el-dropdown-item><a href="http://localhost:8080/hr-management-system/login.jsp">退出登录</a>
+                    </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </el-header>
@@ -52,11 +53,11 @@
                             <template slot="title"><i class="el-icon-menu"></i>系统管理</template>
 
                             <el-menu-item index="employeeManage">员工管理</el-menu-item>
-                            <el-menu-item index="departmentManage">部门管理</el-menu-item>
+                            <%--                            <el-menu-item index="departmentManage">部门管理</el-menu-item>--%>
 
                         </el-submenu>
                         <el-submenu index="transactionManage">
-                            <template slot="title"><i class="el-icon-menu"></i>事务管理</template>
+                            <template slot="title"><i class="el-icon-more"></i>事务管理</template>
 
                             <el-menu-item-group>
                                 <template slot="title">培训</template>
@@ -74,7 +75,13 @@
                             <el-menu-item-group>
                                 <template slot="title">考勤</template>
                                 <el-menu-item index="emprpManage" @click="selectByPageAndCondition_rewardPunish">
-                                    考勤管理
+                                    考勤奖罚管理
+                                </el-menu-item>
+                            </el-menu-item-group>
+                            <el-menu-item-group>
+                                <template slot="title">工资</template>
+                                <el-menu-item index="salary" @click="selectSalary">
+                                    工资管理
                                 </el-menu-item>
                             </el-menu-item-group>
 
@@ -258,8 +265,13 @@
                                         prop="trainDate"
                                         align="center"
                                         label="培训日期">
-                                </el-table-column>
 
+                                    <template slot-scope="scope">
+
+                                        <div>{{goTime(scope.row.trainDate)}}</div>
+
+                                    </template>
+                                </el-table-column>
                                 <el-table-column
                                         prop="trainContent"
                                         align="center"
@@ -384,16 +396,27 @@
 
                                 <el-table-column
                                         prop="startDate"
-                                        label="开始时间"
                                         align="center"
-                                >
+                                        label="开始时间">
+
+                                    <template slot-scope="scope">
+
+                                        <div>{{goTime(scope.row.startDate)}}</div>
+
+                                    </template>
                                 </el-table-column>
+
 
                                 <el-table-column
                                         prop="endDate"
-                                        label="结束时间"
                                         align="center"
-                                >
+                                        label="结束时间">
+
+                                    <template slot-scope="scope">
+
+                                        <div>{{goTime(scope.row.endDate)}}</div>
+
+                                    </template>
                                 </el-table-column>
 
                                 <el-table-column
@@ -491,9 +514,14 @@
 
                                 <el-table-column
                                         prop="rpDate"
-                                        label="奖罚时间"
                                         align="center"
-                                >
+                                        label="奖罚时间">
+
+                                    <template slot-scope="scope">
+
+                                        <div>{{goTime(scope.row.rpDate)}}</div>
+
+                                    </template>
                                 </el-table-column>
 
                                 <el-table-column
@@ -614,6 +642,60 @@
 
                             </el-table>
                         </template>
+
+                    </div>
+                    <div v-show="currentPage_ === 'salary'">
+
+                        <!--按钮-->
+                        <el-row>
+                            <el-button type="primary" @click="dialogVisible9 = true">新增</el-button>
+                        </el-row>
+                        <!--表格-->
+                        <template>
+                            <el-table
+                                    :data="tableData_salary"
+                                    style="width: 100%"
+                                    :row-class-name="tableRowClassName"
+                            >
+                                <el-table-column
+                                        prop="id"
+                                        label="序号"
+                                        width="50px"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="eid"
+                                        label="员工编号(id)"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="sal"
+                                        label="工资"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+
+                                <el-table-column
+                                        prop="basicSalary"
+                                        label="底薪"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+
+                                <el-table-column
+                                        prop="performance"
+                                        label="业绩"
+                                        align="center"
+                                >
+                                </el-table-column>
+                            </el-table>
+                        </template>
+
 
                     </div>
 
@@ -902,6 +984,38 @@
             <el-form-item>
                 <el-button type="primary" @click="addRewardPunish">提交</el-button>
                 <el-button @click="dialogVisible6 = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+
+    </el-dialog>
+
+    <!--添加数据对话框表单-->
+    <el-dialog
+            title="添加员工工资"
+            :visible.sync="dialogVisible9"
+            width="30%"
+    >
+
+        <el-form ref="form" :model="salary" label-width="80px">
+            <el-form-item label="员工编号">
+                <el-input v-model="salary.eid"></el-input>
+            </el-form-item>
+
+            <el-form-item label="工资">
+                <el-input v-model="salary.sal"></el-input>
+            </el-form-item>
+
+            <el-form-item label="底薪">
+                <el-input v-model="salary.basicSalary"></el-input>
+            </el-form-item>
+
+            <el-form-item label="业绩">
+                <el-input v-model="salary.performance"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="addSalary">提交</el-button>
+                <el-button @click="dialogVisible9 = false">取消</el-button>
             </el-form-item>
         </el-form>
 
@@ -1556,6 +1670,53 @@
                     }
                 )
             },
+            goTime(val) {
+                var timestamp4 = new Date(val);
+                //利用拼接正则等手段转化为yyyy-MM-dd hh:mm:ss 格式
+                return timestamp4.toLocaleDateString().replace(/\//g, "-") + " " + timestamp4.toTimeString().substr(0, 8);
+            },
+
+            // 分页查询
+            selectSalary() {
+                axios({
+                    method: "get",
+                    url: "http://localhost:8080/hr-management-system/salary/selectAll"
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData_salary = resp.data; //{rows:[],totoalCount}
+                    }
+                )
+            },
+
+            // 添加数据
+            addSalary() {
+                var _this = this;
+                //console.log(this.employee);
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/salary/add",
+                    data: _this.salary
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+
+                        //关闭窗口
+                        _this.dialogVisible9 = false;
+
+                        //重新加载页面
+                        _this.selectSalary();
+
+                        //成功提示框
+                        _this.$message({
+                            message: '恭喜你，添加成功',
+                            type: 'success'
+                        });
+
+                    }
+
+                })
+            }
         },
         data() {
             return {
@@ -1879,7 +2040,29 @@
                             picker.$emit('pick', date);
                         }
                     }]
-                }
+                },
+
+                tableData_salary: [{
+                    id: '',
+                    eid: '',
+                    sal: '',
+                    basicSalary: '',
+                    performance: ''
+                },{
+                    id: '',
+                    eid: '',
+                    sal: '',
+                    basicSalary: '',
+                    performance: ''
+                }],
+                salary: {
+                    id: '',
+                    eid: '',
+                    sal: '',
+                    basicSalary: '',
+                    performance: ''
+                },
+                dialogVisible9:false
             }
         }
     })
