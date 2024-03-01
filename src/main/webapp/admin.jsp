@@ -48,9 +48,9 @@
             <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
                 <div class="menu">
                     <el-menu :default-openeds="['1', '3']" @select="handleSelect">
-
+                        <el-menu-item index="inbox" @click="receive"><i class="el-icon-message"></i>收件箱</el-menu-item>
                         <el-submenu index="systemManage">
-                            <template slot="title"><i class="el-icon-message"></i>系统管理</template>
+                            <template slot="title"><i class="el-icon-menu"></i>系统管理</template>
 
                             <el-menu-item index="employeeManage">员工管理</el-menu-item>
                             <el-menu-item index="departmentManage">部门管理</el-menu-item>
@@ -74,11 +74,13 @@
                             </el-menu-item-group>
                             <el-menu-item-group>
                                 <template slot="title">考勤</template>
-                                <el-menu-item index="emprpManage"  @click="selectByPageAndCondition_rewardPunish">考勤管理</el-menu-item>
+                                <el-menu-item index="emprpManage" @click="selectByPageAndCondition_rewardPunish">
+                                    考勤管理
+                                </el-menu-item>
                             </el-menu-item-group>
 
                         </el-submenu>
-                        <el-menu-item index="register"  @click="dialogVisible7 = true">注册员工账号</el-menu-item>
+                        <el-menu-item index="register" @click="dialogVisible7 = true">注册员工账号</el-menu-item>
                     </el-menu>
                 </div>
 
@@ -404,7 +406,7 @@
 
                                 <el-table-column
                                         prop="remark"
-                                        label="成绩"
+                                        label="备注"
                                         align="center"
                                 >
                                 </el-table-column>
@@ -583,7 +585,38 @@
 
 
                     </div>
+                    <div v-show="currentPage_ === 'inbox'">
+                        <!--表格-->
+                        <template>
+                            <el-table
+                                    :data="tableData_messages"
+                                    style="width: 100%"
+                                    :row-class-name="tableRowClassName"
+                            >
+                                <el-table-column
+                                        type="index"
+                                        label="序号"
+                                        width="50">
+                                </el-table-column>
 
+                                <el-table-column
+                                        prop="eid"
+                                        label="员工id"
+                                        width="300px"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="message"
+                                        label="离职缘由"
+                                        width="900px"
+                                >
+                                </el-table-column>
+
+                            </el-table>
+                        </template>
+
+                    </div>
 
                 </el-main>
 
@@ -827,12 +860,12 @@
                 <el-input v-model="rewardPunish.eid"></el-input>
             </el-form-item>
 
-            <el-form-item label="奖罚日期"  label-width="100px">
+            <el-form-item label="奖罚日期" label-width="100px">
                 <el-input v-model="rewardPunish.rpDate"></el-input>
             </el-form-item>
 
 
-            <el-form-item label="奖罚类型"  label-width="100px">
+            <el-form-item label="奖罚类型" label-width="100px">
                 <el-switch v-model="rewardPunish.rpType"
                            active-value="1"
                            inactive-value="0"
@@ -842,15 +875,15 @@
             </el-form-item>
 
 
-            <el-form-item label="奖罚原因"  label-width="100px">
+            <el-form-item label="奖罚原因" label-width="100px">
                 <el-input v-model="rewardPunish.rpReason"></el-input>
             </el-form-item>
 
-            <el-form-item label="奖罚分"  label-width="100px">
+            <el-form-item label="奖罚分" label-width="100px">
                 <el-input v-model="rewardPunish.rpPoint"></el-input>
             </el-form-item>
 
-            <el-form-item label="备注"  label-width="100px">
+            <el-form-item label="备注" label-width="100px">
                 <el-input v-model="rewardPunish.remark"></el-input>
             </el-form-item>
 
@@ -1375,7 +1408,7 @@
                 //提交表单数据,发送异步请求
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/hr-management-system/vacate/updateById?id="+_this.vacate.id+"&status=" + _this.vacate.status,
+                    url: "http://localhost:8080/hr-management-system/vacate/updateById?id=" + _this.vacate.id + "&status=" + _this.vacate.status,
                     // data: _this.vacate
                 }).then(function (resp) {
                     //判断响应标识
@@ -1496,6 +1529,20 @@
                     }
 
                 })
+
+
+            },
+
+            // 分页查询
+            receive() {
+                axios({
+                    method: "get",
+                    url: "http://localhost:8080/hr-management-system/admin/receive"
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData_messages = resp.data; //{rows:[],totoalCount}
+                    }
+                )
             },
         },
         data() {
@@ -1508,7 +1555,6 @@
 
                 // 每页显示的条数
                 pageSize: 5,
-
 
 
                 // 选中的id int[]数组
@@ -1716,50 +1762,50 @@
                     rpType: '1',
                     rpReason: '',
                     rpPoint: '',
-                    remark:''
-                },{
+                    remark: ''
+                }, {
                     id: '1',
                     eid: '5',
                     rpDate: '2024-02-19',
                     rpType: '1',
                     rpReason: '',
                     rpPoint: '',
-                    remark:''
-                },{
+                    remark: ''
+                }, {
                     id: '1',
                     eid: '5',
                     rpDate: '2024-02-19',
                     rpType: '1',
                     rpReason: '',
                     rpPoint: '',
-                    remark:''
-                },{
+                    remark: ''
+                }, {
                     id: '1',
                     eid: '5',
                     rpDate: '2024-02-19',
                     rpType: '1',
                     rpReason: '',
                     rpPoint: '',
-                    remark:''
-                },{
+                    remark: ''
+                }, {
                     id: '1',
                     eid: '5',
                     rpDate: '2024-02-19',
                     rpType: '1',
                     rpReason: '',
                     rpPoint: '',
-                    remark:''
+                    remark: ''
                 },]
                 ,
                 // 模型数据
-                rewardPunish:{
+                rewardPunish: {
                     id: '',
                     eid: '',
                     rpDate: '',
                     rpType: '',
                     rpReason: '',
                     rpPoint: '',
-                    remark:''
+                    remark: ''
                 },
                 // 当前页码
                 currentPage_rewardPunish: '1',
@@ -1768,16 +1814,34 @@
                 // 总条数
                 totalCount_rewardPunish: '100',
                 // 新增奖罚表单展示
-                dialogVisible6:false
+                dialogVisible6: false
                 ,
                 // 新增奖罚表单展示
-                dialogVisible7:false,
-                user:{
-                    id : '',
-                    username : '',
-                    password:'',
-                    enabled:'',
-                    staffId:''
+                dialogVisible7: false,
+                user: {
+                    id: '',
+                    username: '',
+                    password: '',
+                    enabled: '',
+                    staffId: ''
+                },
+                // 培训公告表格
+                tableData_messages: [{
+                    eid: '1',
+                    message: ''
+                }, {
+                    eid: '1',
+                    message: ''
+                }, {
+                    eid: '1',
+                    message: ''
+                }, {
+                    eid: '1',
+                    message: ''
+                }],
+                messages:{
+                    eid:'',
+                    message:''
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.turing.service;
 
 import com.turing.pojo.Employee;
+import com.turing.pojo.Messages;
 import com.turing.pojo.PageBean;
 import org.apache.ibatis.annotations.Select;
 
@@ -52,4 +53,11 @@ public interface AdministratorService {
      * @param id
      */
     void softDeleteById(int id);
+
+    // 管理员操作
+    /**
+     * 查询所有
+     * @return
+     */
+    List<Messages> receive();
 }

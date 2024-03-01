@@ -23,4 +23,10 @@ public interface VacateService {
      * @param id
      */
     void updateById(int id,int status);
+
+    /**
+     * 添加
+     * @param vacate
+     */
+    void addByEmp(Vacate vacate);
 }

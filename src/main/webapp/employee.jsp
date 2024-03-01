@@ -152,9 +152,8 @@
     <el-container style="height: 500px; border: 1px solid #eee">
 
 
-
         <el-header style="text-align: right; font-size: 12px">
-<%--            <span>${user.username}</span>--%>
+            <%--            <span>${user.username}</span>--%>
             <span>${user.staffId}</span>
             <el-dropdown>
                 <i class="el-icon-user" style="margin-right: 15px"></i>
@@ -176,7 +175,13 @@
                         <el-menu-item index="join" @click="dialogVisible3=true">参与培训</el-menu-item>
                         <el-menu-item index="mark" @click="selectMarkByPageAndId">个人培训计划与成绩</el-menu-item>
                     </el-submenu>
+
                     <el-submenu index="3">
+                        <template slot="title"><i class="el-icon-message"></i>请假</template>
+                        <el-menu-item index="vacate" @click="dialogVisible4=true">申请请假</el-menu-item>
+
+                    </el-submenu>
+                    <el-submenu index="4">
                         <template slot="title"><i class="el-icon-setting"></i>导航三</template>
                         <el-menu-item-group>
                             <template slot="title">分组一</template>
@@ -191,6 +196,8 @@
                             <el-menu-item index="3-4-1">选项4-1</el-menu-item>
                         </el-submenu>
                     </el-submenu>
+
+                    <el-menu-item index="inbox" @click="dialogVisible5=true"><i class="el-icon-message"></i>离职申请</el-menu-item>
                 </el-menu>
             </el-aside>
 
@@ -300,20 +307,20 @@
                                         label="成绩">
                                 </el-table-column>
 
-                               <%-- <el-table-column
-                                        align="center"
-                                        label="操作">
+                                <%-- <el-table-column
+                                         align="center"
+                                         label="操作">
 
-                                    <template slot-scope="scope">
-                                        <el-button @click="dialogVisible2=true;getupdate_train(scope.row)"
-                                                   type="primary"
-                                                   round>编辑
-                                        </el-button>
-                                        <!--                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>软删除-->
-                                        </el-button>
-                                    </template>
+                                     <template slot-scope="scope">
+                                         <el-button @click="dialogVisible2=true;getupdate_train(scope.row)"
+                                                    type="primary"
+                                                    round>编辑
+                                         </el-button>
+                                         <!--                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>软删除-->
+                                         </el-button>
+                                     </template>
 
-                                </el-table-column>--%>
+                                 </el-table-column>--%>
                             </el-table>
                         </template>
 
@@ -329,7 +336,6 @@
                         </el-pagination>
                     </el-main>
                 </div>
-
                 <div v-show="currentPage_ === 'join'">
                     <%--添加培训表单--%>
                     <el-dialog
@@ -354,6 +360,71 @@
                             <el-form-item>
                                 <el-button type="primary" @click="addByEmp">提交</el-button>
                                 <el-button @click="dialogVisible3 = false">取消</el-button>
+                            </el-form-item>
+                        </el-form>
+
+                    </el-dialog>
+
+
+                </div>
+                <div v-show="currentPage_ === 'vacate'">
+                    <!--添加员工数据对话框表单-->
+                    <el-dialog
+                            title="申请请假"
+                            :visible.sync="dialogVisible4"
+                            width="30%"
+                    >
+
+                        <el-form ref="form" :model="vacate" label-width="80px">
+                            <el-form-item label="员工Id">
+                                <el-input v-model="vacate.eid"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="开始时间">
+                                <el-input v-model="vacate.startDate"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="结束时间">
+                                <el-input v-model="vacate.endDate"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="请假类型">
+                                <el-input v-model="vacate.type"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="备注">
+                                <el-input v-model="vacate.remark"></el-input>
+                            </el-form-item>
+
+                            <el-form-item>
+                                <el-button type="primary" @click="vacateByEmp">提交</el-button>
+                                <el-button @click="dialogVisible4 = false">取消</el-button>
+                            </el-form-item>
+                        </el-form>
+
+                    </el-dialog>
+
+                </div>
+                <div v-show="currentPage_ === 'inbox'">
+                    <!--添加员工数据对话框表单-->
+                    <el-dialog
+                            title="申请离职"
+                            :visible.sync="dialogVisible5"
+                            width="30%"
+                    >
+
+                        <el-form ref="form" :model="vacate" label-width="80px">
+                            <el-form-item label="员工Id">
+                                <el-input v-model="messages.eid"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="缘由">
+                                <el-input v-model="messages.message"></el-input>
+                            </el-form-item>
+
+                            <el-form-item>
+                                <el-button type="primary" @click="send">提交</el-button>
+                                <el-button @click="dialogVisible5 = false">取消</el-button>
                             </el-form-item>
                         </el-form>
 
@@ -509,7 +580,7 @@
                 },
                 dialogVisible2: true,
                 // 成绩表格
-                tableData_mark:[{
+                tableData_mark: [{
                     id: '1',
                     eid: '6',
                     trainDate: '2024-2-21',
@@ -541,7 +612,7 @@
                 pageSize_mark: 5,
 
                 // 总条数
-                totalCount_mark:100,
+                totalCount_mark: 100,
 
                 dialogVisible3: false,
 
@@ -552,6 +623,25 @@
                     trainContent: '',
                     remark: ''
                 },
+                dialogVisible4: false
+                ,
+                // 模型数据
+                vacate: {
+                    id: '',
+                    eid: '',
+                    start_date: '',
+                    end_date: '',
+                    type: '',
+                    remark: '',
+                    status: ''
+                }
+                ,
+                messages:{
+                    eid     :'',
+                    message  : ''
+                },
+                dialogVisible5:false
+
             }
         },
         methods: {
@@ -750,6 +840,65 @@
                         //成功提示框
                         _this.$message({
                             message: '恭喜你，添加成功',
+                            type: 'success'
+                        });
+
+                    }
+
+                })
+            },
+
+            // 添加数据
+            vacateByEmp() {
+                var _this = this;
+                //console.log(this.employee);
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/vacate/addByEmp",
+                    data: _this.vacate
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+
+                        //关闭窗口
+                        _this.dialogVisible4 = false;
+
+                        /* //重新加载页面
+                         _this.selectByPage();
+ */
+                        //成功提示框
+                        _this.$message({
+                            message: '恭喜你，添加成功',
+                            type: 'success'
+                        });
+
+                    }
+
+                })
+            },
+            // 添加数据
+            send() {
+                var _this = this;
+                //console.log(this.employee);
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/messages/send",
+                    data: _this.messages
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+
+                        //关闭窗口
+                        _this.dialogVisible5 = false;
+
+                        /* //重新加载页面
+                         _this.selectByPage();
+ */
+                        //成功提示框
+                        _this.$message({
+                            message: '发送成功',
                             type: 'success'
                         });
 

@@ -2,6 +2,7 @@ package com.turing.web.servlet;
 
 import com.alibaba.fastjson.JSON;
 import com.turing.pojo.Employee;
+import com.turing.pojo.Messages;
 import com.turing.pojo.PageBean;
 import com.turing.service.impl.AdministratorServiceImpl;
 import com.turing.service.impl.EmployeeServiceImpl;
@@ -188,5 +189,26 @@ public class AdministratorServlet extends BaseServlet {
         // 响应成功标识
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write("success");
+    }
+
+
+    /**
+     * 收件箱
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void receive(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 调用service 的查询所有方法 返回 employees 集合
+        List<Messages> receive = adminService.receive();
+
+        // 转换为JSON 对象
+        String jsonString = JSON.toJSONString(receive);
+
+        // 响应JSON 对象
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
     }
 }

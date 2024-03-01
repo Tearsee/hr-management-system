@@ -1,6 +1,8 @@
 package com.turing.mapper;
 
+import com.turing.pojo.Train;
 import com.turing.pojo.Vacate;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 
@@ -30,4 +32,10 @@ public interface VacateMapper {
     @Update("update vacate set status=#{status} where id=#{id}")
     void updateById(@Param("id") int id,@Param("status") int status);
 
+    /**
+     * 添加
+     * @param vacate
+     */
+    @Insert("insert into vacate values (null,#{eid},#{startDate},#{endDate},#{type},#{remark},2)")
+    void addByEmp(Vacate vacate);
 }

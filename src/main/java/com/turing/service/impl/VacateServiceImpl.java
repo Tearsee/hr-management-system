@@ -1,5 +1,6 @@
 package com.turing.service.impl;
 
+import com.turing.mapper.TrainMapper;
 import com.turing.mapper.VacateMapper;
 import com.turing.pojo.Vacate;
 import com.turing.pojo.PageBean;
@@ -66,6 +67,29 @@ public class VacateServiceImpl implements VacateService {
 
         // 执行方法
         vacateMapper.updateById(id,status);
+
+        // 提交事务
+        sqlSession.commit();
+
+        // 释放资源
+        sqlSession.close();
+    }
+
+    /**
+     * 添加
+     * @param vacate
+     */
+    @Override
+    public void addByEmp(Vacate vacate) {
+
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        VacateMapper vacateMapper = sqlSession.getMapper(VacateMapper.class);
+
+        // 执行方法
+        vacateMapper.addByEmp(vacate);
 
         // 提交事务
         sqlSession.commit();

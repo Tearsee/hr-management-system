@@ -1,7 +1,9 @@
 package com.turing.service.impl;
 
 import com.turing.mapper.EmployeeMapper;
+import com.turing.mapper.MessagesMapper;
 import com.turing.pojo.Employee;
+import com.turing.pojo.Messages;
 import com.turing.pojo.PageBean;
 import com.turing.service.AdministratorService;
 import com.turing.util.SqlSessionFactoryUtils;
@@ -211,5 +213,27 @@ public class AdministratorServiceImpl implements AdministratorService {
 
         // 释放资源
         sqlSession.close();
+    }
+
+    /**
+     * 收件箱
+     * @return
+     */
+    @Override
+    public List<Messages> receive() {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        MessagesMapper messagesMapper = sqlSession.getMapper(MessagesMapper.class);
+
+        // 执行方法
+        List<Messages> receive = messagesMapper.receive();
+
+        // 释放资源
+        sqlSession.close();
+
+        // 返回查询结果
+        return receive;
     }
 }

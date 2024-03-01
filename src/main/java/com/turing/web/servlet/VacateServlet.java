@@ -2,7 +2,9 @@ package com.turing.web.servlet;
 
 import com.alibaba.fastjson.JSON;
 import com.turing.pojo.PageBean;
+import com.turing.pojo.Train;
 import com.turing.pojo.Vacate;
+import com.turing.service.VacateService;
 import com.turing.service.impl.VacateServiceImpl;
 
 import javax.servlet.ServletException;
@@ -70,6 +72,30 @@ public class VacateServlet extends BaseServlet {
 
         // 调用service 添加员工
         vacateService.updateById(id,status);
+
+        // 响应成功标识
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write("success");
+    }
+
+    /**
+     * 添加
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void addByEmp(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 从JSON中获取employee数据
+        BufferedReader br = req.getReader();
+        String params = br.readLine();
+
+        // 转为train 对象
+        Vacate vacate = JSON.parseObject(params, Vacate.class);
+
+        // 调用service 添加员工
+        vacateService.addByEmp(vacate);
 
         // 响应成功标识
         resp.setContentType("text/json;charset=utf-8");
