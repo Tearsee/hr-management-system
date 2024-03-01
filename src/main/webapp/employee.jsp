@@ -173,7 +173,7 @@
                     <el-submenu index="2">
                         <template slot="title"><i class="el-icon-message"></i>培训</template>
                         <el-menu-item index="announcement" @click="selectByPage_announcement">培训公告</el-menu-item>
-                        <el-menu-item index="1-2">参与培训</el-menu-item>
+                        <el-menu-item index="join" @click="dialogVisible3=true">参与培训</el-menu-item>
                         <el-menu-item index="mark" @click="selectMarkByPageAndId">个人培训计划与成绩</el-menu-item>
                     </el-submenu>
                     <el-submenu index="3">
@@ -297,12 +297,6 @@
                                 <el-table-column
                                         prop="remark"
                                         align="center"
-                                        label="备注">
-                                </el-table-column>
-
-                                <el-table-column
-                                        prop="mark"
-                                        align="center"
                                         label="成绩">
                                 </el-table-column>
 
@@ -336,6 +330,37 @@
                     </el-main>
                 </div>
 
+                <div v-show="currentPage_ === 'join'">
+                    <%--添加培训表单--%>
+                    <el-dialog
+                            title="添加个人培训计划"
+                            :visible.sync="dialogVisible3"
+                            width="30%"
+                    >
+
+                        <el-form ref="form" :model="train" label-width="80px">
+                            <el-form-item label="员工编号">
+                                <el-input v-model="train.eid"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="培训日期">
+                                <el-input v-model="train.trainDate"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="培训内容">
+                                <el-input v-model="train.trainContent"></el-input>
+                            </el-form-item>
+
+                            <el-form-item>
+                                <el-button type="primary" @click="addByEmp">提交</el-button>
+                                <el-button @click="dialogVisible3 = false">取消</el-button>
+                            </el-form-item>
+                        </el-form>
+
+                    </el-dialog>
+
+
+                </div>
             </el-container>
 
 
@@ -490,28 +515,24 @@
                     trainDate: '2024-2-21',
                     trainContent: 'xxxxxxx',
                     remark: '',
-                    mark:''
                 }, {
                     id: '1',
                     eid: '6',
                     trainDate: '2024-2-21',
                     trainContent: 'xxxxxxx',
                     remark: '',
-                    mark:''
                 }, {
                     id: '1',
                     eid: '6',
                     trainDate: '2024-2-21',
                     trainContent: 'xxxxxxx',
                     remark: '',
-                    mark:''
                 }, {
                     id: '1',
                     eid: '6',
                     trainDate: '2024-2-21',
                     trainContent: 'xxxxxxx',
                     remark: '',
-                    mark:''
                 }],
                 // 培训 当前页码
                 currentPage_mark: 1,
@@ -520,9 +541,17 @@
                 pageSize_mark: 5,
 
                 // 总条数
-                totalCount_mark:100
+                totalCount_mark:100,
 
+                dialogVisible3: false,
 
+                train: {
+                    id: '',
+                    eid: '',
+                    trainDate: '',
+                    trainContent: '',
+                    remark: ''
+                },
             }
         },
         methods: {
@@ -698,6 +727,36 @@
                 this.selectMarkByPageAndId();
             },
 
+
+            // 添加数据
+            addByEmp() {
+                var _this = this;
+                //console.log(this.employee);
+                //提交表单数据,发送异步请求
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/train/addByEmp",
+                    data: _this.train
+                }).then(function (resp) {
+                    //判断响应标识
+                    if (resp.data == "success") {
+
+                        //关闭窗口
+                        _this.dialogVisible3 = false;
+
+                        /* //重新加载页面
+                         _this.selectByPage();
+ */
+                        //成功提示框
+                        _this.$message({
+                            message: '恭喜你，添加成功',
+                            type: 'success'
+                        });
+
+                    }
+
+                })
+            }
         }
     })
 

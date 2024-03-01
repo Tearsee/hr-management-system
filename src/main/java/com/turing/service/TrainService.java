@@ -62,4 +62,10 @@ public interface TrainService {
      * @return
      */
     PageBean<Train> selectMarkByPageAndId(int currentPage, int pageSize,int eid);
+
+    /**
+     * 添加培训    员工
+     * @param train
+     */
+    void addByEmp(Train train);
 }

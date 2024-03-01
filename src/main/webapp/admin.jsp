@@ -268,7 +268,7 @@
                                 <el-table-column
                                         prop="remark"
                                         align="center"
-                                        label="备注">
+                                        label="成绩">
                                 </el-table-column>
 
                                 <el-table-column
@@ -404,7 +404,7 @@
 
                                 <el-table-column
                                         prop="remark"
-                                        label="备注"
+                                        label="成绩"
                                         align="center"
                                 >
                                 </el-table-column>
@@ -518,7 +518,7 @@
 
                                 <el-table-column
                                         prop="remark"
-                                        label="备注"
+                                        label="成绩"
                                         align="center"
                                 >
                                 </el-table-column>
@@ -721,7 +721,7 @@
                 <el-input v-model="train.trainContent"></el-input>
             </el-form-item>
 
-            <el-form-item label="备注">
+            <el-form-item label="成绩">
                 <el-input v-model="train.remark"></el-input>
             </el-form-item>
 
@@ -752,7 +752,7 @@
                 <el-input v-model="train.trainContent"></el-input>
             </el-form-item>
 
-            <el-form-item label="备注">
+            <el-form-item label="成绩">
                 <el-input v-model="train.remark"></el-input>
             </el-form-item>
 

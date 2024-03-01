@@ -86,5 +86,10 @@ public interface TrainMapper {
     @Select("select count(*) from emptrain where eid=#{eid}")
     int selectMarkTotalCount(int eid);
 
-
+    /**
+     * 添加培训计划
+     * @param train
+     */
+    @Insert("insert into emptrain values (null,#{eid},#{trainDate},#{trainContent},0)")
+    void addByEmp(Train train);
 }
