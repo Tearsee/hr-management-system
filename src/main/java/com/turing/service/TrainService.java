@@ -53,4 +53,13 @@ public interface TrainService {
      * @return
      */
     PageBean<Train> selectByPageAndCondition(int currentPage, int pageSize,Train train);
+
+    /**
+     * 个人分页查询
+     * @param currentPage
+     * @param pageSize
+     * @param eid
+     * @return
+     */
+    PageBean<Train> selectMarkByPageAndId(int currentPage, int pageSize,int eid);
 }

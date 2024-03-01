@@ -1509,8 +1509,7 @@
                 // 每页显示的条数
                 pageSize: 5,
 
-                // 每页显示的条数
-                pageSize_train: 5,
+
 
                 // 选中的id int[]数组
                 selectedIds: [],
@@ -1520,6 +1519,9 @@
 
                 // 培训 当前页码
                 currentPage_train: 1,
+
+                // 每页显示的条数
+                pageSize_train: 5,
 
                 //当前页面
                 currentPage_: 'employeeManage',

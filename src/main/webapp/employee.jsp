@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
 <%-- 获取 session 中传输的对象 user --%>
-<jsp:useBean id="user" class="com.turing.pojo.User" scope="session" />
+<jsp:useBean id="user" class="com.turing.pojo.User" scope="session"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -145,13 +145,17 @@
         <span>点击按钮生成个人资料信息</span>
         <span slot="footer" class="dialog-footer">
 <%--    <el-button @click="dialogVisible2 = false">取 消</el-button>--%>
-    <el-button type="primary" @click="dialogVisible2 = false;selectOneById">click</el-button>
-  </span>
+        <el-button type="primary" @click="dialogVisible2 = false;selectOneById('${user.staffId}')">click</el-button>
+        </span>
     </el-dialog>
 
     <el-container style="height: 500px; border: 1px solid #eee">
+
+
+
         <el-header style="text-align: right; font-size: 12px">
-            <span>${user.username}</span>
+<%--            <span>${user.username}</span>--%>
+            <span>${user.staffId}</span>
             <el-dropdown>
                 <i class="el-icon-user" style="margin-right: 15px"></i>
                 <el-dropdown-menu slot="dropdown">
@@ -164,13 +168,13 @@
 
         <el-container>
             <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-                <el-menu :default-openeds="['1', '3']"  @select="handleSelect">
+                <el-menu :default-openeds="['1', '3']" @select="handleSelect">
                     <el-menu-item index="home">首页</el-menu-item>
                     <el-submenu index="2">
                         <template slot="title"><i class="el-icon-message"></i>培训</template>
                         <el-menu-item index="announcement" @click="selectByPage_announcement">培训公告</el-menu-item>
                         <el-menu-item index="1-2">参与培训</el-menu-item>
-                        <el-menu-item index="1-3">个人培训计划与成绩</el-menu-item>
+                        <el-menu-item index="mark" @click="selectMarkByPageAndId">个人培训计划与成绩</el-menu-item>
                     </el-submenu>
                     <el-submenu index="3">
                         <template slot="title"><i class="el-icon-setting"></i>导航三</template>
@@ -192,7 +196,7 @@
 
             <el-container>
 
-                <div  v-show="currentPage_ === 'home'">
+                <div v-show="currentPage_ === 'home'">
                     <el-main>
 
                         <el-card class="box-card">
@@ -226,7 +230,7 @@
                     </el-main>
 
                 </div>
-                <div  v-show="currentPage_ === 'announcement'">
+                <div v-show="currentPage_ === 'announcement'">
                     <el-main>
                         <!--表格-->
                         <template>
@@ -261,6 +265,73 @@
                                 :page-size="5"
                                 layout="total, sizes, prev, pager, next, jumper"
                                 :total="totalCount_announcement">
+                        </el-pagination>
+                    </el-main>
+                </div>
+                <div v-show="currentPage_ === 'mark'">
+                    <el-main>
+                        <!--表格-->
+                        <template>
+                            <el-table
+                                    :data="tableData_mark"
+                                    style="width: 100%"
+                                    :row-class-name="tableRowClassName"
+                            >
+                                <el-table-column3
+                                        type="index"
+                                        width="50">
+                                </el-table-column3>
+
+                                <el-table-column
+                                        prop="trainDate"
+                                        align="center"
+                                        label="培训日期">
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="trainContent"
+                                        align="center"
+                                        label="培训内容">
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="remark"
+                                        align="center"
+                                        label="备注">
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="mark"
+                                        align="center"
+                                        label="成绩">
+                                </el-table-column>
+
+                               <%-- <el-table-column
+                                        align="center"
+                                        label="操作">
+
+                                    <template slot-scope="scope">
+                                        <el-button @click="dialogVisible2=true;getupdate_train(scope.row)"
+                                                   type="primary"
+                                                   round>编辑
+                                        </el-button>
+                                        <!--                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>软删除-->
+                                        </el-button>
+                                    </template>
+
+                                </el-table-column>--%>
+                            </el-table>
+                        </template>
+
+                        <!--分页工具条-->
+                        <el-pagination
+                                @size-change="handleSizeChange_mark"
+                                @current-change="handleCurrentChange_mark"
+                                :current-page="currentPage_mark"
+                                :page-sizes="[5, 10, 15, 20]"
+                                :page-size="5"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="totalCount_mark">
                         </el-pagination>
                     </el-main>
                 </div>
@@ -346,13 +417,13 @@
             };
             return {
                 // 当前页面
-                currentPage_ : 'home',
+                currentPage_: 'home',
                 // 当前页码
-                currentPage_announcement:'1',
+                currentPage_announcement: '1',
                 // 页面展示数
-                pageSize_announcement:'5',
+                pageSize_announcement: '5',
                 // 总条数
-                totalCount_announcement:'100',
+                totalCount_announcement: '100',
                 size: '',
                 tableData: Array(20).fill(item),
                 currentDate: new Date(),
@@ -391,27 +462,66 @@
                 },
                 // 修改数据对话框是否展示的标记
                 dialogVisible1: false,
-                tableData_announcement:[{
-                    id:'1',
-                    detail:"2024-2-21日井冈山培训"
-                },{
-                    id:'2',
-                    detail:"2024-2-21日井冈山培训"
-                },{
-                    id:'3',
-                    detail:"2024-2-21日井冈山培训"
-                },{
-                    id:'4',
-                    detail:"2024-2-21日井冈山培训"
+                tableData_announcement: [{
+                    id: '1',
+                    detail: "2024-2-21日井冈山培训"
+                }, {
+                    id: '2',
+                    detail: "2024-2-21日井冈山培训"
+                }, {
+                    id: '3',
+                    detail: "2024-2-21日井冈山培训"
+                }, {
+                    id: '4',
+                    detail: "2024-2-21日井冈山培训"
                 }],
-                user:{
-                    id : '',
-                    username : '',
-                    password:'',
-                    enabled:'',
-                    staffId:''
+                user: {
+                    id: '',
+                    username: '',
+                    password: '',
+                    enabled: '',
+                    staffId: ''
                 },
-                dialogVisible2: true
+                dialogVisible2: true,
+                // 成绩表格
+                tableData_mark:[{
+                    id: '1',
+                    eid: '6',
+                    trainDate: '2024-2-21',
+                    trainContent: 'xxxxxxx',
+                    remark: '',
+                    mark:''
+                }, {
+                    id: '1',
+                    eid: '6',
+                    trainDate: '2024-2-21',
+                    trainContent: 'xxxxxxx',
+                    remark: '',
+                    mark:''
+                }, {
+                    id: '1',
+                    eid: '6',
+                    trainDate: '2024-2-21',
+                    trainContent: 'xxxxxxx',
+                    remark: '',
+                    mark:''
+                }, {
+                    id: '1',
+                    eid: '6',
+                    trainDate: '2024-2-21',
+                    trainContent: 'xxxxxxx',
+                    remark: '',
+                    mark:''
+                }],
+                // 培训 当前页码
+                currentPage_mark: 1,
+
+                // 每页显示的条数
+                pageSize_mark: 5,
+
+                // 总条数
+                totalCount_mark:100
+
 
             }
         },
@@ -459,12 +569,12 @@
                 });
             },
             // 员工个人查询
-            selectOneById() {
+            selectOneById(staffId) {
                 <%-- 调用对象 user 的 staffId 属性 --%>
                 // const staffId = this.$session.user.staffId;
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/hr-management-system/employee/selectOneById?staffId=" + ${user.staffId}// 暂时写死
+                    url: "http://localhost:8080/hr-management-system/employee/selectOneById?staffId=" + staffId// 暂时写死
                 }).then(resp => {
                         // 设置数据
                         this.employee.id = resp.data.id;
@@ -520,7 +630,7 @@
                 this.currentPage_ = index;
             },
             // 分页查询公告
-            selectByPage_announcement(){
+            selectByPage_announcement() {
                 axios({
                     method: "get",
                     url: "http://localhost:8080/hr-management-system/announcement/selectByPage?currentPage_announcement=" + this.currentPage_announcement + "&pageSize_announcement=" + this.pageSize_announcement,
@@ -552,7 +662,41 @@
 
                 // 重新查询 分页 数据
                 this.selectByPage_announcement();
-            }
+            },
+            // 根据条件分页查询
+            selectMarkByPageAndId() {
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/train/selectMarkByPageAndId?currentPage_mark=" + this.currentPage_mark + "&pageSize_mark=" + this.pageSize_mark + "&id=" + this.employee.id,
+                    // data: this.train
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData_mark = resp.data.rows; //{rows:[],totoalCount}
+                        this.totalCount_mark = resp.data.totalCount;
+                    }
+                )
+            },
+            //分页
+            handleSizeChange_mark(val) {
+                //console.log(`每页 ${val} 条`);
+
+                // 重新设置展示页数
+                this.pageSize_mark = val;
+
+                // 重新查询 分页 数据
+                this.selectMarkByPageAndId();
+
+            },
+            handleCurrentChange_mark(val) {
+                <%--console.log(`当前页: ${val}`); //   当前页 : 8--%>
+                // val : currentPage
+
+                // 重新设置当前页码
+                this.currentPage_mark = val;
+
+                // 重新查询 分页 数据
+                this.selectMarkByPageAndId();
+            },
 
         }
     })

@@ -69,4 +69,22 @@ public interface TrainMapper {
      */
     int selectTotalCountByCondition(Train train);
 
+
+    /**
+     * 分页查询含成绩(个人)
+     * @param begin
+     * @param size
+     * @return
+     */
+    @Select("select * from emptrain where eid=#{eid} limit #{begin},#{size}")
+    List<Train> selectMarkByPageAndId(@Param("begin") int begin, @Param("size") int size,@Param("eid")int eid);
+
+    /**
+     * 查询总条数(个人)
+     * @return
+     */
+    @Select("select count(*) from emptrain where eid=#{eid}")
+    int selectMarkTotalCount(int eid);
+
+
 }
