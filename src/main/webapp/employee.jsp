@@ -158,9 +158,7 @@
             <el-dropdown>
                 <i class="el-icon-user" style="margin-right: 15px"></i>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>查看</el-dropdown-item>
-                    <el-dropdown-item>新增</el-dropdown-item>
-                    <el-dropdown-item>删除</el-dropdown-item>
+                    <el-dropdown-item><a href="http://localhost:8080/hr-management-system/login.jsp">退出登录</a></el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </el-header>
@@ -350,7 +348,13 @@
                             </el-form-item>
 
                             <el-form-item label="培训日期">
-                                <el-input v-model="train.trainDate"></el-input>
+                                <el-date-picker
+                                        v-model="train.trainDate"
+                                        align="right"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        :picker-options="pickerOptions">
+                                </el-date-picker>
                             </el-form-item>
 
                             <el-form-item label="培训内容">
@@ -381,15 +385,37 @@
                             </el-form-item>
 
                             <el-form-item label="开始时间">
-                                <el-input v-model="vacate.startDate"></el-input>
+                                <el-date-picker
+                                        v-model="vacate.start_date"
+                                        align="right"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        :picker-options="pickerOptions">
+                                </el-date-picker>
                             </el-form-item>
 
                             <el-form-item label="结束时间">
-                                <el-input v-model="vacate.endDate"></el-input>
+                                <el-date-picker
+                                        v-model="vacate.end_date"
+                                        align="right"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        :picker-options="pickerOptions">
+                                </el-date-picker>
                             </el-form-item>
 
                             <el-form-item label="请假类型">
-                                <el-input v-model="vacate.type"></el-input>
+<%--                                <el-input v-model="vacate.type"></el-input>--%>
+
+
+                                <el-select v-model="vacate.type" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
 
                             <el-form-item label="备注">
@@ -641,7 +667,14 @@
                     message  : ''
                 },
                 dialogVisible5:false
-
+                ,
+                options: [{
+                    value: '0',
+                    label: '病假'
+                }, {
+                    value: '1',
+                    label: '事假'
+                }],
             }
         },
         methods: {
@@ -869,7 +902,7 @@
  */
                         //成功提示框
                         _this.$message({
-                            message: '恭喜你，添加成功',
+                            message: '申请发送成功',
                             type: 'success'
                         });
 

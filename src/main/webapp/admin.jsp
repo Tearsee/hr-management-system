@@ -36,9 +36,7 @@
             <el-dropdown>
                 <i class="el-icon-user" style="margin-right: 15px"></i>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>查看</el-dropdown-item>
-                    <el-dropdown-item>新增</el-dropdown-item>
-                    <el-dropdown-item>删除</el-dropdown-item>
+                    <el-dropdown-item><a href="http://localhost:8080/hr-management-system/login.jsp">退出登录</a></el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </el-header>
@@ -48,7 +46,8 @@
             <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
                 <div class="menu">
                     <el-menu :default-openeds="['1', '3']" @select="handleSelect">
-                        <el-menu-item index="inbox" @click="receive"><i class="el-icon-message"></i>收件箱</el-menu-item>
+                        <el-menu-item index="inbox" @click="receive"><i class="el-icon-message"></i>收件箱
+                        </el-menu-item>
                         <el-submenu index="systemManage">
                             <template slot="title"><i class="el-icon-menu"></i>系统管理</template>
 
@@ -747,8 +746,15 @@
             </el-form-item>
 
             <el-form-item label="培训日期">
-                <el-input v-model="train.trainDate"></el-input>
+                <el-date-picker
+                        v-model="train.trainDate"
+                        align="right"
+                        type="date"
+                        placeholder="选择日期"
+                        :picker-options="pickerOptions">
+                </el-date-picker>
             </el-form-item>
+
 
             <el-form-item label="培训内容">
                 <el-input v-model="train.trainContent"></el-input>
@@ -778,7 +784,13 @@
             </el-form-item>
 
             <el-form-item label="培训日期">
-                <el-input v-model="train.trainDate"></el-input>
+                <el-date-picker
+                        v-model="train.trainDate"
+                        align="right"
+                        type="date"
+                        placeholder="选择日期"
+                        :picker-options="pickerOptions">
+                </el-date-picker>
             </el-form-item>
 
             <el-form-item label="培训内容">
@@ -1839,9 +1851,34 @@
                     eid: '1',
                     message: ''
                 }],
-                messages:{
-                    eid:'',
-                    message:''
+                messages: {
+                    eid: '',
+                    message: ''
+                },
+                pickerOptions: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                    shortcuts: [{
+                        text: '今天',
+                        onClick(picker) {
+                            picker.$emit('pick', new Date());
+                        }
+                    }, {
+                        text: '昨天',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
+                        }
+                    }, {
+                        text: '一周前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }]
                 }
             }
         }
