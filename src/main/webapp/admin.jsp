@@ -36,7 +36,11 @@
             <el-dropdown>
                 <i class="el-icon-user" style="margin-right: 15px"></i>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item><a href="http://localhost:8080/hr-management-system/login.jsp">退出登录</a>
+<%--                    <el-dropdown-item><a href="http://localhost:8080/hr-management-system/login.jsp" onclick="">退出登录</a>--%>
+                    <el-dropdown-item>
+                        <form action="logout">
+                            <input type="submit" value="退出登录" />
+                        </form>
                     </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>

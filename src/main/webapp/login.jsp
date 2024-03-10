@@ -20,15 +20,28 @@
 
 <body>
 <div id="loginDiv" style="height: 350px">
-    <form action="/hr-management-system/login/select" id="form">
+    <form action="/hr-management-system/login/select" id="form" method="post">
         <h1 id="loginMsg">LOGIN IN</h1>
         <div id="errorMsg">${login_msg}</div>
+<%--        <h1 id="logoutMsg">LOGOUT</h1>--%>
+        <div id="errorMsg">${msg}</div>
+        <div id="errorMsg">${error_msg}</div>
+        <div id="errorMsg">${error_msg2}</div>
         <p>Username:<input id="username" name="username" type="text">
+
            <br>
             <span id="username_err" class="err_msg" style="display: none">用户名不存在</span>
         </p>
 
+        <p>
+            请输入2-9位的英文名字
+        </p>
+
         <p>Password:<input id="password" name="password" type="password"></p>
+
+        <p>
+            请输入6-10位的密码只能包含数字字母下划线，其中至少包含数字和字母
+        </p>
 <%--        <p>Remember:<input id="remember" name="remember" type="checkbox"></p>--%>
         <div id="subDiv">
             <input type="submit" class="button" value="login up">
