@@ -123,7 +123,7 @@ CREATE TABLE `emptrain`
     KEY `pid` (`eid`) USING BTREE,
     CONSTRAINT `employeetrain_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `tb_employee` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 40
+  AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci
   ROW_FORMAT = DYNAMIC COMMENT ='员工培训';
@@ -266,11 +266,11 @@ CREATE TABLE `user`
 -- ----------------------------
 
 INSERT INTO `user`
-VALUES (1, 'admin', 123456, 1, 'admin');
+VALUES (1, 'admin', 'admin123', 1, 'admin');
 INSERT INTO `user`
-VALUES (2, 'zs', 123456, 1, 'sdf4215');
+VALUES (2, 'zs', 'zs123456', 1, 'sdf4215');
 INSERT INTO `user`
-VALUES (3, 'ls', 123456, 1, 'sdf7425');
+VALUES (3, 'ls', 'ls123456', 1, 'sdf7425');
 
 
 -- ----------------------------

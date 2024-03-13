@@ -1,10 +1,10 @@
 package com.turing.web.servlet;
 
 import com.alibaba.fastjson.JSON;
+import com.turing.pojo.*;
 import com.turing.pojo.RewardPunish;
-import com.turing.pojo.PageBean;
 import com.turing.pojo.RewardPunish;
-import com.turing.pojo.RewardPunish;
+import com.turing.service.impl.AdministratorServiceImpl;
 import com.turing.service.impl.RewardPunishServiceImpl;
 import com.turing.service.impl.RewardPunishServiceImpl;
 
@@ -14,11 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.List;
+
 
 @WebServlet("/rewardPunish/*")
 public class RewardPunishServlet extends BaseServlet{
 
     private static RewardPunishServiceImpl rewardPunishService = new RewardPunishServiceImpl();// 创建service 对象
+    private static AdministratorServiceImpl administratorService = new AdministratorServiceImpl();// 创建service 对象
+
     /**
      * 分页条件查询
      *
@@ -71,6 +75,40 @@ public class RewardPunishServlet extends BaseServlet{
 
         // 转为rewardPunish 对象
         RewardPunish rewardPunish = JSON.parseObject(params, RewardPunish.class);
+
+
+        // 员工编号，判断是否存在该编号
+
+//        List<Train> trains = trainService.selectAll()
+        List<Employee> employees = administratorService.selectAll();
+
+        boolean isExist = false;
+        for(int i = 0;i < employees.size();i ++ ){
+
+            // 员工编号存在
+            if(employees.get(i).getId().equals(rewardPunish.getEid())){
+
+                isExist = true;
+                break;
+            }
+        }
+
+        // 判断员工编号是否存在
+        if(!isExist){
+            resp.setContentType("text/json;charset=utf-8");
+            resp.getWriter().write("repeat_eid");
+        }
+
+        // 判断输入成绩的有界性
+        if(rewardPunish.getRpPoint()< 0 || rewardPunish.getRpPoint() > 100){
+
+            resp.setContentType("text/json;charset=utf-8");
+            resp.getWriter().write("repeat_remark");
+            return;
+
+        }
+
+
 
         // 调用service 添加员工
         rewardPunishService.add(rewardPunish);

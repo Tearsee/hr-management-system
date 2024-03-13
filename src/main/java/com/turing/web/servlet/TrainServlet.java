@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.turing.pojo.Employee;
 import com.turing.pojo.PageBean;
 import com.turing.pojo.Train;
+import com.turing.service.impl.AdministratorServiceImpl;
 import com.turing.service.impl.EmployeeServiceImpl;
 import com.turing.service.impl.TrainServiceImpl;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public class TrainServlet extends BaseServlet {
 
     private static TrainServiceImpl trainService = new TrainServiceImpl();// 创建service 对象
+    private static AdministratorServiceImpl administratorService = new AdministratorServiceImpl();// 创建service 对象
 
     /**
      * 查询所有
@@ -55,6 +57,38 @@ public class TrainServlet extends BaseServlet {
 
         // 转为train 对象
         Train train = JSON.parseObject(params, Train.class);
+
+//        员工编号，判断是否存在该编号
+
+//        List<Train> trains = trainService.selectAll()
+        List<Employee> employees = administratorService.selectAll();
+
+        boolean isExist = false;
+        for(int i = 0;i < employees.size();i ++ ){
+
+            // 员工编号存在
+            if(employees.get(i).getId().equals(train.getEid())){
+
+                isExist = true;
+                break;
+            }
+        }
+
+        // 判断员工编号是否存在
+        if(!isExist){
+            resp.setContentType("text/json;charset=utf-8");
+            resp.getWriter().write("repeat_eid");
+        }
+
+        // 判断输入成绩的有界性
+        if(Integer.parseInt(train.getRemark())< 0 || Integer.parseInt(train.getRemark()) > 100){
+
+            resp.setContentType("text/json;charset=utf-8");
+            resp.getWriter().write("repeat_remark");
+            return;
+
+        }
+
 
         // 调用service 添加员工
         trainService.add(train);
@@ -102,6 +136,39 @@ public class TrainServlet extends BaseServlet {
 
         // 转为employee 对象
         Train train = JSON.parseObject(params, Train.class);
+
+        // 员工编号，判断是否存在该编号
+
+//        List<Train> trains = trainService.selectAll()
+        List<Employee> employees = administratorService.selectAll();
+
+        boolean isExist = false;
+        for(int i = 0;i < employees.size();i ++ ){
+
+            // 员工编号存在
+            if(employees.get(i).getId().equals(train.getEid())){
+
+                isExist = true;
+                break;
+            }
+        }
+
+        // 判断员工编号是否存在
+        if(!isExist){
+            resp.setContentType("text/json;charset=utf-8");
+            resp.getWriter().write("repeat_eid");
+        }
+
+        // 判断输入成绩的有界性
+        if(Integer.parseInt(train.getRemark())< 0 || Integer.parseInt(train.getRemark()) > 100){
+
+            resp.setContentType("text/json;charset=utf-8");
+            resp.getWriter().write("repeat_remark");
+            return;
+
+        }
+
+
 
         // 调用service 添加员工
         trainService.updateById(train);
@@ -216,6 +283,12 @@ public class TrainServlet extends BaseServlet {
 
         // 转为train 对象
         Train train = JSON.parseObject(params, Train.class);
+
+        String _eid = req.getParameter("id");
+        int eid = Integer.parseInt(_eid);
+
+        // 将eid设置为具体员工的编号
+        train.setEid(eid);
 
         // 调用service 添加员工
         trainService.add(train);

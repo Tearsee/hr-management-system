@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 public interface UserService {
     /**
      * 根据用户名和密码查询对象
@@ -30,4 +32,10 @@ public interface UserService {
      * @param user
      */
     void add(User user);
+
+    /**
+     * 查询所有
+     * @return
+     */
+    List<User> selectAll();
 }

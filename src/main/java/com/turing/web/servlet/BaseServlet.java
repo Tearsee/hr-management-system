@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Date;
 
 public class BaseServlet extends HttpServlet {
 
@@ -50,5 +51,21 @@ public class BaseServlet extends HttpServlet {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * 用于比较两个 Date 对象的函数
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static int compareDates(Date date1, Date date2) {
+        if (date1.before(date2)) {
+            return -1;
+        } else if (date1.after(date2)) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

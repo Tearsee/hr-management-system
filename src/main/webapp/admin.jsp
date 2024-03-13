@@ -551,12 +551,12 @@
 
                                 <el-table-column
                                         prop="remark"
-                                        label="成绩"
+                                        label="备注"
                                         align="center"
                                 >
                                 </el-table-column>
 
-                                <el-table-column
+                               <%-- <el-table-column
                                         align="center"
                                         label="操作">
 
@@ -569,7 +569,7 @@
                                         </el-button>
                                     </template>
 
-                                </el-table-column>
+                                </el-table-column>--%>
 
                             </el-table>
                         </template>
@@ -590,16 +590,16 @@
                         <el-dialog
                                 title="注册"
                                 :visible.sync="dialogVisible7"
-                                width="30%"
+                                width="50%"
                         >
 
-                            <el-form ref="form" :model="user" label-width="200px">
+                            <el-form ref="form" :model="user" label-width="55px">
                                 <el-form-item label="用户名">
-                                    <el-input v-model="user.username"></el-input>
+                                    <el-input v-model="user.username" placeholder="请输入2-9位的英文名字"></el-input>
                                 </el-form-item>
 
                                 <el-form-item label="密码">
-                                    <el-input v-model="user.password"></el-input>
+                                    <el-input v-model="user.password" placeholder="请输入6-10位的密码只能包含数字字母下划线，其中至少包含数字和字母"></el-input>
                                 </el-form-item>
 
                                 <el-form-item label="工号">
@@ -727,23 +727,23 @@
             </el-form-item>
 
             <el-form-item label="员工名称">
-                <el-input v-model="employee.employeeName"></el-input>
+                <el-input v-model="employee.employeeName"  placeholder="请输入中文名字"></el-input>
             </el-form-item>
 
             <el-form-item label="年龄">
-                <el-input v-model="employee.age"></el-input>
+                <el-input v-model="employee.age"  placeholder="请输入年龄"></el-input>
             </el-form-item>
 
             <el-form-item label="邮箱">
-                <el-input v-model="employee.email"></el-input>
+                <el-input v-model="employee.email" placeholder="请输入邮箱"></el-input>
             </el-form-item>
 
             <el-form-item label="手机号">
-                <el-input v-model="employee.phone"></el-input>
+                <el-input v-model="employee.phone" placeholder="请输入11位手机号码"></el-input>
             </el-form-item>
 
             <el-form-item label="部门编号">
-                <el-input v-model="employee.deptId"></el-input>
+                <el-input v-model="employee.deptId" placeholder="请输入部门编号(1-9)"></el-input>
             </el-form-item>
 
             <el-form-item label="职位ID">
@@ -832,12 +832,18 @@
             </el-form-item>
 
             <el-form-item label="培训日期">
-                <el-date-picker
+               <%-- <el-date-picker
                         v-model="train.trainDate"
                         align="right"
                         type="date"
                         placeholder="选择日期"
                         :picker-options="pickerOptions">
+                </el-date-picker>--%>
+
+                <el-date-picker
+                        v-model="train.trainDate"
+                        type="date"
+                        placeholder="选择日期">
                 </el-date-picker>
             </el-form-item>
 
@@ -847,7 +853,7 @@
             </el-form-item>
 
             <el-form-item label="成绩">
-                <el-input v-model="train.remark"></el-input>
+                <el-input v-model="train.remark" placeholder="0-100"></el-input>
             </el-form-item>
 
             <el-form-item>
@@ -959,7 +965,11 @@
             </el-form-item>
 
             <el-form-item label="奖罚日期" label-width="100px">
-                <el-input v-model="rewardPunish.rpDate"></el-input>
+                <el-date-picker
+                        v-model="rewardPunish.rpDate"
+                        type="date"
+                        placeholder="选择日期">
+                </el-date-picker>
             </el-form-item>
 
 
@@ -978,7 +988,7 @@
             </el-form-item>
 
             <el-form-item label="奖罚分" label-width="100px">
-                <el-input v-model="rewardPunish.rpPoint"></el-input>
+                <el-input v-model="rewardPunish.rpPoint" placeholder="0-100"></el-input>
             </el-form-item>
 
             <el-form-item label="备注" label-width="100px">
@@ -1111,6 +1121,54 @@
                         });
 
                     }
+                    else if(resp.data == "repeat_sdfId"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '工号重复',
+                            type: 'error'
+                        });
+
+                    }else if(resp.data == "format_empname"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '名字格式有误',
+                            type: 'error'
+                        });
+
+                    }else if (resp.data == "format_empage"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '年龄格式有误',
+                            type: 'error'
+                        });
+
+                    }else if(resp.data == "format_email"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '邮箱格式有误',
+                            type: 'error'
+                        });
+                    }else if(resp.data == "format_tel"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '手机号码格式有误',
+                            type: 'error'
+                        });
+
+                    }else if(resp.data == "format_dept"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '部门编号格式有误',
+                            type: 'error'
+                        });
+
+                    }
 
                 })
             },
@@ -1135,7 +1193,55 @@
                             message: '恭喜你，编辑成功',
                             type: 'success'
                         });
+                    }else if(resp.data == "repeat_sdfId"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '工号重复',
+                            type: 'error'
+                        });
+
+                    }else if(resp.data == "format_empname"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '名字格式有误',
+                            type: 'error'
+                        });
+
+                    }else if (resp.data == "format_empage"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '年龄格式有误',
+                            type: 'error'
+                        });
+
+                    }else if(resp.data == "format_email"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '邮箱格式有误',
+                            type: 'error'
+                        });
+                    }else if(resp.data == "format_tel"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '手机号码格式有误',
+                            type: 'error'
+                        });
+
+                    }else if(resp.data == "format_dept"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '部门编号格式有误',
+                            type: 'error'
+                        });
+
                     }
+
                 })
             },
             // 修改数据
@@ -1275,6 +1381,22 @@
                             type: 'success'
                         });
 
+                    }else if(resp.data == "repeat_eid"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '员工编号不存在，请重新输入',
+                            type: 'error'
+                        });
+
+                    }else if(resp.data == "repeat_remark"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '输入成绩应处于0-100之间',
+                            type: 'error'
+                        });
+
                     }
 
                 })
@@ -1311,6 +1433,22 @@
                             message: '恭喜你，编辑成功',
                             type: 'success'
                         });
+                    }else if(resp.data == "repeat_eid"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '员工编号不存在，请重新输入',
+                            type: 'error'
+                        });
+
+                    }else if(resp.data == "repeat_remark"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '输入成绩应处于0-100之间',
+                            type: 'error'
+                        });
+
                     }
                 })
             },
@@ -1627,11 +1765,27 @@
                             type: 'success'
                         });
 
+                    }else if(resp.data == "repeat_eid"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '员工编号不存在，请重新输入',
+                            type: 'error'
+                        });
+
+                    }else if(resp.data == "repeat_remark"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '输入成绩应处于0-100之间',
+                            type: 'error'
+                        });
+
                     }
 
                 })
             },
-            // 添加培训公告
+            // 注册员工账号
             addRegister() {
                 var _this = this;
                 //console.log(this.employee);
@@ -1654,6 +1808,45 @@
                         _this.$message({
                             message: '恭喜你，添加成功',
                             type: 'success'
+                        });
+
+                    }else if(resp.data == "fail1"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '用户名重复',
+                            type: 'error'
+                        });
+
+                    }else if (resp.data == "fail2"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '工号重复',
+                            type: 'error'
+                        });
+
+                    }else if(resp.data == "fail3"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '用户名和工号都重复',
+                            type: 'error'
+                        });
+                    }else if(resp.data == "format_username"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '用户名或密码格式有误',
+                            type: 'error'
+                        });
+
+                    }else if(resp.data == "format_password"){
+                        // 用户名或者密码重复逻辑
+                        //成功提示框
+                        _this.$message({
+                            message: '用户名或密码格式有误',
+                            type: 'error'
                         });
 
                     }

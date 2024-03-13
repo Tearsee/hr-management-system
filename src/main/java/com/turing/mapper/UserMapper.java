@@ -6,7 +6,16 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 public interface UserMapper {
+
+    /**
+     * 查询所有
+     */
+
+    @Select("select * from user")
+    List<User> selectAll();
 
     /**
      * 根据用户名和密码查询对象

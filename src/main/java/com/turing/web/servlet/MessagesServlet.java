@@ -34,6 +34,12 @@ public class MessagesServlet extends BaseServlet {
         // 转为train 对象
         Messages messages = JSON.parseObject(params, Messages.class);
 
+        String _eid = req.getParameter("id");
+        int eid = Integer.parseInt(_eid);
+
+        // 将eid设置为具体员工的编号
+        messages.setEid(eid);
+
         // 调用service 添加员工
         messagesService.send(messages);
 

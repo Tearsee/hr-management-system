@@ -37,9 +37,9 @@ public class LoginServlet extends BaseServlet {
         // 只能为2-9位的英文名字
         String regex1 = "^[a-zA-Z]{2,10}$";
 
-        if(username.matches(regex1)){
+        if (username.matches(regex1)) {
             System.out.println("匹配成功");
-        }else{
+        } else {
             System.out.println("匹配失败");
 
             // 匹配失败逻辑
@@ -49,16 +49,15 @@ public class LoginServlet extends BaseServlet {
             req.getRequestDispatcher("/login.jsp").forward(req, resp);
 
 
-
         }
 
         // 正则表达式判断输入 密码
 //        6-10位允许数字字母下划线，其中至少包含数字和字母
         String regex = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d_]{6,10}$";
 
-        if(password.matches(regex)){
+        if (password.matches(regex)) {
             System.out.println("匹配成功");
-        }else{
+        } else {
             System.out.println("匹配失败");
 
 
@@ -80,7 +79,8 @@ public class LoginServlet extends BaseServlet {
         if (user != null) {
 
             // 登录成功逻辑
-            if (user.getUsername().equals("admin") && user.getPassword().equals("123456")) {
+//            if (user.getUsername().equals("admin") && user.getPassword().equals("123456")) {
+            if ("admin".equals(user.getUsername()) && "admin123".equals(user.getPassword())) {
 
                 // 登录成功逻辑
 //                    HttpSession session = req.getSession();
@@ -112,31 +112,6 @@ public class LoginServlet extends BaseServlet {
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
     }
-
-    /**
-     * 根据用户名查询用户对象
-     * @param req
-     * @param resp
-     * @throws ServletException
-     * @throws IOException
-    /* public void selectByUsername(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    String username = req.getParameter("username");
-
-    boolean flag = true;
-
-    // 判断
-    if(username){
-
-    }else{
-
-    }
-
-
-
-    resp.getWriter().write("" + flag);
-
-    }*/
 
 
 }

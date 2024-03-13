@@ -364,9 +364,9 @@
                     >
 
                         <el-form ref="form" :model="train" label-width="80px">
-                            <el-form-item label="员工编号">
+                            <%--<el-form-item label="员工编号">
                                 <el-input v-model="train.eid"></el-input>
-                            </el-form-item>
+                            </el-form-item>--%>
 
                             <el-form-item label="培训日期">
                                 <el-date-picker
@@ -401,9 +401,9 @@
                     >
 
                         <el-form ref="form" :model="vacate" label-width="80px">
-                            <el-form-item label="员工Id">
+                           <%-- <el-form-item label="员工Id">
                                 <el-input v-model="vacate.eid"></el-input>
-                            </el-form-item>
+                            </el-form-item>--%>
 
                             <el-form-item label="开始时间">
                                 <el-date-picker
@@ -461,9 +461,9 @@
                     >
 
                         <el-form ref="form" :model="vacate" label-width="80px">
-                            <el-form-item label="员工Id">
+                            <%--<el-form-item label="员工Id">
                                 <el-input v-model="messages.eid"></el-input>
-                            </el-form-item>
+                            </el-form-item>--%>
 
                             <el-form-item label="缘由">
                                 <el-input v-model="messages.message"></el-input>
@@ -660,23 +660,23 @@
             </el-form-item>
 
             <el-form-item label="员工名称">
-                <el-input v-model="employee.employeeName"></el-input>
+                <el-input v-model="employee.employeeName"  placeholder="请输入中文名字"></el-input>
             </el-form-item>
 
             <el-form-item label="年龄">
-                <el-input v-model="employee.age"></el-input>
+                <el-input v-model="employee.age"  placeholder="请输入年龄"></el-input>
             </el-form-item>
 
             <el-form-item label="邮箱">
-                <el-input v-model="employee.email"></el-input>
+                <el-input v-model="employee.email" placeholder="请输入邮箱"></el-input>
             </el-form-item>
 
             <el-form-item label="手机号">
-                <el-input v-model="employee.phone"></el-input>
+                <el-input v-model="employee.phone" placeholder="请输入11位手机号码"></el-input>
             </el-form-item>
 
             <el-form-item label="部门编号">
-                <el-input v-model="employee.deptId"></el-input>
+                <el-input v-model="employee.deptId" placeholder="请输入部门编号(1-9)"></el-input>
             </el-form-item>
 
             <el-form-item label="职位ID">
@@ -1134,7 +1134,7 @@
                 //提交表单数据,发送异步请求
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/hr-management-system/train/addByEmp",
+                    url: "http://localhost:8080/hr-management-system/train/addByEmp?id=" + _this.employee.id,
                     data: _this.train
                 }).then(function (resp) {
                     //判断响应标识
@@ -1164,7 +1164,7 @@
                 //提交表单数据,发送异步请求
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/hr-management-system/vacate/addByEmp",
+                    url: "http://localhost:8080/hr-management-system/vacate/addByEmp?id=" + _this.employee.id,
                     data: _this.vacate
                 }).then(function (resp) {
                     //判断响应标识
@@ -1182,6 +1182,18 @@
                             type: 'success'
                         });
 
+                    }else if(resp.data == "date_error"){
+                        //失败提示框
+                        _this.$message({
+                            message: '开始时间不得晚于结束时间',
+                            type: 'error'
+                        });
+                    }else if(resp.data == "date_error1"){
+                        //失败提示框
+                        _this.$message({
+                            message: '开始时间不得晚于现在时间',
+                            type: 'error'
+                        });
                     }
 
                 })
@@ -1193,7 +1205,7 @@
                 //提交表单数据,发送异步请求
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/hr-management-system/messages/send",
+                    url: "http://localhost:8080/hr-management-system/messages/send?id=" + _this.employee.id,
                     data: _this.messages
                 }).then(function (resp) {
                     //判断响应标识

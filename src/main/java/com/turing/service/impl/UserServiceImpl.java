@@ -81,4 +81,19 @@ public class UserServiceImpl implements UserService {
         sqlSession.close();
 
     }
+
+    @Override
+    public List<User> selectAll() {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+        List<User> users = userMapper.selectAll();
+
+        sqlSession.close();
+
+        return users;
+    }
 }

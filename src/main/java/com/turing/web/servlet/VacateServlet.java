@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Date;
 
 @WebServlet("/vacate/*")
 public class VacateServlet extends BaseServlet {
@@ -93,6 +94,57 @@ public class VacateServlet extends BaseServlet {
 
         // 转为train 对象
         Vacate vacate = JSON.parseObject(params, Vacate.class);
+
+        String _eid = req.getParameter("id");
+        int eid = Integer.parseInt(_eid);
+
+        // 将eid设置为具体员工的编号
+        vacate.setEid(eid);
+
+
+        // 对请假日期进行校验
+        Date date1 = vacate.getStartDate();
+        Date date2 = vacate.getEndDate();
+        Date currentDate = new Date();
+
+        // 1. 开始不得晚于现在时间
+        int comparisonResult_ = compareDates(date1, currentDate);
+        // 根据比较结果输出
+        if (comparisonResult_ == -1) {
+            // 不合理情况
+            System.out.println(date1 + " 在 " + currentDate + " 之前");
+
+            resp.setContentType("text/json;charset=utf-8");
+            resp.getWriter().write("date_error1");
+            return;
+        } else if (comparisonResult_ == 1) {
+            //合理
+            System.out.println(date1 + " 在 " + currentDate + " 之后");
+        } else {
+            // 合理
+            System.out.println(date1 + " 与 " + currentDate + " 相同");
+        }
+
+
+
+        // 2. 开始不得晚于结束
+        // 调用 compareDates 函数进行比较
+        int comparisonResult = compareDates(date1, date2);
+        // 根据比较结果输出
+        if (comparisonResult == -1) {
+            // 合理情况
+            System.out.println(date1 + " 在 " + date2 + " 之前");
+        } else if (comparisonResult == 1) {
+            //不合理
+            System.out.println(date1 + " 在 " + date2 + " 之后");
+
+            resp.setContentType("text/json;charset=utf-8");
+            resp.getWriter().write("date_error");
+            return;
+        } else {
+            // 合理
+            System.out.println(date1 + " 与 " + date2 + " 相同");
+        }
 
         // 调用service 添加员工
         vacateService.addByEmp(vacate);
