@@ -34,6 +34,7 @@
             font-size: 18px;
             /* 字体颜色 */
             color: #333;
+            font-weight: bold; /* 字体加粗 */
         }
     </style>
 
@@ -44,16 +45,16 @@
     <!--管理员页面导航栏-->
     <el-container style="height: 500px; border: 1px solid #eee">
         <el-header style="text-align: right; font-size: 12px">
-<%--            <span style="margin-left: 15px">人力资源管理系统</span>--%>
-                <span style="float: left; text-align: left;" id="flag">人力资源管理系统</span>
+            <%--            <span style="margin-left: 15px">人力资源管理系统</span>--%>
+            <span style="float: left; text-align: left;" id="flag">人力资源管理系统</span>
             <span>${user.username}</span>
             <el-dropdown>
                 <i class="el-icon-user" style="margin-right: 15px"></i>
                 <el-dropdown-menu slot="dropdown">
-<%--                    <el-dropdown-item><a href="http://localhost:8080/hr-management-system/login.jsp" onclick="">退出登录</a>--%>
+                    <%--                    <el-dropdown-item><a href="http://localhost:8080/hr-management-system/login.jsp" onclick="">退出登录</a>--%>
                     <el-dropdown-item>
                         <form action="logout">
-                            <input type="submit" value="退出登录" />
+                            <input type="submit" value="退出登录"/>
                         </form>
                     </el-dropdown-item>
                 </el-dropdown-menu>
@@ -65,12 +66,13 @@
             <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
                 <div class="menu">
                     <el-menu :default-openeds="['1', '3']" @select="handleSelect">
+                        <el-menu-item index="home"><i class="el-icon-s-home"></i>首页</el-menu-item>
                         <el-menu-item index="inbox" @click="receive"><i class="el-icon-message"></i>收件箱
                         </el-menu-item>
                         <el-submenu index="systemManage">
                             <template slot="title"><i class="el-icon-menu"></i>系统管理</template>
 
-                            <el-menu-item index="employeeManage">员工管理</el-menu-item>
+                            <el-menu-item index="employeeManage"><i class="el-icon-user"></i>员工管理</el-menu-item>
                             <%--                            <el-menu-item index="departmentManage">部门管理</el-menu-item>--%>
 
                         </el-submenu>
@@ -79,32 +81,44 @@
 
                             <el-menu-item-group>
                                 <template slot="title">培训</template>
-                                <el-menu-item index="trainManage" @click="selectByPageAndCondition_train">培训管理
+                                <el-menu-item index="trainManage" @click="selectByPageAndCondition_train">
+                                    <i class="el-icon-s-order"></i>
+                                    培训管理
                                 </el-menu-item>
-                                <el-menu-item index="trainAnnouncement" @click="selectByPage_announcement_admin">培训公告管理
+                                <el-menu-item index="trainAnnouncement" @click="selectByPage_announcement_admin">
+                                    <i class="el-icon-files"></i>
+
+                                    培训公告管理
                                 </el-menu-item>
                             </el-menu-item-group>
 
                             <el-menu-item-group>
                                 <template slot="title">请假</template>
-                                <el-menu-item index="vacateManage" @click="selectByPageAndCondition_vacate">请假管理
+                                <el-menu-item index="vacateManage" @click="selectByPageAndCondition_vacate">
+                                    <i class="el-icon-reading"></i>
+                                    请假审批
                                 </el-menu-item>
                             </el-menu-item-group>
                             <el-menu-item-group>
                                 <template slot="title">考勤</template>
                                 <el-menu-item index="emprpManage" @click="selectByPageAndCondition_rewardPunish">
-                                    考勤奖罚管理
+                                    <i class="el-icon-edit"></i>
+                                    考勤表现
                                 </el-menu-item>
                             </el-menu-item-group>
                             <el-menu-item-group>
                                 <template slot="title">工资</template>
                                 <el-menu-item index="salary" @click="selectSalary">
+                                    <i class="el-icon-data-line"></i>
                                     工资管理
                                 </el-menu-item>
                             </el-menu-item-group>
 
                         </el-submenu>
-                        <el-menu-item index="register" @click="dialogVisible7 = true"><i class="el-icon-circle-plus-outline"></i>注册员工账号</el-menu-item>
+
+                        <el-menu-item index="register" @click="dialogVisible7 = true"><i
+                                class="el-icon-circle-plus-outline"></i>注册员工账号
+                        </el-menu-item>
                     </el-menu>
                 </div>
 
@@ -112,7 +126,10 @@
 
             <el-container>
                 <el-main>
-
+                    <div v-show="currentPage_ === 'home'" style="width: 40%">
+                        <el-calendar v-model="value_calendar">
+                        </el-calendar>
+                    </div>
                     <div v-show="currentPage_ === 'employeeManage'">
                         <!--搜索表单-->
                         <el-form :inline="true" :model="employee" class="demo-form-inline">
@@ -570,20 +587,20 @@
                                 >
                                 </el-table-column>
 
-                               <%-- <el-table-column
-                                        align="center"
-                                        label="操作">
+                                <%-- <el-table-column
+                                         align="center"
+                                         label="操作">
 
-                                    <template slot-scope="scope">
-                                        <el-button @click="dialogVisible5=true;getupdate_rewardPunish(scope.row)"
-                                                   type="primary"
-                                                   round>审阅
-                                        </el-button>
-                                        <!--                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>软删除-->
-                                        </el-button>
-                                    </template>
+                                     <template slot-scope="scope">
+                                         <el-button @click="dialogVisible5=true;getupdate_rewardPunish(scope.row)"
+                                                    type="primary"
+                                                    round>审阅
+                                         </el-button>
+                                         <!--                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>软删除-->
+                                         </el-button>
+                                     </template>
 
-                                </el-table-column>--%>
+                                 </el-table-column>--%>
 
                             </el-table>
                         </template>
@@ -613,7 +630,8 @@
                                 </el-form-item>
 
                                 <el-form-item label="密码">
-                                    <el-input v-model="user.password" placeholder="请输入6-10位的密码只能包含数字字母下划线，其中至少包含数字和字母"></el-input>
+                                    <el-input v-model="user.password"
+                                              placeholder="请输入6-10位的密码只能包含数字字母下划线，其中至少包含数字和字母"></el-input>
                                 </el-form-item>
 
                                 <el-form-item label="工号">
@@ -741,11 +759,11 @@
             </el-form-item>
 
             <el-form-item label="员工名称">
-                <el-input v-model="employee.employeeName"  placeholder="请输入中文名字"></el-input>
+                <el-input v-model="employee.employeeName" placeholder="请输入中文名字"></el-input>
             </el-form-item>
 
             <el-form-item label="年龄">
-                <el-input v-model="employee.age"  placeholder="请输入年龄"></el-input>
+                <el-input v-model="employee.age" placeholder="请输入年龄"></el-input>
             </el-form-item>
 
             <el-form-item label="邮箱">
@@ -846,13 +864,13 @@
             </el-form-item>
 
             <el-form-item label="培训日期">
-               <%-- <el-date-picker
-                        v-model="train.trainDate"
-                        align="right"
-                        type="date"
-                        placeholder="选择日期"
-                        :picker-options="pickerOptions">
-                </el-date-picker>--%>
+                <%-- <el-date-picker
+                         v-model="train.trainDate"
+                         align="right"
+                         type="date"
+                         placeholder="选择日期"
+                         :picker-options="pickerOptions">
+                 </el-date-picker>--%>
 
                 <el-date-picker
                         v-model="train.trainDate"
@@ -1134,8 +1152,7 @@
                             type: 'success'
                         });
 
-                    }
-                    else if(resp.data == "repeat_sdfId"){
+                    } else if (resp.data == "repeat_sdfId") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1143,7 +1160,7 @@
                             type: 'error'
                         });
 
-                    }else if(resp.data == "format_empname"){
+                    } else if (resp.data == "format_empname") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1151,7 +1168,7 @@
                             type: 'error'
                         });
 
-                    }else if (resp.data == "format_empage"){
+                    } else if (resp.data == "format_empage") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1159,14 +1176,14 @@
                             type: 'error'
                         });
 
-                    }else if(resp.data == "format_email"){
+                    } else if (resp.data == "format_email") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
                             message: '邮箱格式有误',
                             type: 'error'
                         });
-                    }else if(resp.data == "format_tel"){
+                    } else if (resp.data == "format_tel") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1174,7 +1191,7 @@
                             type: 'error'
                         });
 
-                    }else if(resp.data == "format_dept"){
+                    } else if (resp.data == "format_dept") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1207,7 +1224,7 @@
                             message: '恭喜你，编辑成功',
                             type: 'success'
                         });
-                    }else if(resp.data == "repeat_sdfId"){
+                    } else if (resp.data == "repeat_sdfId") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1215,7 +1232,7 @@
                             type: 'error'
                         });
 
-                    }else if(resp.data == "format_empname"){
+                    } else if (resp.data == "format_empname") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1223,7 +1240,7 @@
                             type: 'error'
                         });
 
-                    }else if (resp.data == "format_empage"){
+                    } else if (resp.data == "format_empage") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1231,14 +1248,14 @@
                             type: 'error'
                         });
 
-                    }else if(resp.data == "format_email"){
+                    } else if (resp.data == "format_email") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
                             message: '邮箱格式有误',
                             type: 'error'
                         });
-                    }else if(resp.data == "format_tel"){
+                    } else if (resp.data == "format_tel") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1246,7 +1263,7 @@
                             type: 'error'
                         });
 
-                    }else if(resp.data == "format_dept"){
+                    } else if (resp.data == "format_dept") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1395,7 +1412,7 @@
                             type: 'success'
                         });
 
-                    }else if(resp.data == "repeat_eid"){
+                    } else if (resp.data == "repeat_eid") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1403,7 +1420,7 @@
                             type: 'error'
                         });
 
-                    }else if(resp.data == "repeat_remark"){
+                    } else if (resp.data == "repeat_remark") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1447,7 +1464,7 @@
                             message: '恭喜你，编辑成功',
                             type: 'success'
                         });
-                    }else if(resp.data == "repeat_eid"){
+                    } else if (resp.data == "repeat_eid") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1455,7 +1472,7 @@
                             type: 'error'
                         });
 
-                    }else if(resp.data == "repeat_remark"){
+                    } else if (resp.data == "repeat_remark") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1779,7 +1796,7 @@
                             type: 'success'
                         });
 
-                    }else if(resp.data == "repeat_eid"){
+                    } else if (resp.data == "repeat_eid") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1787,7 +1804,7 @@
                             type: 'error'
                         });
 
-                    }else if(resp.data == "repeat_remark"){
+                    } else if (resp.data == "repeat_remark") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1824,7 +1841,7 @@
                             type: 'success'
                         });
 
-                    }else if(resp.data == "fail1"){
+                    } else if (resp.data == "fail1") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1832,7 +1849,7 @@
                             type: 'error'
                         });
 
-                    }else if (resp.data == "fail2"){
+                    } else if (resp.data == "fail2") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1840,14 +1857,14 @@
                             type: 'error'
                         });
 
-                    }else if(resp.data == "fail3"){
+                    } else if (resp.data == "fail3") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
                             message: '用户名和工号都重复',
                             type: 'error'
                         });
-                    }else if(resp.data == "format_username"){
+                    } else if (resp.data == "format_username") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1855,7 +1872,7 @@
                             type: 'error'
                         });
 
-                    }else if(resp.data == "format_password"){
+                    } else if (resp.data == "format_password") {
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
@@ -1954,7 +1971,7 @@
                 pageSize_train: 5,
 
                 //当前页面
-                currentPage_: 'employeeManage',
+                currentPage_: 'home',
 
                 // 添加数据对话框是否展示的标记
                 dialogVisible: false,
@@ -2259,7 +2276,7 @@
                     sal: '',
                     basicSalary: '',
                     performance: ''
-                },{
+                }, {
                     id: '',
                     eid: '',
                     sal: '',
@@ -2273,7 +2290,11 @@
                     basicSalary: '',
                     performance: ''
                 },
-                dialogVisible9:false
+                dialogVisible9: false
+                ,
+
+                value_calendar: new Date()
+
             }
         }
     })

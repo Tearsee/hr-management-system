@@ -144,6 +144,7 @@
             font-size: 18px;
             /* 字体颜色 */
             color: #333;
+            font-weight: bold; /* 字体加粗 */
         }
     </style>
 </head>
@@ -186,31 +187,45 @@
                     <el-menu-item index="home"><i class="el-icon-s-home"></i>首页</el-menu-item>
                     <el-submenu index="2">
                         <template slot="title"><i class="el-icon-suitcase"></i>培训</template>
-                        <el-menu-item index="announcement" @click="selectByPage_announcement">培训公告</el-menu-item>
-                        <el-menu-item index="join" @click="dialogVisible3=true">参与培训</el-menu-item>
-                        <el-menu-item index="mark" @click="selectMarkByPageAndId">个人培训计划与成绩</el-menu-item>
+                        <el-menu-item index="announcement" @click="selectByPage_announcement"><i
+                                class="el-icon-files"></i>
+                            培训公告
+                        </el-menu-item>
+                        <el-menu-item index="join" @click="dialogVisible3=true">
+                            <i class="el-icon-circle-plus-outline"></i>
+                            参与培训
+                        </el-menu-item>
+                        <el-menu-item index="mark" @click="selectMarkByPageAndId">
+                            <i class=" el-icon-paperclip"></i>
+                            培训情况
+                        </el-menu-item>
                     </el-submenu>
 
                     <el-submenu index="3">
-                        <template slot="title"><i class="el-icon-position"></i>请假</template>
-                        <el-menu-item index="vacate" @click="dialogVisible4=true">申请请假</el-menu-item>
+                        <template slot="title"><i class="el-icon-news"></i>请假</template>
+                        <el-menu-item index="vacate" @click="dialogVisible4=true">
+                            <i class="el-icon-s-promotion"></i>
+
+                            申请请假
+                        </el-menu-item>
 
                     </el-submenu>
-                    <el-submenu index="4">
-                        <template slot="title"><i class="el-icon-date"></i>考勤&工资</template>
-                        <el-menu-item-group>
-                            <template slot="title">考勤</template>
-                            <el-menu-item index="emprpManage" @click="selectByPageAndCondition_rewardPunish">
-                                考勤奖罚记录
-                            </el-menu-item>
-                        </el-menu-item-group>
 
-                        <el-menu-item-group>
-                            <template slot="title">工资</template>
-                            <el-menu-item index="salary" @click="selectSalary">
-                                工资管理
-                            </el-menu-item>
-                        </el-menu-item-group>
+                    <el-submenu index="4">
+                        <template slot="title"><i class="el-icon-date"></i>考勤</template>
+                        <el-menu-item index="emprpManage" @click="selectByPageAndCondition_rewardPunish">
+                            <i class="el-icon-s-order"></i>
+
+                            考勤奖罚记录
+                        </el-menu-item>
+                    </el-submenu>
+
+                    <el-submenu index="5">
+                        <template slot="title"><i class="el-icon-s-finance"></i>工资管理</template>
+                        <el-menu-item index="salary" @click="selectSalary">
+                            <i class="el-icon-wallet"></i>
+                            薪资
+                        </el-menu-item>
                     </el-submenu>
 
                     <el-menu-item index="inbox" @click="dialogVisible5=true"><i class="el-icon-message"></i>离职申请
@@ -964,6 +979,9 @@
                     basicSalary: '',
                     performance: ''
                 }
+                ,
+
+                value_calendar: new Date()
             }
         },
         methods: {
