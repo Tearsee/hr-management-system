@@ -16,6 +16,17 @@
     <title>login</title>
 <%--    <link href="css/login.css" rel="stylesheet">--%>
     <link href="http://localhost:8080/hr-management-system/css/login.css" rel="stylesheet">
+
+    <style>
+
+        #username {
+            width: 420px;
+        }
+        #password {
+            width: 430px;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -27,21 +38,21 @@
         <div id="errorMsg">${msg}</div>
         <div id="errorMsg">${error_msg}</div>
         <div id="errorMsg">${error_msg2}</div>
-        <p>Username:<input id="username" name="username" type="text">
+        <p>Username:<input id="username" name="username" type="text" placeholder="请输入2-9位英文字母">
 
            <br>
             <span id="username_err" class="err_msg" style="display: none">用户名不存在</span>
         </p>
 
-        <p>
-            请输入2-9位的英文名字
-        </p>
+        <%--<p>
+            请输入2-9位的英文
+        </p>--%>
 
-        <p>Password:<input id="password" name="password" type="password"></p>
+        <p>Password:<input id="password" name="password" type="password" placeholder="请输入6-10位的密码只能包含数字字母下划线，其中至少包含数字和字母"></p>
 
-        <p>
+       <%-- <p>
             请输入6-10位的密码只能包含数字字母下划线，其中至少包含数字和字母
-        </p>
+        </p>--%>
 <%--        <p>Remember:<input id="remember" name="remember" type="checkbox"></p>--%>
         <div id="subDiv">
             <input type="submit" class="button" value="login up">

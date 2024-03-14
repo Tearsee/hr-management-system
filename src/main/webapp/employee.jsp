@@ -134,6 +134,18 @@
             background-color: #f9fafc;
         }
     </style>
+
+    <style>
+        /* 选择器可以是具体的元素名称，如 p、h1 等 */
+        #flag {
+            /* 字体名称 */
+            font-family: Microsoft YaHei, sans-serif;
+            /* 字体大小 */
+            font-size: 18px;
+            /* 字体颜色 */
+            color: #333;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
@@ -142,10 +154,10 @@
             :visible.sync="dialogVisible2"
             width="30%"
             :before-close="handleClose">
-        <span>点击按钮生成个人资料信息</span>
+        <span>欢迎使用人力资源管理系统</span>
         <span slot="footer" class="dialog-footer">
 <%--    <el-button @click="dialogVisible2 = false">取 消</el-button>--%>
-        <el-button type="primary" @click="dialogVisible2 = false;selectOneById('${user.staffId}')">click</el-button>
+        <el-button type="primary" @click="dialogVisible2 = false;selectOneById('${user.staffId}')">开始使用</el-button>
         </span>
     </el-dialog>
 
@@ -153,14 +165,15 @@
 
 
         <el-header style="text-align: right; font-size: 12px">
-            <%--            <span>${user.username}</span>--%>
+            <span style="float: left; text-align: left;" id="flag">人力资源管理系统</span>
+
             <span>${user.staffId}</span>
             <el-dropdown>
                 <i class="el-icon-user" style="margin-right: 15px"></i>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>
                         <form action="logout">
-                            <input type="submit" value="退出登录" />
+                            <input type="submit" value="退出登录"/>
                         </form>
                     </el-dropdown-item>
                 </el-dropdown-menu>
@@ -170,21 +183,21 @@
         <el-container>
             <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
                 <el-menu :default-openeds="['1', '3']" @select="handleSelect">
-                    <el-menu-item index="home">首页</el-menu-item>
+                    <el-menu-item index="home"><i class="el-icon-s-home"></i>首页</el-menu-item>
                     <el-submenu index="2">
-                        <template slot="title"><i class="el-icon-message"></i>培训</template>
+                        <template slot="title"><i class="el-icon-suitcase"></i>培训</template>
                         <el-menu-item index="announcement" @click="selectByPage_announcement">培训公告</el-menu-item>
                         <el-menu-item index="join" @click="dialogVisible3=true">参与培训</el-menu-item>
                         <el-menu-item index="mark" @click="selectMarkByPageAndId">个人培训计划与成绩</el-menu-item>
                     </el-submenu>
 
                     <el-submenu index="3">
-                        <template slot="title"><i class="el-icon-message"></i>请假</template>
+                        <template slot="title"><i class="el-icon-position"></i>请假</template>
                         <el-menu-item index="vacate" @click="dialogVisible4=true">申请请假</el-menu-item>
 
                     </el-submenu>
                     <el-submenu index="4">
-                        <template slot="title"><i class="el-icon-setting"></i>考勤&工资</template>
+                        <template slot="title"><i class="el-icon-date"></i>考勤&工资</template>
                         <el-menu-item-group>
                             <template slot="title">考勤</template>
                             <el-menu-item index="emprpManage" @click="selectByPageAndCondition_rewardPunish">
@@ -305,14 +318,14 @@
                                     </template>
                                 </el-table-column>
 
-                              <%--  <el-table-column align="center" prop="phone" label="活动时间" width="200">
-                                    <template slot-scope="scope">
-                                        <div>开始时间：</div>
-                                        <div>{{goTime(scope.row.start_time)}}</div>
-                                        <div>结束时间：</div>
-                                        <div>{{goTime(scope.row.end_time)}}</div>
-                                    </template>
-                                </el-table-column>--%>
+                                <%--  <el-table-column align="center" prop="phone" label="活动时间" width="200">
+                                      <template slot-scope="scope">
+                                          <div>开始时间：</div>
+                                          <div>{{goTime(scope.row.start_time)}}</div>
+                                          <div>结束时间：</div>
+                                          <div>{{goTime(scope.row.end_time)}}</div>
+                                      </template>
+                                  </el-table-column>--%>
 
                                 <el-table-column
                                         prop="trainContent"
@@ -401,9 +414,9 @@
                     >
 
                         <el-form ref="form" :model="vacate" label-width="80px">
-                           <%-- <el-form-item label="员工Id">
-                                <el-input v-model="vacate.eid"></el-input>
-                            </el-form-item>--%>
+                            <%-- <el-form-item label="员工Id">
+                                 <el-input v-model="vacate.eid"></el-input>
+                             </el-form-item>--%>
 
                             <el-form-item label="开始时间">
                                 <el-date-picker
@@ -483,14 +496,14 @@
 
                     <!--搜索表单-->
                     <el-form :inline="true" :model="rewardPunish" class="demo-form-inline">
-                            <el-form-item label="员工编号">
-                                <el-input
-                                        placeholder="员工编号(id)"
-                                        v-model="rewardPunish.eid"
-                                >
-                                </el-input>
-                            </el-form-item>
-                            <el-form-item label="奖罚类型">
+                        <el-form-item label="员工编号">
+                            <el-input
+                                    placeholder="员工编号(id)"
+                                    v-model="rewardPunish.eid"
+                            >
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="奖罚类型">
                             <el-select v-model="rewardPunish.rpType" placeholder="请选择">
                                 <el-option
                                         v-for="item in options_rp"
@@ -660,11 +673,11 @@
             </el-form-item>
 
             <el-form-item label="员工名称">
-                <el-input v-model="employee.employeeName"  placeholder="请输入中文名字"></el-input>
+                <el-input v-model="employee.employeeName" placeholder="请输入中文名字"></el-input>
             </el-form-item>
 
             <el-form-item label="年龄">
-                <el-input v-model="employee.age"  placeholder="请输入年龄"></el-input>
+                <el-input v-model="employee.age" placeholder="请输入年龄"></el-input>
             </el-form-item>
 
             <el-form-item label="邮箱">
@@ -936,7 +949,7 @@
                     sal: '',
                     basicSalary: '',
                     performance: ''
-                },{
+                }, {
                     id: '',
                     eid: '',
                     sal: '',
@@ -1182,13 +1195,13 @@
                             type: 'success'
                         });
 
-                    }else if(resp.data == "date_error"){
+                    } else if (resp.data == "date_error") {
                         //失败提示框
                         _this.$message({
                             message: '开始时间不得晚于结束时间',
                             type: 'error'
                         });
-                    }else if(resp.data == "date_error1"){
+                    } else if (resp.data == "date_error1") {
                         //失败提示框
                         _this.$message({
                             message: '开始时间不得晚于现在时间',

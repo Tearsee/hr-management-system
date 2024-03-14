@@ -25,6 +25,18 @@
         }
     </style>
 
+    <style>
+        /* 选择器可以是具体的元素名称，如 p、h1 等 */
+        #flag {
+            /* 字体名称 */
+            font-family: Microsoft YaHei, sans-serif;
+            /* 字体大小 */
+            font-size: 18px;
+            /* 字体颜色 */
+            color: #333;
+        }
+    </style>
+
 </head>
 <body>
 <div id="app">
@@ -32,6 +44,8 @@
     <!--管理员页面导航栏-->
     <el-container style="height: 500px; border: 1px solid #eee">
         <el-header style="text-align: right; font-size: 12px">
+<%--            <span style="margin-left: 15px">人力资源管理系统</span>--%>
+                <span style="float: left; text-align: left;" id="flag">人力资源管理系统</span>
             <span>${user.username}</span>
             <el-dropdown>
                 <i class="el-icon-user" style="margin-right: 15px"></i>
@@ -90,7 +104,7 @@
                             </el-menu-item-group>
 
                         </el-submenu>
-                        <el-menu-item index="register" @click="dialogVisible7 = true">注册员工账号</el-menu-item>
+                        <el-menu-item index="register" @click="dialogVisible7 = true"><i class="el-icon-circle-plus-outline"></i>注册员工账号</el-menu-item>
                     </el-menu>
                 </div>
 
@@ -178,9 +192,9 @@
                                 </el-table-column>
 
                                 <el-table-column
-                                        prop="deptId"
+                                        prop="deptStr"
                                         align="center"
-                                        label="所属部门ID">
+                                        label="所属部门">
                                 </el-table-column>
 
                                 <el-table-column
@@ -1125,7 +1139,7 @@
                         // 用户名或者密码重复逻辑
                         //成功提示框
                         _this.$message({
-                            message: '工号重复',
+                            message: '该工号已存在',
                             type: 'error'
                         });
 
