@@ -519,7 +519,7 @@
                             </el-form-item>
 
                             <el-form-item label="奖罚类型">
-<%--                                <el-input v-model="rewardPunish.rpType" placeholder="奖罚类型"></el-input>--%>
+                                <%--                                <el-input v-model="rewardPunish.rpType" placeholder="奖罚类型"></el-input>--%>
                                 <el-select v-model="rewardPunish.rpType" placeholder="奖罚类型">
                                     <el-option label="罚" value="0"></el-option>
                                     <el-option label="奖" value="1"></el-option>
@@ -673,16 +673,33 @@
                                 </el-table-column>
 
                                 <el-table-column
-                                        prop="eid"
-                                        label="员工id"
-                                        width="300px"
+                                        prop="staffId"
+                                        label="工号"
+                                        width="100px"
                                 >
                                 </el-table-column>
-
+                                <el-table-column
+                                        prop="employeeName"
+                                        label="员工名字"
+                                        width="150px"
+                                >
+                                </el-table-column>
+                                <el-table-column
+                                        prop="deptStr"
+                                        label="所属部门"
+                                        width="150px"
+                                >
+                                </el-table-column>
+                                <el-table-column
+                                        prop="employmentStatusStr"
+                                        label="在职状态"
+                                        width="150px"
+                                >
+                                </el-table-column>
                                 <el-table-column
                                         prop="message"
-                                        label="内容"
-                                        width="900px"
+                                        label="内容详情"
+                                        width="800px"
                                 >
                                 </el-table-column>
 
@@ -2338,17 +2355,29 @@
                 },
                 // 培训公告表格
                 tableData_messages: [{
-                    eid: '1',
-                    message: ''
+                    staffId:'',
+                    employeeName:'',
+                    deptId:'',
+                    employmentStatus:'',
+                    message:''
                 }, {
-                    eid: '1',
-                    message: ''
+                    staffId:'',
+                    employeeName:'',
+                    deptId:'',
+                    employmentStatus:'',
+                    message:''
                 }, {
-                    eid: '1',
-                    message: ''
+                    staffId:'',
+                    employeeName:'',
+                    deptId:'',
+                    employmentStatus:'',
+                    message:''
                 }, {
-                    eid: '1',
-                    message: ''
+                    staffId:'',
+                    employeeName:'',
+                    deptId:'',
+                    employmentStatus:'',
+                    message:''
                 }],
                 messages: {
                     eid: '',

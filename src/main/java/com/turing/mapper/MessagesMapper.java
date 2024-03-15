@@ -18,10 +18,9 @@ public interface MessagesMapper {
 
     // 管理员操作
     /**
-     * 查询所有
+     * 查询所有(多表)
      * @return
      */
-    @Select("select * from messages")
+//    @Select("select * from messages")
     List<Messages> receive();
-
 }
