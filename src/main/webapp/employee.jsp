@@ -614,6 +614,23 @@
 
                 </div>
                 <div v-show="currentPage_ === 'salary'">
+                    <!--搜索表单-->
+                    <el-form :inline="true" :model="salary" class="demo-form-inline">
+
+                        <el-form-item label="日期">
+                            <el-select v-model="salary.month" placeholder="一月份">
+                                <el-option
+                                        v-for="item in options_sal"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="selectSalary">查询</el-button>
+                        </el-form-item>
+                    </el-form>
                     <!--表格-->
                     <template>
                         <el-table
@@ -621,19 +638,28 @@
                                 style="width: 100%"
                                 :row-class-name="tableRowClassName"
                         >
+                           <%-- <el-table-column
+                                    prop="month"
+                                    label="月份"
+                                    align="center"
+                                    width="300px"
+                            >
+                            </el-table-column>--%>
+
                             <el-table-column
-                                    prop="id"
-                                    label="序号"
-                                    width="200px"
+                                    prop="basicSalary"
+                                    label="底薪"
+                                    align="center"
+                                    width="450px"
+
                             >
                             </el-table-column>
 
                             <el-table-column
-                                    prop="eid"
-                                    label="员工编号(id)"
+                                    prop="performance"
+                                    label="业绩"
                                     align="center"
-                                    width="200px"
-
+                                    width="450px"
                             >
                             </el-table-column>
 
@@ -641,33 +667,24 @@
                                     prop="sal"
                                     label="工资"
                                     align="center"
-                                    width="200px"
+                                    width="450px"
 
                             >
                             </el-table-column>
-
-
-                            <el-table-column
-                                    prop="basicSalary"
-                                    label="底薪"
-                                    align="center"
-                                    width="200px"
-
-                            >
-                            </el-table-column>
-
-
-                            <el-table-column
-                                    prop="performance"
-                                    label="业绩"
-                                    align="center"
-                                    width="200px"
-                            >
-                            </el-table-column>
-
 
                         </el-table>
                     </template>
+
+                    <!--分页工具条-->
+                    <el-pagination
+                            @size-change="handleSizeChange_salary"
+                            @current-change="handleCurrentChange_salary"
+                            :current-page="currentPage_salary"
+                            :page-sizes="[5, 10, 15, 20]"
+                            :page-size="5"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="totalCount_salary">
+                    </el-pagination>
 
                 </div>
             </el-container>
@@ -959,8 +976,9 @@
                 ,
 
                 tableData_salary: [{
-                    id: '',
-                    eid: '',
+                    staffId: '',
+                    employeeName: '',
+                    deptId: '',
                     sal: '',
                     basicSalary: '',
                     performance: ''
@@ -970,18 +988,66 @@
                     sal: '',
                     basicSalary: '',
                     performance: ''
-                }],
-
-                salary: {
-                    id: '',
-                    eid: '',
-                    sal: '',
-                    basicSalary: '',
-                    performance: ''
-                }
+                }]
                 ,
 
-                value_calendar: new Date()
+                value_calendar: new Date(),
+                // 当前页码
+                currentPage_salary: '1',
+                // 页面展示数
+                pageSize_salary: '5',
+                // 总条数
+                totalCount_salary: '100',
+                salary: {
+                    eid: '',
+                    staffId: '',
+                    employeeName: '',
+                    deptId: '',
+                    sal: '',
+                    basicSalary: '',
+                    performance: '',
+                    month: ''
+                },
+                options_sal: [{
+                    value: '1',
+                    label: '一月'
+                }, {
+                    value: '2',
+                    label: '二月'
+                }, {
+                    value: '3',
+                    label: '三月'
+                }, {
+                    value: '4',
+                    label: '四月'
+                }, {
+                    value: '5',
+                    label: '五月'
+                }, {
+                    value: '5',
+                    label: '五月'
+                }, {
+                    value: '6',
+                    label: '六月'
+                }, {
+                    value: '7',
+                    label: '七月'
+                }, {
+                    value: '8',
+                    label: '八月'
+                }, {
+                    value: '9',
+                    label: '九月'
+                }, {
+                    value: '10',
+                    label: '十月'
+                }, {
+                    value: '11',
+                    label: '十一月'
+                }, {
+                    value: '12',
+                    label: '十二月'
+                }]
             }
         },
         methods: {
@@ -1306,15 +1372,49 @@
                 return timestamp4.toLocaleDateString().replace(/\//g, "-") + " " + timestamp4.toTimeString().substr(0, 8);
             },
             // 分页查询
-            selectSalary() {
+           /* selectSalary() {
                 axios({
-                    method: "get",
-                    url: "http://localhost:8080/hr-management-system/salary/selectAll"
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/salary/selectByPageAndCondition"
                 }).then(resp => {
                         // 设置表格数据
                         this.tableData_salary = resp.data; //{rows:[],totoalCount}
                     }
                 )
+            }*/
+            // 分页查询
+            selectSalary() {
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/salary/selectByPageAndCondition2?currentPage_salary=" + this.currentPage_salary + "&pageSize_salary=" + this.pageSize_salary + "&employeeName=" + this.employee.employeeName,
+                    data: this.salary
+                }).then(resp => {
+                        // 设置表格数据
+                        this.tableData_salary = resp.data.rows;
+                        this.totalCount_salary = resp.data.totalCount;
+                    }
+                )
+            },
+            //分页
+            handleSizeChange_salary(val) {
+                //console.log(`每页 ${val} 条`);
+
+                // 重新设置展示页数
+                this.pageSize_salary = val;
+
+                // 重新查询 分页 数据
+                this.selectSalary();
+
+            },
+            handleCurrentChange_salary(val) {
+                console.log(`当前页: ${val}`); //   当前页 : 8
+                // val : currentPage
+
+                // 重新设置当前页码
+                this.currentPage_salary = val;
+
+                // 重新查询 分页 数据
+                this.selectSalary();
             }
         }
     })

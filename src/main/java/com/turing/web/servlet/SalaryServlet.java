@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.List;
 
@@ -103,7 +104,7 @@ public class SalaryServlet extends BaseServlet {
     }
 
     /**
-     * 根据条件分页查询
+     * 根据条件分页查询(admin)
      *
      * @param req
      * @param resp
@@ -116,6 +117,13 @@ public class SalaryServlet extends BaseServlet {
         String _currentPage = req.getParameter("currentPage_salary");
         String _pageSize = req.getParameter("pageSize_salary");
 
+/*
+        // 更新用户查询功能
+        // 可能会影响amdin的查询salary
+        String _id = req.getParameter("id");
+        int eid = Integer.parseInt(_id);
+*/
+
         int currentPage = Integer.parseInt(_currentPage);
         int pageSize = Integer.parseInt(_pageSize);
 
@@ -124,6 +132,52 @@ public class SalaryServlet extends BaseServlet {
         String params = br.readLine();
 
         SalaryQuery salaryQuery = JSON.parseObject(params, SalaryQuery.class);
+
+        // 调用service 查询pageBean
+        PageBean<SalaryQuery> pageBean = salaryService.selectByPageAndCondition(currentPage, pageSize,salaryQuery);
+
+        // 转换为JSON 对象
+        String jsonString = JSON.toJSONString(pageBean);
+
+        // 响应JSON 对象
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+    }
+
+    /**
+     * 根据条件分页查询(employee)
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void selectByPageAndCondition2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        req.setCharacterEncoding("UTF-8");
+
+        // 调用service 的查询所有方法 返回 employees 集合
+//        List<Employee> employees = employeeService.selectAll();
+        String _currentPage = req.getParameter("currentPage_salary");
+        String _pageSize = req.getParameter("pageSize_salary");
+
+        // 更新用户查询功能
+        // 可能会影响amdin的查询salary
+        String _employeeName = req.getParameter("employeeName");
+
+        byte[] bytes = _employeeName.getBytes("ISO-8859-1");
+
+        String employeeName = new String(bytes, "utf-8");
+
+        int currentPage = Integer.parseInt(_currentPage);
+        int pageSize = Integer.parseInt(_pageSize);
+
+        // 获取
+        BufferedReader br = req.getReader();
+        String params = br.readLine();
+
+        SalaryQuery salaryQuery = JSON.parseObject(params, SalaryQuery.class);
+        salaryQuery.setEmployeeName(employeeName);
 
         // 调用service 查询pageBean
         PageBean<SalaryQuery> pageBean = salaryService.selectByPageAndCondition(currentPage, pageSize,salaryQuery);

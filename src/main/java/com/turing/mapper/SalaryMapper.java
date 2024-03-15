@@ -17,7 +17,7 @@ public interface SalaryMapper {
 
 
     /**
-     * 添加员工
+     * 添加
      * @param salaryQuery
      */
     @Insert("insert into empsalary values (null,#{eid},#{sal},#{basicSalary},#{performance},#{month})")
@@ -38,6 +38,4 @@ public interface SalaryMapper {
      * @return
      */
     int selectTotalCountByCondition(SalaryQuery salaryQuery);
-
-
 }
