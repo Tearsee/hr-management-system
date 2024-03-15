@@ -183,8 +183,10 @@
 
         <el-container>
             <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-                <el-menu :default-openeds="['1', '3']" @select="handleSelect">
+                <el-menu :default-openeds="['1', '7']" @select="handleSelect">
                     <el-menu-item index="home"><i class="el-icon-s-home"></i>首页</el-menu-item>
+                    <el-menu-item index="inbox" @click="dialogVisible5=true"><i class="el-icon-message"></i>邮箱
+                    </el-menu-item>
                     <el-submenu index="2">
                         <template slot="title"><i class="el-icon-suitcase"></i>培训</template>
                         <el-menu-item index="announcement" @click="selectByPage_announcement"><i
@@ -205,7 +207,6 @@
                         <template slot="title"><i class="el-icon-news"></i>请假</template>
                         <el-menu-item index="vacate" @click="dialogVisible4=true">
                             <i class="el-icon-s-promotion"></i>
-
                             申请请假
                         </el-menu-item>
 
@@ -228,8 +229,7 @@
                         </el-menu-item>
                     </el-submenu>
 
-                    <el-menu-item index="inbox" @click="dialogVisible5=true"><i class="el-icon-message"></i>离职申请
-                    </el-menu-item>
+
                 </el-menu>
             </el-aside>
 
@@ -483,7 +483,7 @@
                 <div v-show="currentPage_ === 'inbox'">
                     <!--添加员工数据对话框表单-->
                     <el-dialog
-                            title="申请离职"
+                            title="发送邮件"
                             :visible.sync="dialogVisible5"
                             width="30%"
                     >
@@ -493,7 +493,7 @@
                                 <el-input v-model="messages.eid"></el-input>
                             </el-form-item>--%>
 
-                            <el-form-item label="缘由">
+                            <el-form-item label="内容">
                                 <el-input v-model="messages.message"></el-input>
                             </el-form-item>
 
