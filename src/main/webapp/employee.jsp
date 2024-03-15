@@ -511,13 +511,7 @@
 
                     <!--搜索表单-->
                     <el-form :inline="true" :model="rewardPunish" class="demo-form-inline">
-                        <el-form-item label="员工编号">
-                            <el-input
-                                    placeholder="员工编号(id)"
-                                    v-model="rewardPunish.eid"
-                            >
-                            </el-input>
-                        </el-form-item>
+
                         <el-form-item label="奖罚类型">
                             <el-select v-model="rewardPunish.rpType" placeholder="请选择">
                                 <el-option
@@ -529,7 +523,7 @@
                             </el-select>
                         </el-form-item>
 
-                        <el-form-item label="奖罚日期">
+                       <%-- <el-form-item label="奖罚日期">
                             <el-date-picker
                                     v-model="rewardPunish.rpDate"
                                     align="right"
@@ -537,7 +531,7 @@
                                     placeholder="选择日期"
                                     :picker-options="pickerOptions">
                             </el-date-picker>
-                        </el-form-item>
+                        </el-form-item>--%>
 
                         <el-form-item>
                             <el-button type="primary" @click="onSubmit_rewardPunish">查询</el-button>
@@ -555,12 +549,14 @@
                                     prop="id"
                                     label="序号"
                                     width="50px"
+                                    align="center"
                             >
                             </el-table-column>
 
                             <el-table-column
                                     prop="rpDate"
                                     align="center"
+                                    width="300px"
                                     label="奖罚时间">
 
                                 <template slot-scope="scope">
@@ -574,6 +570,7 @@
                                     prop="rpTypeStr"
                                     label="奖罚类型"
                                     align="center"
+                                    width="250px"
                             >
                             </el-table-column>
 
@@ -581,6 +578,7 @@
                                     prop="rpReason"
                                     label="奖罚原因"
                                     align="center"
+                                    width="250px"
                             >
                             </el-table-column>
 
@@ -588,6 +586,7 @@
                                     prop="rpPoint"
                                     label="奖罚分"
                                     align="center"
+                                    width="250px"
                             >
                             </el-table-column>
 
@@ -595,6 +594,7 @@
                                     prop="remark"
                                     label="备注"
                                     align="center"
+                                    width="350px"
                             >
                             </el-table-column>
 
@@ -1355,7 +1355,7 @@
             selectByPageAndCondition_rewardPunish() {
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/hr-management-system/rewardPunish/selectByPageAndCondition?currentPage_rewardPunish=" + this.currentPage_rewardPunish + "&pageSize_rewardPunish=" + this.pageSize_rewardPunish,
+                    url: "http://localhost:8080/hr-management-system/rewardPunish/selectByPageAndCondition2?currentPage_rewardPunish=" + this.currentPage_rewardPunish + "&pageSize_rewardPunish=" + this.pageSize_rewardPunish + "&id=" + this.employee.id,
                     data: this.rewardPunish
                 }).then(resp => {
                         // 设置表格数据

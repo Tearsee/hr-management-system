@@ -118,4 +118,47 @@ public class RewardPunishServlet extends BaseServlet{
         resp.getWriter().write("success");
     }
 
+    /**
+     * 分页条件查询
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void selectByPageAndCondition2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 调用service 的查询所有方法 返回 rewardPunishs 集合
+//        List<RewardPunish> rewardPunishs = rewardPunishService.selectAll();
+        String _currentPage = req.getParameter("currentPage_rewardPunish");
+        String _pageSize = req.getParameter("pageSize_rewardPunish");
+        String _id = req.getParameter("id");
+
+
+        int currentPage = Integer.parseInt(_currentPage);
+        int pageSize = Integer.parseInt(_pageSize);
+        // 用户id --> eid
+        int eid = Integer.parseInt(_id);
+
+
+//        System.out.println(currentPage);
+//        System.out.println(pageSize);
+        // 获取
+        BufferedReader br = req.getReader();
+        String params = br.readLine();
+
+        RewardPunish rewardPunish = JSON.parseObject(params, RewardPunish.class);
+        // 对id 赋值
+        rewardPunish.setEid(eid);
+
+        // 调用service 查询pageBean
+        PageBean<RewardPunish> pageBean = rewardPunishService.selectByPageAndCondition(currentPage, pageSize,rewardPunish);
+
+        // 转换为JSON 对象
+        String jsonString = JSON.toJSONString(pageBean);
+
+        // 响应JSON 对象
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+    }
+
 }
