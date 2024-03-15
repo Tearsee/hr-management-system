@@ -1,8 +1,6 @@
 package com.turing.service;
 
-import com.turing.pojo.PageBean;
-import com.turing.pojo.Salary;
-import com.turing.pojo.Vacate;
+import com.turing.pojo.*;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -14,5 +12,15 @@ public interface SalaryService {
      */
     List<Salary> selectAll();
 
-    void add(Salary salary);
+    void add(SalaryQuery salaryQuery);
+
+    /**
+     * 分页条件查询
+     * @param currentPage
+     * @param pageSize
+     * @param salaryQuery
+     * @return
+     */
+    PageBean<SalaryQuery> selectByPageAndCondition(int currentPage, int pageSize, SalaryQuery salaryQuery);
+
 }

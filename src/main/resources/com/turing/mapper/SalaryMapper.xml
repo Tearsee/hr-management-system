@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.turing.mapper.SalaryMapper">
+
+   <!-- <resultMap id="employeeResultMap" type="employee">
+        <result property="staffId" column="staff_id"/>
+        <result property="employeeName" column="employee_name"/>
+        <result property="employmentStatus" column="employment_status"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="posId" column="pos_id"/>
+    </resultMap>-->
+
+    <resultMap id="salaryQueryResultMap" type="salaryQuery">
+        <result property="staffId" column="staff_id"/>
+        <result property="employeeName" column="employee_name"/>
+        <result property="deptId" column="dept_id"/>
+    </resultMap>
+
+    <!--分页条件查询-->
+
+    <select id="selectByPageAndCondition" resultMap="salaryQueryResultMap">
+        SELECT e.staff_id, e.employee_name, e.dept_id,es.basicSalary,es.performance,es.sal
+        FROM empsalary es
+        JOIN tb_employee e
+        ON e.id = es.eid
+        <where>
+            <if test=" salaryQuery.employeeName != null and  salaryQuery.employeeName != ''">
+                and e.employee_name like #{salaryQuery.employeeName}
+            </if>
+
+            <if test=" salaryQuery.month != null">
+                and es.month = #{salaryQuery.month}
+            </if>
+
+        </where>
+
+        limit #{begin},#{size}
+    </select>
+
+    <!--根据条件查询总记录数-->
+    <select id="selectTotalCountByCondition" resultType="int">
+        select count(*)
+        FROM tb_employee e
+        INNER JOIN empsalary es ON e.id = es.eid
+        <where>
+            <if test="employeeName != null and employeeName != ''">
+                and e.employee_name like #{employeeName}
+            </if>
+        </where>
+
+
+        <if test=" month != null and month != ''">
+            and es.month = #{month}
+        </if>
+
+    </select>
+
+
+</mapper>

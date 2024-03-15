@@ -3,10 +3,7 @@ package com.turing.service.impl;
 import com.turing.mapper.EmployeeMapper;
 import com.turing.mapper.SalaryMapper;
 import com.turing.mapper.VacateMapper;
-import com.turing.pojo.Employee;
-import com.turing.pojo.PageBean;
-import com.turing.pojo.Salary;
-import com.turing.pojo.Vacate;
+import com.turing.pojo.*;
 import com.turing.service.SalaryService;
 import com.turing.service.VacateService;
 import com.turing.util.SqlSessionFactoryUtils;
@@ -25,20 +22,20 @@ public class SalaryServiceImpl implements SalaryService {
         SqlSession sqlSession = factory.openSession();
 
         // 获取mapper
-        SalaryMapper salaryMapper = sqlSession.getMapper(SalaryMapper.class);
+        SalaryMapper salaryQuery = sqlSession.getMapper(SalaryMapper.class);
 
         // 执行方法
-        List<Salary> employees = salaryMapper.selectAll();
+        List<Salary> salaries = salaryQuery.selectAll();
 
         // 释放资源
         sqlSession.close();
 
         // 返回查询结果
-        return employees;
+        return salaries;
     }
 
     @Override
-    public void add(Salary salary) {
+    public void add(SalaryQuery salaryQuery) {
         // 获取SQLSession
         SqlSession sqlSession = factory.openSession();
 
@@ -46,7 +43,7 @@ public class SalaryServiceImpl implements SalaryService {
         SalaryMapper salaryMapper = sqlSession.getMapper(SalaryMapper.class);
 
         // 执行方法
-        salaryMapper.add(salary);
+        salaryMapper.add(salaryQuery);
 
         // 提交事务
         sqlSession.commit();
@@ -54,5 +51,46 @@ public class SalaryServiceImpl implements SalaryService {
         // 释放资源
         sqlSession.close();
 
+    }
+
+    @Override
+    public PageBean<SalaryQuery> selectByPageAndCondition(int currentPage, int pageSize, SalaryQuery salaryQuery) {
+        // 获取SQLSession
+        SqlSession sqlSession = factory.openSession();
+
+        // 获取mapper
+        SalaryMapper salaryMapper = sqlSession.getMapper(SalaryMapper.class);
+
+        // 计算开始索引
+        int begin = (currentPage - 1) * pageSize;
+        // 计算查询条目数
+        int size = pageSize;
+
+        // 处理employee条件 ，设置模糊表达式
+
+        String employeeName = salaryQuery.getEmployeeName();
+        if(employeeName != null && employeeName.length() > 0){
+            salaryQuery.setEmployeeName("%" + employeeName + "%");
+        }
+
+        // 查询当前页数据
+        List<SalaryQuery> rows = salaryMapper.selectByPageAndCondition(begin, size,salaryQuery);
+
+        // 查询总记录数
+        int totalCount = salaryMapper.selectTotalCountByCondition(salaryQuery);
+
+        // 封装PageBean 对象
+        PageBean<SalaryQuery> pageBean = new PageBean<>();
+        pageBean.setRows(rows);
+        pageBean.setTotalCount(totalCount);
+
+        /*List<SalaryQuery> rows1 = pageBean.getRows();
+        for (int i = 0; i < pageBean.getRows().size(); i++) {
+            System.out.println(rows1.get(i).toString());
+        }*/
+        // 释放资源
+        sqlSession.close();
+
+        return pageBean;
     }
 }

@@ -108,7 +108,7 @@
                             </el-menu-item-group>
                             <el-menu-item-group>
                                 <template slot="title">工资</template>
-                                <el-menu-item index="salary" @click="selectSalary">
+                                <el-menu-item index="salary" @click="selectByPageAndCondition_salary">
                                     <i class="el-icon-data-line"></i>
                                     工资管理
                                 </el-menu-item>
@@ -401,7 +401,13 @@
                             </el-form-item>
 
                             <el-form-item label="审批状态">
-                                <el-input v-model="vacate.status" placeholder="审批状态"></el-input>
+                                <%--                                <el-input v-model="vacate.status" placeholder="审批状态"></el-input>--%>
+
+                                <el-select v-model="vacate.status" placeholder="审批状态">
+                                    <el-option label="通过" value="1"></el-option>
+                                    <el-option label="不通过" value="0"></el-option>
+                                    <el-option label="待审核" value="2"></el-option>
+                                </el-select>
                             </el-form-item>
 
                             <el-form-item>
@@ -513,7 +519,11 @@
                             </el-form-item>
 
                             <el-form-item label="奖罚类型">
-                                <el-input v-model="rewardPunish.rpType" placeholder="奖罚类型"></el-input>
+<%--                                <el-input v-model="rewardPunish.rpType" placeholder="奖罚类型"></el-input>--%>
+                                <el-select v-model="rewardPunish.rpType" placeholder="奖罚类型">
+                                    <el-option label="罚" value="0"></el-option>
+                                    <el-option label="奖" value="1"></el-option>
+                                </el-select>
                             </el-form-item>
 
                             <el-form-item>
@@ -671,7 +681,7 @@
 
                                 <el-table-column
                                         prop="message"
-                                        label="离职缘由"
+                                        label="内容"
                                         width="900px"
                                 >
                                 </el-table-column>
@@ -682,6 +692,28 @@
                     </div>
                     <div v-show="currentPage_ === 'salary'">
 
+                        <!--搜索表单-->
+                        <el-form :inline="true" :model="salary" class="demo-form-inline">
+
+
+                            <el-form-item label="员工名称">
+                                <el-input v-model="salary.employeeName" placeholder="员工名称"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="日期">
+                                <el-select v-model="salary.month" placeholder="请选择月份">
+                                    <el-option
+                                            v-for="item in options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="selectByPageAndCondition_salary">查询</el-button>
+                            </el-form-item>
+                        </el-form>
                         <!--按钮-->
                         <el-row>
                             <el-button type="primary" @click="dialogVisible9 = true">新增</el-button>
@@ -694,15 +726,37 @@
                                     :row-class-name="tableRowClassName"
                             >
                                 <el-table-column
-                                        prop="id"
-                                        label="序号"
-                                        width="50px"
+                                        prop="staffId"
+                                        label="工号"
+                                        align="center"
                                 >
                                 </el-table-column>
 
                                 <el-table-column
-                                        prop="eid"
-                                        label="员工编号(id)"
+                                        prop="employeeName"
+                                        label="员工名称"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+
+                                <el-table-column
+                                        prop="deptStr"
+                                        label="所属部门"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="basicSalary"
+                                        label="底薪"
+                                        align="center"
+                                >
+                                </el-table-column>
+
+                                <el-table-column
+                                        prop="performance"
+                                        label="业绩"
                                         align="center"
                                 >
                                 </el-table-column>
@@ -715,21 +769,18 @@
                                 </el-table-column>
 
 
-                                <el-table-column
-                                        prop="basicSalary"
-                                        label="底薪"
-                                        align="center"
-                                >
-                                </el-table-column>
-
-
-                                <el-table-column
-                                        prop="performance"
-                                        label="业绩"
-                                        align="center"
-                                >
-                                </el-table-column>
                             </el-table>
+
+                            <!--分页工具条-->
+                            <el-pagination
+                                    @size-change="handleSizeChange_salary"
+                                    @current-change="handleCurrentChange_salary"
+                                    :current-page="currentPage_salary"
+                                    :page-sizes="[5, 10, 15, 20]"
+                                    :page-size="5"
+                                    layout="total, sizes, prev, pager, next, jumper"
+                                    :total="totalCount_salary">
+                            </el-pagination>
                         </template>
 
 
@@ -1043,20 +1094,39 @@
     >
 
         <el-form ref="form" :model="salary" label-width="80px">
-            <el-form-item label="员工编号">
+            <el-form-item label="员工ID">
                 <el-input v-model="salary.eid"></el-input>
             </el-form-item>
 
             <el-form-item label="工资">
-                <el-input v-model="salary.sal"></el-input>
+                <%--                <el-input v-model="salary.sal"></el-input>--%>
+                <el-input-number v-model="salary.sal" :min="2500" :step="100" label="工资">
+
+                </el-input-number>
             </el-form-item>
 
+
             <el-form-item label="底薪">
-                <el-input v-model="salary.basicSalary"></el-input>
+                <el-input-number v-model="salary.basicSalary" :min="2500" :step="100" label="工资">
+
+                </el-input-number>
             </el-form-item>
 
             <el-form-item label="业绩">
-                <el-input v-model="salary.performance"></el-input>
+                <el-input-number v-model="salary.performance" :min="0" :step="100" label="工资">
+
+                </el-input-number>
+            </el-form-item>
+
+            <el-form-item label="日期">
+                <el-select v-model="salary.month" placeholder="请选择月份">
+                    <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
             </el-form-item>
 
             <el-form-item>
@@ -1066,6 +1136,7 @@
         </el-form>
 
     </el-dialog>
+
 </div>
 
 <script src="js/vue.js"></script>
@@ -1905,13 +1976,15 @@
             },
 
             // 分页查询
-            selectSalary() {
+            selectByPageAndCondition_salary() {
                 axios({
-                    method: "get",
-                    url: "http://localhost:8080/hr-management-system/salary/selectAll"
+                    method: "post",
+                    url: "http://localhost:8080/hr-management-system/salary/selectByPageAndCondition?currentPage_salary=" + this.currentPage_salary + "&pageSize_salary=" + this.pageSize_salary,
+                    data: this.salary
                 }).then(resp => {
                         // 设置表格数据
-                        this.tableData_salary = resp.data; //{rows:[],totoalCount}
+                        this.tableData_salary = resp.data.rows;
+                        this.totalCount_salary = resp.data.totalCount;
                     }
                 )
             },
@@ -1941,10 +2014,47 @@
                             type: 'success'
                         });
 
+                    } else if (resp.data == "error_eid") {
+
+                        //成功提示框
+                        _this.$message({
+                            message: '该员工编号不存在,请重新输入',
+                            type: 'error'
+                        });
+
+                    } else if (resp.data == "error_sal") {
+
+                        //成功提示框
+                        _this.$message({
+                            message: '底薪不能大于工资,请重新输入',
+                            type: 'error'
+                        });
                     }
 
                 })
-            }
+            },
+            //分页
+            handleSizeChange_salary(val) {
+                //console.log(`每页 ${val} 条`);
+
+                // 重新设置展示页数
+                this.pageSize_salary = val;
+
+                // 重新查询 分页 数据
+                this.selectByPageAndCondition_salary();
+
+            },
+            handleCurrentChange_salary(val) {
+                console.log(`当前页: ${val}`); //   当前页 : 8
+                // val : currentPage
+
+                // 重新设置当前页码
+                this.currentPage_salary = val;
+
+                // 重新查询 分页 数据
+                this.selectByPageAndCondition_salary();
+            },
+
         },
         data() {
             return {
@@ -2271,8 +2381,9 @@
                 },
 
                 tableData_salary: [{
-                    id: '',
-                    eid: '',
+                    staffId: '',
+                    employeeName: '',
+                    deptId: '',
                     sal: '',
                     basicSalary: '',
                     performance: ''
@@ -2284,17 +2395,69 @@
                     performance: ''
                 }],
                 salary: {
-                    id: '',
                     eid: '',
+                    staffId: '',
+                    employeeName: '',
+                    deptId: '',
                     sal: '',
                     basicSalary: '',
-                    performance: ''
+                    performance: '',
+                    month: ''
                 },
                 dialogVisible9: false
                 ,
 
                 value_calendar: new Date()
 
+                ,
+                // 当前页码
+                currentPage_salary: '1',
+                // 页面展示数
+                pageSize_salary: '5',
+                // 总条数
+                totalCount_salary: '100',
+
+
+                options: [{
+                    value: '1',
+                    label: '一月'
+                }, {
+                    value: '2',
+                    label: '二月'
+                }, {
+                    value: '3',
+                    label: '三月'
+                }, {
+                    value: '4',
+                    label: '四月'
+                }, {
+                    value: '5',
+                    label: '五月'
+                }, {
+                    value: '5',
+                    label: '五月'
+                }, {
+                    value: '6',
+                    label: '六月'
+                }, {
+                    value: '7',
+                    label: '七月'
+                }, {
+                    value: '8',
+                    label: '八月'
+                }, {
+                    value: '9',
+                    label: '九月'
+                }, {
+                    value: '10',
+                    label: '十月'
+                }, {
+                    value: '11',
+                    label: '十一月'
+                }, {
+                    value: '12',
+                    label: '十二月'
+                }]
             }
         }
     })

@@ -25,4 +25,12 @@ public class PageBean<T> {
     public void setRows(List<T> rows) {
         this.rows = rows;
     }
+
+    @Override
+    public String toString() {
+        return "PageBean{" +
+                "totalCount=" + totalCount +
+                ", rows=" + rows +
+                '}';
+    }
 }
