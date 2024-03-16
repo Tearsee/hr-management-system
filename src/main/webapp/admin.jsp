@@ -57,6 +57,15 @@
                             <input type="submit" value="退出登录"/>
                         </form>
                     </el-dropdown-item>
+
+                    <el-dropdown-item>
+
+                        <form action="uploadServlet" method="post" enctype="multipart/form-data">
+                            <input type="file" name="image"/>
+                            <input type="submit" value="上传头像"/>
+                        </form>
+                    </el-dropdown-item>
+
                 </el-dropdown-menu>
             </el-dropdown>
         </el-header>
@@ -129,6 +138,8 @@
                     <div v-show="currentPage_ === 'home'" style="width: 40%">
                         <el-calendar v-model="value_calendar">
                         </el-calendar>
+                        <!-- 如果是文件路径 -->
+                        <img src="upload/图片文件名.jpg" alt="图片描述" />
                     </div>
                     <div v-show="currentPage_ === 'employeeManage'">
                         <!--搜索表单-->
@@ -147,6 +158,10 @@
 
                             <el-form-item label="员工名称">
                                 <el-input v-model="employee.employeeName" placeholder="员工名称"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="员工编号">
+                                <el-input v-model="employee.id" placeholder="员工编号"></el-input>
                             </el-form-item>
 
                             <el-form-item>
@@ -177,6 +192,13 @@
                                         type="index"
                                         width="50">
                                 </el-table-column3>
+
+                                <el-table-column
+                                        prop="id"
+                                        label="员工编号"
+                                        align="center"
+                                >
+                                </el-table-column>
 
                                 <el-table-column
                                         prop="staffId"
@@ -233,7 +255,7 @@
                                         <el-button @click="dialogVisible1=true;getupdate(scope.row)" type="primary"
                                                    round>编辑
                                         </el-button>
-                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>软删除
+                                        <el-button @click="softDeleteById(scope.row.id)" type="danger" round>删除
                                         </el-button>
                                     </template>
                                 </el-table-column>
@@ -2122,6 +2144,7 @@
                 multipleSelection: [],
                 // 表格数据
                 tableData: [{
+                    id: '',
                     staffId: 'aaa111',
                     employeeName: '张三',
                     age: "18",
@@ -2355,29 +2378,29 @@
                 },
                 // 培训公告表格
                 tableData_messages: [{
-                    staffId:'',
-                    employeeName:'',
-                    deptId:'',
-                    employmentStatus:'',
-                    message:''
+                    staffId: '',
+                    employeeName: '',
+                    deptId: '',
+                    employmentStatus: '',
+                    message: ''
                 }, {
-                    staffId:'',
-                    employeeName:'',
-                    deptId:'',
-                    employmentStatus:'',
-                    message:''
+                    staffId: '',
+                    employeeName: '',
+                    deptId: '',
+                    employmentStatus: '',
+                    message: ''
                 }, {
-                    staffId:'',
-                    employeeName:'',
-                    deptId:'',
-                    employmentStatus:'',
-                    message:''
+                    staffId: '',
+                    employeeName: '',
+                    deptId: '',
+                    employmentStatus: '',
+                    message: ''
                 }, {
-                    staffId:'',
-                    employeeName:'',
-                    deptId:'',
-                    employmentStatus:'',
-                    message:''
+                    staffId: '',
+                    employeeName: '',
+                    deptId: '',
+                    employmentStatus: '',
+                    message: ''
                 }],
                 messages: {
                     eid: '',

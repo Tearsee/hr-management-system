@@ -37,6 +37,10 @@
                 and employment_status = #{employee.employmentStatus}
             </if>
 
+            <if test="employee.id != null">
+                and id = #{employee.id}
+            </if>
+
         </where>
         limit #{begin},#{size}
     </select>
@@ -56,6 +60,10 @@
 
             <if test="employmentStatus != null">
                 and employment_status = #{employmentStatus}
+            </if>
+
+            <if test="id != null">
+                and id = #{id}
             </if>
 
         </where>

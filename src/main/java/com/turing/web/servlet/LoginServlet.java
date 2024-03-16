@@ -113,5 +113,4 @@ public class LoginServlet extends BaseServlet {
         resp.getWriter().write(jsonString);
     }
 
-
 }

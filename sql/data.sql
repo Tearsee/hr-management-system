@@ -147,7 +147,9 @@ DROP TABLE IF EXISTS `messages`;
 CREATE TABLE `messages`
 (
     `eid`     int          DEFAULT NULL,
-    `message` varchar(255) DEFAULT NULL
+    `message` varchar(255) DEFAULT NULL,
+    KEY `messages_tb_employee_id_fk` (`eid`),
+    CONSTRAINT `messages_tb_employee_id_fk` FOREIGN KEY (`eid`) REFERENCES `tb_employee` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci COMMENT ='信息库';
@@ -333,5 +335,6 @@ INSERT INTO `vacate`
 VALUES (2, 2, '2024-02-27', '2024-02-28', 1, '', 0);
 INSERT INTO `vacate`
 VALUES (7, 4, '2024-02-28', '2024-02-28', 1, '', 1);
+
 
 

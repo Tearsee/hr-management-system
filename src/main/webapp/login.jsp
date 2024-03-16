@@ -16,6 +16,8 @@
     <title>login</title>
 <%--    <link href="css/login.css" rel="stylesheet">--%>
     <link href="http://localhost:8080/hr-management-system/css/login.css" rel="stylesheet">
+<%--    <link href="http://localhost:8080/hr_management_system_war_exploded/css/login.css" rel="stylesheet">--%>
+<%--    http://localhost/hr_management_system_war_exploded/--%>
 
     <style>
 

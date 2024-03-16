@@ -213,15 +213,18 @@ public class AdministratorServlet extends BaseServlet {
 //        List<Employee> employees = employeeService.selectAll();
         String _currentPage = req.getParameter("currentPage");
         String _pageSize = req.getParameter("pageSize");
+//        String _id = req.getParameter("id");
 
         int currentPage = Integer.parseInt(_currentPage);
         int pageSize = Integer.parseInt(_pageSize);
+//        int id = Integer.parseInt(_id);
 
         // 获取employee
         BufferedReader br = req.getReader();
         String params = br.readLine();
 
         Employee employee = JSON.parseObject(params, Employee.class);
+//        employee.setId(id);
 
         // 调用service 查询pageBean
         PageBean<Employee> pageBean = adminService.selectByPageAndCondition(currentPage, pageSize,employee);
